@@ -12,6 +12,7 @@
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
+| pnpm | 10.x | Package manager (fast, efficient) |
 | Next.js | 16.0.5 | Framework (App Router) |
 | React | 19.2.0 | UI Library |
 | TypeScript | 5.x | Type safety |
@@ -19,7 +20,13 @@
 | shadcn/ui | Latest | UI components |
 | Velite | Latest | MDX content management |
 | next-intl | Latest | i18n (English + Arabic) |
-| Framer Motion | 11.x | Animations |
+| Framer Motion | 12.x | Animations |
+
+---
+
+## Repository
+
+**GitHub:** https://github.com/Mauritania-Programmers-Community/mpc_website
 
 ---
 
@@ -128,31 +135,16 @@ mpc-platform/
 
 ---
 
-## Content Management
+## Content Schemas (Velite)
 
-**See `CONTENT-GUIDE.md` for full documentation.**
+### Event
+- title, titleAr, slug, date, status, type
+- description, coverImage, speaker, platform
+- youtubeRecording, gallery, content (MDX)
 
-### Content Structure (Locale-based)
-```
-content/
-├── blog/
-│   ├── en/*.mdx    # English posts
-│   └── ar/*.mdx    # Arabic posts
-└── events/
-    ├── en/*.mdx    # English events
-    └── ar/*.mdx    # Arabic events
-```
-
-### Slash Commands
-- `/create-post [slug]` - Create bilingual blog post
-- `/create-event [slug]` - Create bilingual event
-
-### Content Helpers (`src/lib/content.ts`)
-- `getPostsByLocale(locale)` - Get posts for a locale
-- `getEventsByLocale(locale)` - Get events for a locale
-- `getPost(slug, locale)` - Get single post
-- `getEvent(slug, locale)` - Get single event
-- `formatDate(date, locale)` - Format date with locale
+### Post
+- title, slug, date, author, excerpt
+- coverImage, tags, content (MDX)
 
 ---
 
@@ -192,30 +184,27 @@ content/
 
 ---
 
-## Planning Documentation
-
-Located in parent folder at `../.claude/`:
+## Documentation Files
 
 | File | Purpose |
 |------|---------|
-| `PLAN.md` | Implementation roadmap |
-| `PROGRESS.md` | Task tracking |
-| `ARCHITECTURE.md` | Architecture decisions |
-| `RESEARCH.md` | Technical research |
+| `.claude/PLAN.md` | Implementation roadmap |
+| `.claude/PROGRESS.md` | Task tracking |
+| `.claude/ARCHITECTURE.md` | Architecture decisions |
+| `.claude/RESEARCH.md` | Technical research |
+| `.claude/CLAUDE.md` | This file - AI memory |
 
 ---
 
 ## External Docs Reference
 
-Located in parent folder at `../`:
-
-| Resource | File |
-|----------|------|
-| Original Plan | `mpc-platform-plan-v2.md` |
-| Checklist | `Project-Checklist.md` |
-| Tech Spec | `Technical-Specification.md` |
-| User Stories | `User-Stories.md` |
-| Design Guide | `Visual-Design-Guide.md` |
+| Resource | Location |
+|----------|----------|
+| Original Plan | `docs/mpc-platform-plan-v2.md` |
+| Checklist | `docs/Project-Checklist.md` |
+| Tech Spec | `docs/Technical-Specification.md` |
+| User Stories | `docs/User-Stories.md` |
+| Design Guide | `docs/Visual-Design-Guide.md` |
 
 ---
 
@@ -227,6 +216,18 @@ Located in parent folder at `../`:
 - **General Supervisor:** Mohamed Salem
 - **Members:** 880+
 - **Founded:** September 21, 2024
+
+---
+
+## Current Phase
+
+**Phase 1: Foundation**
+- ✅ Project initialized
+- ✅ pnpm install complete (migrated from npm)
+- ✅ Folder structure created
+- ✅ MPC color system
+- ✅ shadcn/ui setup
+- ✅ Hero sections implemented
 
 ---
 
@@ -244,7 +245,7 @@ Located in parent folder at `../`:
 ## Session Context
 
 When resuming work on this project:
-1. Check `../.claude/PROGRESS.md` for current status
-2. Review `../.claude/PLAN.md` for next tasks
-3. Use `../.claude/RESEARCH.md` for implementation details
-4. Reference original docs in parent folder for requirements
+1. Check `.claude/PROGRESS.md` for current status
+2. Review `.claude/PLAN.md` for next tasks
+3. Use `.claude/RESEARCH.md` for implementation details
+4. Reference original docs in project root for requirements
