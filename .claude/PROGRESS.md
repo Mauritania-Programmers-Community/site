@@ -27,7 +27,7 @@
 | Configure src/ directory | ✅ | Already set up with --src-dir |
 | Set up path aliases | ✅ | @/*, @/data/*, #site/content in tsconfig.json |
 | Configure ESLint | ✅ | eslint-config-next included |
-| Initialize Git | ⬜ | Pending |
+| Initialize Git | ✅ | Connected to GitHub |
 
 ### 1.2 Styling Setup
 | Task | Status | Notes |
@@ -194,8 +194,8 @@
 ### 4.4 Deployment
 | Task | Status | Notes |
 |------|--------|-------|
-| Push to GitHub | ⬜ | |
-| Deploy to Vercel | ⬜ | |
+| Push to GitHub | ✅ | MPC org + personal repo |
+| Deploy to Vercel | ✅ | https://mpc-platform-hapas-projects.vercel.app |
 | Configure domain | ⬜ | |
 | Production testing | ⬜ | |
 
@@ -211,7 +211,30 @@
 
 ## Session Log
 
-### November 30, 2025 (Session 2)
+### December 1, 2024 (Session 3)
+- ✅ Initialized Git repository
+- ✅ Connected to GitHub (MPC organization repo)
+- ✅ Added personal repo remote for Vercel deployment
+- ✅ Reorganized project structure:
+  - Moved `.claude/` folder into repo
+  - Moved `.mcp.json` into repo
+  - Created `docs/` folder with planning docs
+  - Removed duplicate files from parent folder
+- ✅ Updated README.md with proper project documentation
+- ✅ Removed unused `data/stats.json`
+- ✅ Deployed to Vercel (production)
+- ✅ Updated PROGRESS.md with current status
+
+**Repositories:**
+- MPC Org: https://github.com/Mauritania-Programmers-Community/mpc_website
+- Personal: https://github.com/ahmed-abdat/mpc_website
+
+**Deployment:**
+- Vercel: https://mpc-platform-hapas-projects.vercel.app
+
+---
+
+### November 30, 2024 (Session 2)
 - ✅ Created folder structure (components, lib, hooks, config, content, data)
 - ✅ Set up complete Tailwind CSS v4 color system with MPC branding
 - ✅ Created utility functions (cn in lib/utils.ts)
