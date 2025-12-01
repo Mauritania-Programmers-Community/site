@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "title": "MPC - Mauritania Programmers Community",
+    "description": "Building Mauritania's Tech Future Together. Join 880+ developers sharing knowledge, opportunities, and innovation."
+  },
+  "nav": {
+    "home": "Home",
+    "events": "Events",
+    "blog": "Blog",
+    "team": "Team",
+    "join": "Join Community"
+  },
+  "hero": {
+    "badge": "Mauritania's Tech Community",
+    "title": "Building Mauritania's",
+    "titleHighlight": "Tech Future",
+    "titleEnd": "Together",
+    "description": "Join 880+ developers sharing knowledge, opportunities, and building the future of technology in Mauritania.",
+    "cta": {
+      "join": "Join WhatsApp Group",
+      "events": "View Events"
+    }
+  },
+  "stats": {
+    "members": "Members",
+    "events": "Events Hosted",
+    "year": "Year Strong",
+    "ideas": "Ideas Shared"
+  },
+  "features": {
+    "title": "What We Do",
+    "subtitle": "Empowering Mauritanian developers through education, collaboration, and community.",
+    "items": {
+      "webdev": {
+        "title": "Web Development",
+        "description": "Modern web technologies, frameworks, and best practices."
+      },
+      "security": {
+        "title": "Cybersecurity",
+        "description": "Ethical hacking, security best practices, and CTF challenges."
+      },
+      "ai": {
+        "title": "AI & Machine Learning",
+        "description": "Exploring the frontiers of artificial intelligence."
+      },
+      "workshops": {
+        "title": "Workshops & Sessions",
+        "description": "Regular learning sessions and hands-on workshops."
+      }
+    }
+  },
+  "events": {
+    "title": "Community Events",
+    "subtitle": "Learn, share, and grow with our community events.",
+    "upcoming": "Upcoming",
+    "past": "Past Events",
+    "all": "All Events",
+    "viewAll": "View All Events",
+    "noEvents": "No events found.",
+    "register": "Register Now",
+    "watchRecording": "Watch Recording",
+    "viewDetails": "View Details"
+  },
+  "team": {
+    "title": "Meet the Team",
+    "subtitle": "The passionate individuals building MPC.",
+    "founder": "Founder",
+    "admins": "Admin Team"
+  },
+  "community": {
+    "badge": "Our Community",
+    "title": "Built by the Community, for the Community",
+    "subtitle": "Join 880+ passionate developers from Mauritania who are learning, sharing, and building together.",
+    "madeWith": "Made with love in Mauritania",
+    "viewTeam": "Meet the Team"
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Can't find what you're looking for? Contact us on",
+    "contact": "WhatsApp",
+    "items": {
+      "about": {
+        "question": "What is MPC?",
+        "answer": "MPC (Mauritania Programmers Community) is a community of 880+ developers from Mauritania. Founded on September 21, 2024, we bring together programmers of all skill levels to learn, share knowledge, and collaborate on projects."
+      },
+      "join": {
+        "question": "How can I join the community?",
+        "answer": "Joining MPC is free and easy! Simply click the 'Join WhatsApp Group' button on our website to become part of our active community. We welcome developers of all experience levels."
+      },
+      "topics": {
+        "question": "What topics does MPC cover?",
+        "answer": "We cover a wide range of programming topics including Web Development (React, Next.js, Vue), Cybersecurity and Ethical Hacking, Artificial Intelligence and Machine Learning, Mobile Development, and much more."
+      },
+      "events": {
+        "question": "Are MPC events free?",
+        "answer": "Yes! All MPC events, workshops, and sessions are completely free. We believe in making tech education accessible to everyone in Mauritania."
+      },
+      "who": {
+        "question": "Who can participate in MPC?",
+        "answer": "Anyone interested in programming and technology can join MPC! Whether you're a beginner just starting your coding journey or an experienced developer, you're welcome here. We especially encourage Mauritanian developers to join."
+      }
+    }
+  },
+  "cta": {
+    "badge": "Join 880+ Developers",
+    "title": "Ready to Level Up Your Skills?",
+    "description": "Join our community of passionate developers and start your journey today.",
+    "button": "Join WhatsApp Group"
+  },
+  "footer": {
+    "tagline": "Building Mauritania's Tech Future Together",
+    "links": {
+      "title": "Quick Links"
+    },
+    "social": {
+      "title": "Follow Us"
+    },
+    "copyright": "© {year} Mauritania Programmers Community. All rights reserved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try Again",
+    "backToHome": "Back to Home"
+  }
+}

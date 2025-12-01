@@ -1,0 +1,32 @@
+{
+  "members": 600,
+  "events": 3,
+  "yearFounded": 2024,
+  "foundedDate": "2024-09-21",
+  "highlights": [
+    {
+      "value": 600,
+      "label": "Members",
+      "labelAr": "عضو",
+      "suffix": "+"
+    },
+    {
+      "value": 3,
+      "label": "Events Hosted",
+      "labelAr": "فعالية",
+      "suffix": ""
+    },
+    {
+      "value": 1,
+      "label": "Year Strong",
+      "labelAr": "سنة",
+      "suffix": ""
+    },
+    {
+      "value": 100,
+      "label": "Ideas Shared",
+      "labelAr": "فكرة",
+      "suffix": "+"
+    }
+  ]
+}
