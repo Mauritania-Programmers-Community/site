@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MPC Platform
+
+Official website for **Mauritania Programmers Community** (مجتمع مبرمجي موريتانيا) - the largest programming community in Mauritania with 880+ members.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **UI Components:** shadcn/ui
+- **Content:** Velite (MDX)
+- **i18n:** next-intl (English + Arabic with RTL)
+- **Animations:** Framer Motion
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
+
+# Build for production
+pnpm build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+mpc-platform/
+├── src/
+│   ├── app/[locale]/      # Pages with i18n routing
+│   ├── components/        # React components
+│   │   ├── ui/            # shadcn/ui components
+│   │   ├── sections/      # Page sections
+│   │   ├── layout/        # Navbar, Footer
+│   │   └── heroes/        # Hero section variants
+│   ├── lib/               # Utilities
+│   └── i18n/              # Internationalization
+├── content/               # MDX content
+│   ├── blog/              # Blog posts (en/ar)
+│   └── events/            # Events (en/ar)
+├── data/                  # JSON data files
+├── messages/              # i18n translations
+└── public/                # Static assets
+```
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- Bilingual support (English/Arabic) with RTL
+- Blog system with MDX
+- Events management
+- Team showcase
+- Dark mode
+- Responsive design
+- Animated hero sections
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content Management
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create new content using slash commands:
+```bash
+/create-post [slug]    # Create bilingual blog post
+/create-event [slug]   # Create bilingual event
+```
 
-## Deploy on Vercel
+See `CONTENT-GUIDE.md` for full documentation.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Team
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Founder:** Deidin
+- **AI & Web Lead:** Ahmed Abdat
+- **Security Lead:** Aziz
+- **General Supervisor:** Mohamed Salem
+
+## Links
+
+- **Community:** [WhatsApp Group](https://chat.whatsapp.com/mpc)
+- **Founded:** September 21, 2024
+
+## License
+
+MIT
