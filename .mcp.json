@@ -10,14 +10,17 @@
     },
     "exa": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=cf72ed1a-b9f7-4328-863e-9df9ddc02c7b"]
+      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=1d91682c-cefb-4e37-8aa2-18821c564669"]
     },
     "Ref": {
-      "type": "http",
-      "url": "https://api.ref.tools/mcp",
-      "headers": {
-        "x-ref-api-key": "ref-6f28538748fde42d2d8f"
-      }
+      "command": "npx",
+      "args": [
+        "-y", 
+        "mcp-remote", 
+        "https://api.ref.tools/mcp",
+        "--header",
+        "x-ref-api-key: ref-6f28538748fde42d2d8f"
+      ]
     },
     "shadcn": {
       "command": "npx",

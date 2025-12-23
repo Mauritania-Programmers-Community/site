@@ -1,6 +1,6 @@
 # MPC Platform
 
-Official website for **Mauritania Programmers Community** (مجتمع مبرمجي موريتانيا) - the largest programming community in Mauritania with 880+ members.
+Official website for **Mauritania Programmers Community** (مجتمع مبرمجي موريتانيا) - the largest programming community in Mauritania with 900+ members.
 
 ## Tech Stack
 

@@ -7,6 +7,7 @@
  */
 
 import * as runtime from "react/jsx-runtime";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -267,6 +268,7 @@ export function MDXContent({
   components,
   className,
 }: MDXContentProps) {
+  // eslint-disable-next-line react-hooks/static-components
   const Component = useMDXComponent(code);
 
   return (

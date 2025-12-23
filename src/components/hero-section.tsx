@@ -139,7 +139,7 @@ const AppComponent = () => {
                 <div className="text-sm font-medium">Steps</div>
             </div>
             <div className="space-y-3">
-                <div className="text-foreground border-b border-white/10 pb-3 text-sm font-medium">This year, you're walking more on average than you did in 2023.</div>
+                <div className="text-foreground border-b border-white/10 pb-3 text-sm font-medium">This year, you&apos;re walking more on average than you did in 2023.</div>
                 <div className="space-y-3">
                     <div className="space-y-1">
                         <div className="space-x-1">

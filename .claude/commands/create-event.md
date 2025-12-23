@@ -43,6 +43,7 @@ Ask the user for:
 - **Speaker**: Speaker name
 - **Platform**: Where it's held (Discord, YouTube, Google Meet, In-Person, etc.)
 - **Location**: Physical location if in-person
+- **End Date**: Event end date if multi-day (YYYY-MM-DD format)
 - **Cover Image**: Path to cover image (e.g., `/images/events/event-name.jpg`)
 - **Registration URL**: Link to register
 - **Recording URL**: Link to recording (if completed)
@@ -55,6 +56,7 @@ locale: en
 title: "{title_en}"
 description: "{description_en}"
 date: {date}
+endDate: {end_date}
 type: {type}
 status: {status}
 speaker: "{speaker}"
@@ -97,6 +99,7 @@ locale: ar
 title: "{title_ar}"
 description: "{description_ar}"
 date: {date}
+endDate: {end_date}
 type: {type}
 status: {status}
 speaker: "{speaker_ar}"
