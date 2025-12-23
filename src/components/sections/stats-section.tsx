@@ -4,7 +4,8 @@ import { useTranslations, useLocale } from "next-intl";
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
-import { Users, Calendar, Clock, Lightbulb, TrendingUp, Star } from "lucide-react";
+import { Users, Calendar, Clock, FolderGit, TrendingUp, Star } from "lucide-react";
+import { SectionHeader } from "./section-header";
 
 interface CounterProps {
   target: number;
@@ -65,7 +66,7 @@ export function StatsSection() {
     },
     {
       value: siteConfig.stats.events,
-      suffix: "",
+      suffix: "+",
       label: t("stats.events"),
       icon: Calendar,
       color: "from-mpc-gold-400 to-mpc-gold-600",
@@ -74,7 +75,7 @@ export function StatsSection() {
     },
     {
       value: 1,
-      suffix: "",
+      suffix: "+",
       label: t("stats.year"),
       icon: Clock,
       color: "from-mpc-green-600 to-mpc-green-800",
@@ -82,10 +83,10 @@ export function StatsSection() {
       textColor: "text-mpc-green-600",
     },
     {
-      value: 100,
+      value: siteConfig.stats.projects,
       suffix: "+",
-      label: t("stats.ideas"),
-      icon: Lightbulb,
+      label: t("stats.projects"),
+      icon: FolderGit,
       color: "from-mpc-gold-400 to-mpc-gold-600",
       bgColor: "bg-mpc-gold-500/10",
       textColor: "text-mpc-gold-500",
@@ -116,28 +117,13 @@ export function StatsSection() {
       </div>
 
       <div className="container relative mx-auto px-4">
-        {/* Section header */}
-        <motion.div
-          className="mb-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <motion.div
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-mpc-green-500/20 bg-mpc-green-500/5 px-4 py-2"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <TrendingUp className="h-4 w-4 text-mpc-green-500" />
-            <span className="text-sm font-medium text-mpc-green-600 dark:text-mpc-green-400">
-              {isRTL ? "إنجازاتنا" : "Our Impact"}
-            </span>
-          </motion.div>
-          <h2 className="text-3xl font-bold sm:text-4xl">
-            {isRTL ? "أرقام تتحدث عنا" : "Numbers That Speak"}
-          </h2>
-        </motion.div>
+        <SectionHeader
+          badge={{
+            icon: TrendingUp,
+            text: isRTL ? "إنجازاتنا" : "Our Impact",
+          }}
+          title={isRTL ? "أرقام تتحدث عنا" : "Numbers That Speak"}
+        />
 
         {/* Stats grid - Bento-style layout */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -150,7 +136,7 @@ export function StatsSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-mpc-green-500/30 hover:shadow-2xl hover:shadow-mpc-green-500/5">
+              <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-mpc-green-500/30 hover:shadow-md hover:scale-[1.02]">
                 {/* Background gradient on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 transition-opacity duration-500 group-hover:opacity-5`} />
 

@@ -8,11 +8,12 @@ import {
   ArrowRight,
   ArrowLeft,
   Users,
-  Sparkles,
   MessageCircle,
   Rocket,
   Heart,
 } from "lucide-react";
+import { Highlighter } from "@/components/ui/highlighter";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 // Floating particles for visual depth - deterministic to avoid hydration mismatch
 const GOLDEN_RATIO = 0.618033988749;
@@ -36,7 +37,6 @@ export function CTASection() {
   const socialProof = [
     { icon: Users, labelEn: "Active Community", labelAr: "مجتمع نشط" },
     { icon: MessageCircle, labelEn: "Daily Discussions", labelAr: "نقاشات يومية" },
-    { icon: Sparkles, labelEn: "Free Resources", labelAr: "موارد مجانية" },
   ];
 
   return (
@@ -150,19 +150,34 @@ export function CTASection() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <span className="block">{t("cta.title")}</span>
+              <Highlighter
+                action="box"
+                color="#FFC107"
+                strokeWidth={3}
+                animationDuration={1200}
+                padding={8}
+              >
+                <span className="block">{t("cta.title")}</span>
+              </Highlighter>
             </motion.h2>
 
             {/* Description */}
-            <motion.p
-              className="mx-auto mb-12 max-w-2xl text-xl text-white/80"
+            <motion.div
+              className="mx-auto mb-12 max-w-2xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              {t("cta.description")}
-            </motion.p>
+              <ScrollReveal
+                containerClassName="text-xl text-white/80"
+                baseOpacity={0.4}
+                baseRotation={1}
+                blurStrength={2}
+              >
+                {t("cta.description")}
+              </ScrollReveal>
+            </motion.div>
 
             {/* CTA button with enhanced styling */}
             <motion.div
@@ -179,7 +194,7 @@ export function CTASection() {
               >
                 <Button
                   size="lg"
-                  className="group relative h-16 gap-3 overflow-hidden bg-white px-10 text-lg font-bold text-mpc-green-600 shadow-2xl transition-all hover:bg-white hover:shadow-white/30"
+                  className="group relative h-16 gap-3 overflow-hidden bg-white px-10 text-lg font-bold text-mpc-green-600 shadow-lg transition-all hover:bg-white hover:shadow-white/30"
                   asChild
                 >
                   <a

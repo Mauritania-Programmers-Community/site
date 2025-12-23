@@ -4,3 +4,5 @@ export { CommunitySection } from "./community-section";
 export { FeaturesSection } from "./features-section";
 export { FAQSection } from "./faq-section";
 export { CTASection } from "./cta-section";
+export { RecentPostsSection } from "./recent-posts-section";
+export { RecentEventsSection } from "./recent-events-section";

@@ -3,22 +3,22 @@
 import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import {
   ArrowRight,
   ArrowLeft,
-  MessageCircle,
   Play,
-  Code2,
-  Users,
-  Zap,
-  Terminal,
+  Terminal as TerminalIcon,
   Braces,
   GitBranch,
-  ChevronRight,
+  Code2,
 } from "lucide-react";
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useCallback } from "react";
+import { InteractiveTerminal } from "@/components/magicui/terminal";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import Image from "next/image";
 
 // Animated background mesh
 function MeshGradient({ prefersReducedMotion }: { prefersReducedMotion: boolean }) {
@@ -99,94 +99,6 @@ function FloatingIcon({
   );
 }
 
-// Interactive Terminal Component
-function InteractiveTerminal({ isRTL }: { isRTL: boolean }) {
-  const [lines, setLines] = useState<Array<{ type: "command" | "output" | "success" | "info"; text: string }>>([]);
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-
-  const terminalSequence = useMemo(() => [
-    { type: "command" as const, text: "$ npx create-mpc-developer", delay: 100 },
-    { type: "info" as const, text: isRTL ? "جاري التحضير..." : "Initializing...", delay: 800 },
-    { type: "success" as const, text: isRTL ? "✓ مرحباً بك في مجتمع MPC!" : "✓ Welcome to MPC Community!", delay: 600 },
-    { type: "output" as const, text: "", delay: 300 },
-    { type: "command" as const, text: "$ mpc status", delay: 500 },
-    { type: "output" as const, text: isRTL ? "  المطورين النشطين: 880+" : "  Active developers: 880+", delay: 400 },
-    { type: "output" as const, text: isRTL ? "  المجالات: ويب، أمن، ذكاء، موبايل" : "  Domains: web, security, ai, mobile", delay: 400 },
-    { type: "output" as const, text: isRTL ? "  الحالة: نشط 24/7" : "  Status: Active 24/7", delay: 400 },
-    { type: "output" as const, text: "", delay: 300 },
-    { type: "command" as const, text: "$ mpc join --now", delay: 500 },
-    { type: "success" as const, text: isRTL ? "✓ جاهز للانضمام!" : "✓ Ready to join!", delay: 600 },
-  ], [isRTL]);
-
-  useEffect(() => {
-    if (currentLineIndex < terminalSequence.length) {
-      const currentItem = terminalSequence[currentLineIndex];
-      const timer = setTimeout(() => {
-        if (currentItem.type === "command") {
-          // Type command character by character
-          let charIndex = 0;
-          const typeInterval = setInterval(() => {
-            if (charIndex <= currentItem.text.length) {
-              setLines(prev => {
-                const newLines = [...prev];
-                if (newLines.length === 0 || newLines[newLines.length - 1].text !== currentItem.text.substring(0, charIndex)) {
-                  if (charIndex === 0) {
-                    newLines.push({ type: "command", text: "" });
-                  } else {
-                    newLines[newLines.length - 1] = { type: "command", text: currentItem.text.substring(0, charIndex) };
-                  }
-                }
-                return newLines;
-              });
-              charIndex++;
-            } else {
-              clearInterval(typeInterval);
-              setCurrentLineIndex(prev => prev + 1);
-            }
-          }, 50);
-        } else {
-          setLines(prev => [...prev, { type: currentItem.type, text: currentItem.text }]);
-          setCurrentLineIndex(prev => prev + 1);
-        }
-      }, currentItem.delay);
-
-      return () => clearTimeout(timer);
-    }
-  }, [currentLineIndex, terminalSequence]);
-
-  return (
-    <div className="space-y-1.5 font-mono text-xs sm:text-sm">
-      {lines.map((line, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          className={`flex items-start gap-2 ${
-            line.type === "success" ? "text-mpc-green-400" :
-            line.type === "info" ? "text-mpc-gold-400" :
-            line.type === "command" ? "text-foreground" :
-            "text-muted-foreground"
-          }`}
-        >
-          {line.type === "command" && <ChevronRight className="h-3 w-3 mt-1 text-mpc-green-500 flex-shrink-0" />}
-          <span className={line.type === "output" ? "ps-5" : ""}>{line.text}</span>
-        </motion.div>
-      ))}
-
-      {/* Blinking cursor */}
-      {currentLineIndex >= terminalSequence.length && (
-        <div className="flex items-center gap-2 pt-2 border-t border-border/30 mt-3">
-          <span className="text-mpc-green-500">$</span>
-          <motion.span
-            className="inline-block h-4 w-2 bg-mpc-green-500"
-            animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function HeroSection() {
   const t = useTranslations();
@@ -195,6 +107,76 @@ export function HeroSection() {
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const containerRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
+
+  // Terminal command handler
+  const handleCommand = useCallback((command: string): string | string[] | React.ReactNode => {
+    const cmd = command.toLowerCase().trim();
+    const availableCommands = [
+      'whoami',
+      'uname',
+      'uname -a',
+      'sudo join mpc-community',
+      'help',
+      'clear'
+    ];
+
+    if (cmd === "whoami") {
+      return t("terminal.commands.whoami");
+    } else if (cmd === "uname" || cmd === "uname -a") {
+      return t("terminal.commands.uname");
+    } else if (cmd.startsWith("sudo join") || cmd === "sudo join mpc-community") {
+      return (
+        <div className="space-y-2">
+          <div className="text-muted-foreground">
+            {t("terminal.commands.sudoPassword")}
+          </div>
+          <div className="text-mpc-green-400">
+            {t("terminal.commands.sudoSuccess")}
+          </div>
+          <a
+            href={siteConfig.links.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-md bg-mpc-green-500/10 border border-mpc-green-500/30 text-mpc-green-500 hover:bg-mpc-green-500/20 hover:border-mpc-green-500/50 transition-all duration-200 font-medium text-xs sm:text-sm group"
+          >
+            <Image src="/images/whatsapp-icon.svg" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
+            <span>{t("hero.cta.join")}</span>
+            <ArrowIcon className="h-3 w-3 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+          </a>
+        </div>
+      );
+    } else if (cmd === "help") {
+      return [
+        t("terminal.commands.help.title"),
+        t("terminal.commands.help.whoami"),
+        t("terminal.commands.help.uname"),
+        t("terminal.commands.help.sudo"),
+        t("terminal.commands.help.help"),
+        t("terminal.commands.help.clear")
+      ];
+    } else if (cmd === "clear") {
+      return ""; // Special case - will be handled by component
+    } else {
+      // Find closest match for suggestion
+      const firstWord = cmd.split(' ')[0];
+      const matches = availableCommands.filter(availCmd =>
+        availCmd.toLowerCase().includes(firstWord) ||
+        firstWord.includes(availCmd.toLowerCase().split(' ')[0])
+      );
+
+      const errorMessages = [
+        t("terminal.errors.unknown", { command: cmd })
+      ];
+
+      if (matches.length > 0) {
+        errorMessages.push(t("terminal.errors.didYouMean", { suggestion: matches[0] }));
+      }
+
+      errorMessages.push(t("terminal.errors.tryHelp"));
+
+      return errorMessages;
+    }
+  }, [t, ArrowIcon]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -208,11 +190,11 @@ export function HeroSection() {
     <section ref={containerRef} className="relative min-h-screen overflow-hidden bg-background">
       <MeshGradient prefersReducedMotion={!!prefersReducedMotion} />
 
-      <div className="container relative mx-auto flex min-h-screen items-center px-4 py-20 lg:py-0">
-        <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-16 xl:gap-24">
-          {/* Left content */}
+      <div className="container relative mx-auto flex min-h-screen items-center px-4 py-16 sm:py-20 xl:py-0">
+        <div className="flex w-full flex-col gap-10 xl:grid xl:grid-cols-2 xl:gap-16 2xl:gap-24">
+          {/* Title and description */}
           <motion.div
-            className="flex flex-col justify-center order-2 lg:order-1"
+            className="flex flex-col justify-center xl:row-span-1"
             style={{ y: contentY }}
           >
             {/* Badge */}
@@ -223,41 +205,48 @@ export function HeroSection() {
               className="mb-6 sm:mb-8"
             >
               <span className="inline-flex items-center gap-2 rounded-full border border-mpc-green-500/30 bg-mpc-green-500/5 px-4 py-2 text-sm font-medium text-mpc-green-600 backdrop-blur-sm dark:text-mpc-green-400">
-                <Terminal className="h-4 w-4" />
+                <TerminalIcon className="h-4 w-4" />
                 {t("hero.badge")}
               </span>
             </motion.div>
 
             {/* Title */}
             <motion.h1
-              className="mb-4 text-3xl font-bold tracking-tight sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl"
+              className="mb-6 text-4xl font-bold tracking-tight sm:mb-8 sm:text-5xl md:text-6xl xl:text-7xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
             >
-              <span className="block">{t("hero.title")}</span>
+              <span>{t("hero.title")} </span>
               <motion.span
-                className="block bg-gradient-to-r from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent"
-                animate={prefersReducedMotion ? {} : {
+                className={`${isRTL ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent`}
+                animate={prefersReducedMotion || isRTL ? {} : {
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                 }}
                 transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                style={{ backgroundSize: "200% auto" }}
+                style={{ backgroundSize: isRTL ? "100% auto" : "200% auto" }}
               >
                 {t("hero.titleHighlight")}
               </motion.span>
-              <span className="block">{t("hero.titleEnd")}</span>
+              <span> {t("hero.titleEnd")}</span>
             </motion.h1>
 
             {/* Description */}
-            <motion.p
-              className="mb-6 max-w-lg text-base text-muted-foreground sm:mb-8 sm:text-lg"
+            <motion.div
+              className="mb-8 sm:max-w-lg sm:mb-10"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              {t("hero.description")}
-            </motion.p>
+              <ScrollReveal
+                containerClassName="text-base text-muted-foreground sm:text-lg"
+                baseOpacity={0.3}
+                baseRotation={1}
+                blurStrength={2}
+              >
+                {t("hero.description")}
+              </ScrollReveal>
+            </motion.div>
 
             {/* CTAs */}
             <motion.div
@@ -266,9 +255,9 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <Button
+              <RainbowButton
                 size="lg"
-                className="group h-12 gap-2 bg-mpc-green-500 px-6 font-semibold text-white shadow-lg shadow-mpc-green-500/25 hover:bg-mpc-green-600 hover:shadow-mpc-green-500/40 transition-all duration-300"
+                className="group h-12 gap-2 px-6"
                 asChild
               >
                 <a
@@ -276,11 +265,11 @@ export function HeroSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <MessageCircle className="h-5 w-5" />
+                  <Image src="/images/whatsapp-icon.svg" alt="" width={20} height={20} className="h-5 w-5" />
                   {t("hero.cta.join")}
                   <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                 </a>
-              </Button>
+              </RainbowButton>
 
               <Button
                 size="lg"
@@ -289,48 +278,16 @@ export function HeroSection() {
                 asChild
               >
                 <Link href={`/${locale}/events`}>
-                  <Play className="h-4 w-4" />
+                  <Play className="h-4 w-4 order-first rtl:order-last" />
                   {t("hero.cta.events")}
                 </Link>
               </Button>
             </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              className="mt-10 flex flex-wrap gap-6 sm:mt-12 sm:gap-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              {[
-                { value: "880+", labelEn: "Members", labelAr: "عضو", icon: Users },
-                { value: "4+", labelEn: "Domains", labelAr: "مجالات", icon: Code2 },
-                { value: "24/7", labelEn: "Active", labelAr: "نشط", icon: Zap },
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  className="flex items-center gap-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-mpc-green-500/10 sm:h-12 sm:w-12">
-                    <stat.icon className="h-4 w-4 text-mpc-green-500 sm:h-5 sm:w-5" />
-                  </div>
-                  <div>
-                    <div className="text-xl font-bold text-foreground sm:text-2xl">{stat.value}</div>
-                    <div className="text-xs text-muted-foreground sm:text-sm">
-                      {isRTL ? stat.labelAr : stat.labelEn}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
           </motion.div>
 
-          {/* Right visual - Interactive Terminal */}
+          {/* Interactive Terminal */}
           <motion.div
-            className="relative flex items-center justify-center order-1 lg:order-2"
+            className="relative flex items-center justify-center xl:col-start-2 xl:row-start-1 xl:row-span-2"
             style={{ y: codeY }}
           >
             {/* Floating icons */}
@@ -349,7 +306,7 @@ export function HeroSection() {
 
             {/* Main terminal card */}
             <motion.div
-              className="relative w-full max-w-md"
+              className="relative w-full max-w-sm sm:max-w-md"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.6 }}
@@ -370,19 +327,33 @@ export function HeroSection() {
                 {/* Window controls */}
                 <div className="mb-4 flex items-center justify-between border-b border-border/50 pb-4">
                   <div className="flex gap-2">
-                    <div className="h-3 w-3 rounded-full bg-red-400" />
-                    <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                    <div className="h-3 w-3 rounded-full bg-green-400" />
+                    <div className="h-3 w-3 rounded-full bg-[#FF5F57] hover:brightness-110 transition-all" />
+                    <div className="h-3 w-3 rounded-full bg-[#FFBD2E] hover:brightness-110 transition-all" />
+                    <div className="h-3 w-3 rounded-full bg-[#28CA42] hover:brightness-110 transition-all" />
                   </div>
                   <span className="text-xs text-muted-foreground font-mono flex items-center gap-1">
-                    <Terminal className="h-3 w-3" />
+                    <TerminalIcon className="h-3 w-3" />
                     mpc-terminal
                   </span>
                 </div>
 
                 {/* Interactive Terminal content */}
                 <div className="min-h-[200px]">
-                  <InteractiveTerminal isRTL={isRTL} />
+                  <InteractiveTerminal
+                    commandHandler={handleCommand}
+                    placeholder={t("terminal.commands.placeholder")}
+                    initialCommands={[
+                      { type: "command", content: "$ whoami" },
+                      { type: "output", content: t("terminal.commands.whoami"), className: "text-muted-foreground" },
+                      { type: "output", content: "" },
+                      { type: "command", content: "$ uname -a" },
+                      { type: "output", content: t("terminal.commands.uname"), className: "text-muted-foreground" },
+                      { type: "output", content: "" },
+                      { type: "command", content: "$ sudo join mpc-community" },
+                      { type: "output", content: t("terminal.commands.sudoPassword"), className: "text-muted-foreground" },
+                      { type: "output", content: t("terminal.commands.sudoSuccess"), className: "text-mpc-green-400" },
+                    ]}
+                  />
                 </div>
               </motion.div>
             </motion.div>

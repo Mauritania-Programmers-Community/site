@@ -8,10 +8,10 @@ import {
   Shield,
   Brain,
   Calendar,
-  Sparkles,
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
+import { SectionHeader } from "./section-header";
 
 const features = [
   {
@@ -76,32 +76,13 @@ export function FeaturesSection() {
       </div>
 
       <div className="container relative mx-auto px-4">
-        {/* Section header */}
-        <motion.div
-          className="mb-20 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <motion.div
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-mpc-green-500/20 bg-gradient-to-r from-mpc-green-500/10 to-mpc-gold-500/10 px-5 py-2.5"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <Sparkles className="h-4 w-4 text-mpc-green-500" />
-            <span className="text-sm font-medium text-mpc-green-600 dark:text-mpc-green-400">
-              {isRTL ? "ماذا نقدم" : "What We Offer"}
-            </span>
-          </motion.div>
-
-          <h2 className="mb-4 text-3xl font-bold sm:text-4xl md:text-5xl">
-            {t("features.title")}
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            {t("features.subtitle")}
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge={{
+            text: isRTL ? "ماذا نقدم" : "What We Offer",
+          }}
+          title={t("features.title")}
+          description={t("features.subtitle")}
+        />
 
         {/* Features grid - Interactive cards */}
         <div className="grid gap-6 md:grid-cols-2">
@@ -119,7 +100,7 @@ export function FeaturesSection() {
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
-                <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-transparent hover:shadow-2xl">
+                <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-transparent hover:shadow-lg">
                   {/* Gradient border on hover */}
                   <motion.div
                     className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${feature.gradient} transition-opacity duration-500`}
@@ -140,14 +121,14 @@ export function FeaturesSection() {
                         animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg`}>
+                        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.gradient} text-white shadow-md`}>
                           <feature.icon className="h-8 w-8" />
                         </div>
                         {/* Glow effect */}
                         <motion.div
                           className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} blur-xl transition-opacity duration-500`}
                           initial={{ opacity: 0 }}
-                          animate={{ opacity: isHovered ? 0.5 : 0 }}
+                          animate={{ opacity: isHovered ? 0.3 : 0 }}
                         />
                       </motion.div>
 
@@ -184,7 +165,7 @@ export function FeaturesSection() {
                   {/* Decorative elements */}
                   <motion.div
                     className={`absolute -end-16 -bottom-16 h-48 w-48 rounded-full bg-gradient-to-br ${feature.bgGradient} blur-3xl`}
-                    animate={{ scale: isHovered ? 1.5 : 1, opacity: isHovered ? 0.8 : 0.3 }}
+                    animate={{ scale: isHovered ? 1.5 : 1, opacity: isHovered ? 0.5 : 0.2 }}
                     transition={{ duration: 0.5 }}
                   />
                 </div>
@@ -193,18 +174,6 @@ export function FeaturesSection() {
           })}
         </div>
 
-        {/* Bottom decorative line */}
-        <motion.div
-          className="mx-auto mt-20 flex max-w-md items-center gap-4"
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-        >
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-mpc-green-500/50 to-transparent" />
-          <Sparkles className="h-5 w-5 text-mpc-green-500" />
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-mpc-green-500/50 to-transparent" />
-        </motion.div>
       </div>
     </section>
   );
