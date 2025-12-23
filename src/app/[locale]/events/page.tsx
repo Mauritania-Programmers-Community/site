@@ -4,10 +4,17 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { VeliteEventCard } from "@/components/events/velite-event-card";
+import { InteractiveEventCard } from "@/components/events/interactive-event-card";
 import { getEventsByLocale, type Locale } from "@/lib/content";
 import { Calendar } from "lucide-react";
 import { use } from "react";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -29,6 +36,7 @@ interface EventsPageClientProps {
 function EventsPageClient({ locale }: EventsPageClientProps) {
   const t = useTranslations("events");
   const events = getEventsByLocale(locale as Locale);
+  const isRTL = locale === "ar";
 
   const upcomingEvents = events.filter((e) => e.status === "upcoming");
   const pastEvents = events.filter((e) => e.status === "completed");
@@ -107,7 +115,7 @@ function EventsPageClient({ locale }: EventsPageClientProps) {
 
       {/* Events Section */}
       <section className="container mx-auto px-4 py-16">
-        <Tabs defaultValue="all" className="w-full">
+        <Tabs defaultValue="all" className="w-full" dir={isRTL ? "rtl" : "ltr"}>
           <motion.div
             className="mb-8 flex justify-center"
             initial={{ opacity: 0, y: 20 }}
@@ -137,65 +145,93 @@ function EventsPageClient({ locale }: EventsPageClientProps) {
           </motion.div>
 
           <TabsContent value="all">
-            {/* Upcoming Events */}
-            {upcomingEvents.length > 0 && (
+            {events.length === 0 ? (
               <motion.div
-                className="mb-12"
-                variants={staggerContainer}
-                initial="initial"
-                animate="animate"
+                className="mx-auto max-w-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                <motion.div
-                  className="mb-6 flex items-center gap-3"
-                  variants={fadeInUp}
-                >
-                  <Calendar className="h-5 w-5 text-mpc-green-500" />
-                  <h2 className="text-2xl font-bold">{t("upcoming")}</h2>
-                  <Badge className="bg-mpc-green-500 text-white">
-                    {upcomingEvents.length} events
-                  </Badge>
-                </motion.div>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {upcomingEvents.map((event, index) => (
-                    <VeliteEventCard
-                      key={event.baseSlug}
-                      event={event}
-                      locale={locale}
-                      index={index}
-                    />
-                  ))}
-                </div>
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <Calendar className="h-6 w-6" />
+                    </EmptyMedia>
+                    <EmptyTitle>
+                      {locale === "ar"
+                        ? "لا توجد فعاليات بعد"
+                        : "No Events Yet"}
+                    </EmptyTitle>
+                    <EmptyDescription>
+                      {locale === "ar"
+                        ? "نخطط لفعاليات رائعة قريبًا. ابقَ على اطلاع!"
+                        : "We're planning amazing events soon. Stay tuned!"}
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
               </motion.div>
-            )}
+            ) : (
+              <>
+                {/* Upcoming Events */}
+                {upcomingEvents.length > 0 && (
+                  <motion.div
+                    className="mb-12"
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                  >
+                    <motion.div
+                      className="mb-6 flex items-center gap-3"
+                      variants={fadeInUp}
+                    >
+                      <Calendar className="h-5 w-5 text-mpc-green-500" />
+                      <h2 className="text-2xl font-bold">{t("upcoming")}</h2>
+                      <Badge className="bg-mpc-green-500 text-white">
+                        {upcomingEvents.length} events
+                      </Badge>
+                    </motion.div>
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+                      {upcomingEvents.map((event, index) => (
+                        <InteractiveEventCard
+                          key={event.baseSlug}
+                          event={event}
+                          locale={locale}
+                          index={index}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
 
-            {/* Past Events */}
-            {pastEvents.length > 0 && (
-              <motion.div
-                variants={staggerContainer}
-                initial="initial"
-                animate="animate"
-              >
-                <motion.div
-                  className="mb-6 flex items-center gap-3"
-                  variants={fadeInUp}
-                >
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
-                  <h2 className="text-2xl font-bold">{t("past")}</h2>
-                  <Badge variant="secondary">
-                    {pastEvents.length} events
-                  </Badge>
-                </motion.div>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {pastEvents.map((event, index) => (
-                    <VeliteEventCard
-                      key={event.baseSlug}
-                      event={event}
-                      locale={locale}
-                      index={index}
-                    />
-                  ))}
-                </div>
-              </motion.div>
+                {/* Past Events */}
+                {pastEvents.length > 0 && (
+                  <motion.div
+                    variants={staggerContainer}
+                    initial="initial"
+                    animate="animate"
+                  >
+                    <motion.div
+                      className="mb-6 flex items-center gap-3"
+                      variants={fadeInUp}
+                    >
+                      <Calendar className="h-5 w-5 text-muted-foreground" />
+                      <h2 className="text-2xl font-bold">{t("past")}</h2>
+                      <Badge variant="secondary">
+                        {pastEvents.length} events
+                      </Badge>
+                    </motion.div>
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+                      {pastEvents.map((event, index) => (
+                        <InteractiveEventCard
+                          key={event.baseSlug}
+                          event={event}
+                          locale={locale}
+                          index={index}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </>
             )}
           </TabsContent>
 
@@ -208,7 +244,7 @@ function EventsPageClient({ locale }: EventsPageClientProps) {
                 animate="animate"
               >
                 {upcomingEvents.map((event, index) => (
-                  <VeliteEventCard
+                  <InteractiveEventCard
                     key={event.baseSlug}
                     event={event}
                     locale={locale}
@@ -218,17 +254,27 @@ function EventsPageClient({ locale }: EventsPageClientProps) {
               </motion.div>
             ) : (
               <motion.div
-                className="py-20 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                className="mx-auto max-w-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                <Calendar className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                <p className="text-lg text-muted-foreground">
-                  No upcoming events at the moment.
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Check back soon for new events!
-                </p>
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <Calendar className="h-6 w-6" />
+                    </EmptyMedia>
+                    <EmptyTitle>
+                      {locale === "ar"
+                        ? "لا توجد فعاليات قادمة"
+                        : "No Upcoming Events"}
+                    </EmptyTitle>
+                    <EmptyDescription>
+                      {locale === "ar"
+                        ? "لا توجد فعاليات مجدولة حاليًا. تحقق مرة أخرى قريبًا!"
+                        : "No events scheduled at the moment. Check back soon for new events!"}
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
               </motion.div>
             )}
           </TabsContent>
@@ -242,7 +288,7 @@ function EventsPageClient({ locale }: EventsPageClientProps) {
                 animate="animate"
               >
                 {pastEvents.map((event, index) => (
-                  <VeliteEventCard
+                  <InteractiveEventCard
                     key={event.baseSlug}
                     event={event}
                     locale={locale}
@@ -252,11 +298,27 @@ function EventsPageClient({ locale }: EventsPageClientProps) {
               </motion.div>
             ) : (
               <motion.div
-                className="py-20 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                className="mx-auto max-w-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                <p className="text-muted-foreground">{t("noEvents")}</p>
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <Calendar className="h-6 w-6" />
+                    </EmptyMedia>
+                    <EmptyTitle>
+                      {locale === "ar"
+                        ? "لا توجد فعاليات سابقة"
+                        : "No Past Events"}
+                    </EmptyTitle>
+                    <EmptyDescription>
+                      {locale === "ar"
+                        ? "لم تكن هناك فعاليات بعد. كن أول من يحضر!"
+                        : "No past events yet. Be among the first to attend!"}
+                    </EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
               </motion.div>
             )}
           </TabsContent>
