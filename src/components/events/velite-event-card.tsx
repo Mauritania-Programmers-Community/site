@@ -11,9 +11,11 @@ import {
   MapPin,
   Video,
   ArrowRight,
-  User,
 } from "lucide-react";
-import type { Event } from "@/lib/content";
+import { formatDate, type Event } from "@/lib/content";
+import { getAuthor, getAuthorName, getAuthorRole } from "@/lib/authors";
+import { AvatarImage } from "@/components/ui/avatar-image";
+import { useTranslations } from "next-intl";
 
 interface VeliteEventCardProps {
   event: Event;
@@ -28,32 +30,28 @@ const eventTypeColors: Record<string, string> = {
   webinar: "bg-green-500/10 text-green-600 dark:text-green-400",
 };
 
-function formatEventDate(date: string, locale: string): string {
-  return new Date(date).toLocaleDateString(
-    locale === "ar" ? "ar-MR" : "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
-}
-
 export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardProps) {
+  const t = useTranslations("events");
   const isPast = event.status === "completed";
+
+  // Get speaker info from author system
+  const speaker = event.speaker ? getAuthor(event.speaker) : undefined;
+  const speakerName = event.speaker ? getAuthorName(event.speaker, locale) : undefined;
+  const speakerRole = event.speaker ? getAuthorRole(event.speaker, locale) : undefined;
 
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       whileHover={{ y: -4 }}
     >
-      <Card
-        className={`group h-full overflow-hidden border-2 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-xl ${
-          isPast ? "opacity-80" : ""
-        }`}
-      >
+        <Card
+          className={`group h-full flex flex-col overflow-hidden border-2 p-0 gap-0 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-md ${
+            isPast ? "opacity-80" : ""
+          }`}
+        >
         {/* Cover Image */}
         {event.image && (
           <div className="relative aspect-video w-full overflow-hidden">
@@ -63,11 +61,10 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
           </div>
         )}
 
-        <CardContent className="p-6">
+        <CardContent className="p-6 flex-grow flex flex-col">
           {/* Header with type badge and date */}
           <div className="mb-4 flex items-center justify-between">
             <Badge className={eventTypeColors[event.type] || eventTypeColors.meetup}>
@@ -75,7 +72,7 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
             </Badge>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
-              {formatEventDate(event.date, locale)}
+              {formatDate(event.date, locale)}
             </div>
           </div>
 
@@ -91,11 +88,25 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
 
           {/* Event details */}
           <div className="mb-4 flex flex-wrap gap-3 text-sm text-muted-foreground">
-            {event.speaker && (
-              <span className="flex items-center gap-1">
-                <User className="h-4 w-4" />
-                {event.speaker}
-              </span>
+            {speakerName && (
+              <div className="flex items-center gap-2">
+                {speaker?.avatar && (
+                  <div className="relative h-6 w-6 overflow-hidden rounded-full ring-1 ring-mpc-green-500/20">
+                    <AvatarImage
+                      src={speaker.avatar}
+                      alt={speakerName}
+                      size={24}
+                      className="rounded-full"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-col">
+                  <span className="font-medium text-foreground">{speakerName}</span>
+                  {speakerRole && (
+                    <span className="text-xs">{speakerRole}</span>
+                  )}
+                </div>
+              </div>
             )}
             {event.platform && (
               <span className="flex items-center gap-1">
@@ -125,13 +136,13 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
             <Link href={`/${locale}/events/${event.baseSlug}`}>
               {isPast ? (
                 <>
-                  View Details
-                  <ArrowRight className="ms-2 h-4 w-4" />
+                  {t("viewDetails")}
+                  <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
                 </>
               ) : (
                 <>
-                  Learn More
-                  <ArrowRight className="ms-2 h-4 w-4" />
+                  {t("learnMore")}
+                  <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
                 </>
               )}
             </Link>
