@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { VeliteBlogCard } from "@/components/blog/velite-blog-card";
+import { ShiftBlogCard } from "@/components/blog/shift-blog-card";
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { getPostsByLocale, getAllTags, type Locale } from "@/lib/content";
 import {
   BookOpen,
@@ -18,6 +19,13 @@ import {
   Tag,
 } from "lucide-react";
 import React from "react";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -37,7 +45,6 @@ interface BlogPageClientProps {
 }
 
 function BlogPageClient({ locale }: BlogPageClientProps) {
-  const t = useTranslations();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -63,34 +70,18 @@ function BlogPageClient({ locale }: BlogPageClientProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-mpc-green-500/10 py-20">
-        {/* Animated background blobs */}
-        <motion.div
-          className="absolute -top-40 -end-40 h-96 w-96 rounded-full bg-mpc-green-500/20 blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.4, 0.2],
-            rotate: [0, 90, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute -bottom-40 -start-40 h-96 w-96 rounded-full bg-mpc-gold-500/20 blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.2, 0.4, 0.2],
-            rotate: [0, -90, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+      <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-mpc-green-500/5 py-20">
+        {/* FlickeringGrid Background */}
+        <div className="absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]">
+          <FlickeringGrid
+            className="h-full w-full"
+            squareSize={4}
+            gridGap={6}
+            color="rgb(76, 175, 80)"
+            maxOpacity={0.15}
+            flickerChance={0.05}
+          />
+        </div>
 
         <div className="container relative mx-auto px-4">
           <motion.div
@@ -148,44 +139,72 @@ function BlogPageClient({ locale }: BlogPageClientProps) {
             </motion.p>
 
             {/* Search bar */}
-            <motion.div
-              className="relative mx-auto max-w-xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <Search className="absolute start-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder={
-                  locale === "ar"
-                    ? "ابحث في المقالات..."
-                    : "Search articles..."
-                }
-                className="h-14 rounded-full border-2 bg-background/80 ps-12 pe-4 text-lg backdrop-blur-sm focus:border-mpc-green-500"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute end-2 top-1/2 -translate-y-1/2"
-                  onClick={() => setSearchQuery("")}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </motion.div>
+            {allPosts.length > 0 && (
+              <motion.div
+                className="relative mx-auto max-w-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <Search className="absolute start-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder={
+                    locale === "ar"
+                      ? "ابحث في المقالات..."
+                      : "Search articles..."
+                  }
+                  className="h-14 rounded-full border-2 bg-background/80 ps-12 pe-4 text-lg backdrop-blur-sm focus:border-mpc-green-500"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute end-2 top-1/2 -translate-y-1/2"
+                    onClick={() => setSearchQuery("")}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </section>
 
       {/* Main content */}
       <section className="container mx-auto px-4 py-16">
-        <div className="grid gap-12 lg:grid-cols-3">
-          {/* Main column */}
-          <div className="lg:col-span-2">
+        {allPosts.length === 0 ? (
+          <motion.div
+            className="mx-auto max-w-2xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <BookOpen className="h-6 w-6" />
+                </EmptyMedia>
+                <EmptyTitle>
+                  {locale === "ar"
+                    ? "لا توجد مقالات بعد"
+                    : "No Blog Posts Yet"}
+                </EmptyTitle>
+                <EmptyDescription>
+                  {locale === "ar"
+                    ? "نعمل على إنشاء محتوى رائع لك. تحقق مرة أخرى قريبًا!"
+                    : "We're working on creating great content for you. Check back soon!"}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </motion.div>
+        ) : (
+          <div className="grid gap-12 lg:grid-cols-3">
+            {/* Main column */}
+            <div className="lg:col-span-2">
             {/* Tag filters */}
             {allTags.length > 0 && (
               <motion.div
@@ -250,7 +269,7 @@ function BlogPageClient({ locale }: BlogPageClientProps) {
                   exit={{ opacity: 0 }}
                 >
                   {filteredPosts.map((post, index) => (
-                    <VeliteBlogCard
+                    <ShiftBlogCard
                       key={post.baseSlug}
                       post={post}
                       locale={locale}
@@ -352,31 +371,9 @@ function BlogPageClient({ locale }: BlogPageClientProps) {
                 </Card>
               </motion.div>
             )}
-
-            {/* Newsletter card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.8 }}
-            >
-              <Card className="border-mpc-green-500/30 bg-gradient-to-br from-mpc-green-500/5 to-mpc-gold-500/5">
-                <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">
-                    {locale === "ar" ? "ابق على اطلاع" : "Stay Updated"}
-                  </h3>
-                  <p className="mb-4 text-sm text-muted-foreground">
-                    {locale === "ar"
-                      ? "انضم لمجتمعنا واحصل على آخر المقالات والأخبار."
-                      : "Join our community and get the latest articles and news."}
-                  </p>
-                  <Button className="w-full bg-mpc-green-500 hover:bg-mpc-green-600">
-                    {locale === "ar" ? "انضم الآن" : "Join Community"}
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
           </div>
         </div>
+        )}
       </section>
     </div>
   );
