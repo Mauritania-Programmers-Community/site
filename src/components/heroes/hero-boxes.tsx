@@ -129,7 +129,7 @@ export function HeroBoxes() {
           transition={{ delay: 0.6, duration: 0.5 }}
         >
           {[
-            { value: "880+", labelEn: "Members", labelAr: "عضو", icon: Users },
+            { value: "900+", labelEn: "Members", labelAr: "عضو", icon: Users },
             { value: "10+", labelEn: "Events", labelAr: "فعالية", icon: Calendar },
           ].map((stat, index) => (
             <motion.div

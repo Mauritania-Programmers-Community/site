@@ -121,7 +121,7 @@ export function HeroNeural() {
             transition={{ delay: 0.7, duration: 0.6 }}
           >
             {[
-              isRTL ? "880+ مطور" : "880+ Developers",
+              isRTL ? "900+ مطور" : "900+ Developers",
               isRTL ? "4 مجالات تقنية" : "4 Tech Domains",
               isRTL ? "مجتمع نشط 24/7" : "24/7 Active Community",
             ].map((detail, index) => (

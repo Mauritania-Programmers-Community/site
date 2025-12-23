@@ -108,7 +108,7 @@ function InteractiveTerminal({ isRTL }: { isRTL: boolean }) {
     { type: "success" as const, text: isRTL ? "✓ مرحباً بك في مجتمع MPC!" : "✓ Welcome to MPC Community!", delay: 600 },
     { type: "output" as const, text: "", delay: 300 },
     { type: "command" as const, text: "$ mpc status", delay: 500 },
-    { type: "output" as const, text: isRTL ? "  المطورين النشطين: 880+" : "  Active developers: 880+", delay: 400 },
+    { type: "output" as const, text: isRTL ? "  المطورين النشطين: 900+" : "  Active developers: 900+", delay: 400 },
     { type: "output" as const, text: isRTL ? "  المجالات: ويب، أمن، ذكاء، موبايل" : "  Domains: web, security, ai, mobile", delay: 400 },
     { type: "output" as const, text: isRTL ? "  الحالة: نشط 24/7" : "  Status: Active 24/7", delay: 400 },
     { type: "output" as const, text: "", delay: 300 },
@@ -302,7 +302,7 @@ export function HeroMinimal() {
               transition={{ delay: 0.4, duration: 0.5 }}
             >
               {[
-                { value: "880+", labelEn: "Members", labelAr: "عضو", icon: Users },
+                { value: "900+", labelEn: "Members", labelAr: "عضو", icon: Users },
                 { value: "4+", labelEn: "Domains", labelAr: "مجالات", icon: Code2 },
                 { value: "24/7", labelEn: "Active", labelAr: "نشط", icon: Zap },
               ].map((stat, index) => (

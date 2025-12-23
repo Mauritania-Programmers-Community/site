@@ -188,7 +188,7 @@ export function HeroParticle() {
           transition={{ delay: 1.2, duration: 0.8 }}
         >
           {[
-            { value: "880+", labelEn: "Developers", labelAr: "مطور" },
+            { value: "900+", labelEn: "Developers", labelAr: "مطور" },
             { value: "4", labelEn: "Tech Domains", labelAr: "مجالات تقنية" },
             { value: "10+", labelEn: "Events", labelAr: "فعالية" },
             { value: "1", labelEn: "Year Strong", labelAr: "سنة قوية" },

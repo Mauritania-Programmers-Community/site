@@ -159,7 +159,7 @@ export function HeroNeon() {
             transition={{ delay: 0.8, duration: 0.5 }}
           >
             {[
-              { value: "880+", labelEn: "Members", labelAr: "عضو" },
+              { value: "900+", labelEn: "Members", labelAr: "عضو" },
               { value: "10+", labelEn: "Events", labelAr: "فعالية" },
               { value: "4", labelEn: "Domains", labelAr: "مجالات" },
             ].map((stat, index) => (

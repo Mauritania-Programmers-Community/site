@@ -284,7 +284,7 @@ export function HeroTailark() {
                       >
                         <span className="text-mpc-green-500">✓</span>
                         <span className="text-muted-foreground">
-                          {isRTL ? "880+ مطور نشط" : "880+ active developers"}
+                          {isRTL ? "900+ مطور نشط" : "900+ active developers"}
                         </span>
                       </motion.div>
                       <motion.div

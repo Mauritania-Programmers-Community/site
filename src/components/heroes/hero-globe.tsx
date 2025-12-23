@@ -157,7 +157,7 @@ export function HeroGlobe() {
               transition={{ delay: 0.6 }}
             >
               {[
-                { value: "880+", labelEn: "Members", labelAr: "عضو", icon: Users },
+                { value: "900+", labelEn: "Members", labelAr: "عضو", icon: Users },
                 { value: "4+", labelEn: "Domains", labelAr: "مجالات", icon: Code2 },
                 { value: "24/7", labelEn: "Active", labelAr: "نشط", icon: Zap },
               ].map((stat, index) => (
