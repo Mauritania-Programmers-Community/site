@@ -4,6 +4,24 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 
 /**
+ * Calculate reading time from MDX content
+ * Average reading speed: 200 words per minute
+ */
+const calculateReadingTime = (content: string): number => {
+  // Remove MDX/JSX components and code blocks
+  const cleanContent = content
+    .replace(/<[^>]+>/g, "") // Remove HTML/JSX tags
+    .replace(/```[\s\S]*?```/g, "") // Remove code blocks
+    .replace(/`[^`]+`/g, "") // Remove inline code
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Convert links to text
+    .replace(/[#*_~]/g, ""); // Remove markdown formatting
+
+  const words = cleanContent.trim().split(/\s+/).length;
+  const readingTime = Math.ceil(words / 200);
+  return Math.max(1, readingTime); // Minimum 1 minute
+};
+
+/**
  * Extract locale from content file path
  * Path format: blog/en/post-name.mdx -> 'en'
  */
@@ -44,6 +62,8 @@ const posts = defineCollection({
       const path = meta.path as string;
       const locale = data.locale || extractLocale(path);
       const baseSlug = extractBaseSlug(path);
+      const content = meta.content as string;
+      const readingTime = calculateReadingTime(content);
 
       return {
         ...data,
@@ -51,6 +71,7 @@ const posts = defineCollection({
         baseSlug,
         slugAsParams: baseSlug,
         permalink: `/${locale}/blog/${baseSlug}`,
+        readingTime,
       };
     }),
 });

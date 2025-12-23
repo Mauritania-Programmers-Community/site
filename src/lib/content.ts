@@ -158,6 +158,14 @@ export function getPastEvents(locale: Locale): Event[] {
 }
 
 /**
+ * Get recent events - last N events regardless of status
+ * Returns events sorted by date (newest first)
+ */
+export function getRecentEvents(locale: Locale, limit: number = 3): Event[] {
+  return getEventsByLocale(locale).slice(0, limit);
+}
+
+/**
  * Get events by type for a locale
  */
 export function getEventsByType(
@@ -185,11 +193,24 @@ export function hasEventTranslation(slug: string, locale: Locale): boolean {
 // ============================================
 
 /**
- * Format date for display
+ * Format reading time for display
+ */
+export function formatReadingTime(minutes: number, locale: Locale): string {
+  if (locale === "ar") {
+    if (minutes === 1) return "دقيقة واحدة للقراءة";
+    if (minutes === 2) return "دقيقتان للقراءة";
+    if (minutes <= 10) return `${minutes} دقائق للقراءة`;
+    return `${minutes} دقيقة للقراءة`;
+  }
+  return `${minutes} min read`;
+}
+
+/**
+ * Format date for display with Western numerals
  */
 export function formatDate(
   date: string,
-  locale: Locale,
+  locale: string,
   options?: Intl.DateTimeFormatOptions
 ): string {
   const defaultOptions: Intl.DateTimeFormatOptions = {
@@ -199,7 +220,7 @@ export function formatDate(
     ...options,
   };
   return new Date(date).toLocaleDateString(
-    locale === "ar" ? "ar-MR" : "en-US",
+    locale === "ar" ? "ar-u-nu-latn" : "en-US",
     defaultOptions
   );
 }
