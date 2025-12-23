@@ -6,16 +6,17 @@ export const siteConfig = {
   url: "https://mpc.mr",
   ogImage: "/og-image.png",
   links: {
-    whatsapp: "https://chat.whatsapp.com/YOUR_LINK",
-    github: "https://github.com/mpc-mauritania",
-    linkedin: "https://linkedin.com/company/mpc-mauritania",
-    facebook: "https://facebook.com/mpc.mauritania",
+    whatsapp: "https://chat.whatsapp.com/E0GEci1wFGA1GrSv4ABBYU",
+    github: "https://github.com/Mauritania-Programmers-Community",
+    linkedin: "https://www.linkedin.com/company/%D9%85%D8%A8%D8%B1%D9%85%D8%AC%D9%8A-%D9%85%D9%88%D8%B1%D9%8A%D8%AA%D8%A7%D9%86%D9%8A%D8%A7",
+    facebook: "https://www.facebook.com/profile.php?id=61581985272862",
   },
   founder: "Deidin",
   foundedDate: "2024-09-21",
   stats: {
-    members: 600,
-    events: 3,
+    members: 900,
+    events: 11,
+    projects: 4,
     yearFounded: 2024,
   },
 } as const;
