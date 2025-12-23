@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { routing, rtlLocales, type Locale } from "@/i18n/routing";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Toaster } from "sonner";
 import "../globals.css";
 
 const inter = Inter({
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | MPC",
   },
   description:
-    "Building Mauritania's Tech Future Together. Join 880+ developers sharing knowledge, opportunities, and innovation.",
+    "Building Mauritania's Tech Future Together. Join 900+ developers sharing knowledge, opportunities, and innovation.",
   keywords: [
     "Mauritania",
     "developers",
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     siteName: "MPC",
     title: "MPC - Mauritania Programmers Community",
     description:
-      "Building Mauritania's Tech Future Together. Join 880+ developers sharing knowledge, opportunities, and innovation.",
+      "Building Mauritania's Tech Future Together. Join 900+ developers sharing knowledge, opportunities, and innovation.",
     images: [
       {
         url: "/og-image.png",
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "MPC - Mauritania Programmers Community",
     description:
-      "Building Mauritania's Tech Future Together. Join 880+ developers sharing knowledge, opportunities, and innovation.",
+      "Building Mauritania's Tech Future Together. Join 900+ developers sharing knowledge, opportunities, and innovation.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -114,6 +115,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
+            <Toaster richColors position="top-center" />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
