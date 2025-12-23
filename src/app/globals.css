@@ -34,6 +34,11 @@
   --color-mpc-gold-600: #FFB300;
   --color-mpc-gold-700: #FFA000;
 
+  /* Traffic Lights (Mac Terminal) */
+  --color-traffic-red: #FF5F57;
+  --color-traffic-yellow: #FFBD2E;
+  --color-traffic-green: #28CA42;
+
   /* Semantic Colors */
   --color-success: #22C55E;
   --color-warning: #F59E0B;
@@ -111,6 +116,12 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* MPC Brand Rainbow - Green to Gold gradient */
+  --color-1: oklch(63% 0.19 142);     /* MPC Green #4CAF50 */
+  --color-2: oklch(70% 0.17 130);     /* Light Green */
+  --color-3: oklch(82% 0.18 95);      /* Gold Transition */
+  --color-4: oklch(78% 0.19 75);      /* MPC Gold #FFC107 */
+  --color-5: oklch(73% 0.18 110);     /* Green-Gold Mid */
 }
 
 /* ============================================
@@ -148,7 +159,19 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  /* MPC Brand Rainbow - Green to Gold gradient (Dark mode) */
+  --color-1: oklch(63% 0.19 142);     /* MPC Green #4CAF50 */
+  --color-2: oklch(70% 0.17 130);     /* Light Green */
+  --color-3: oklch(82% 0.18 95);      /* Gold Transition */
+  --color-4: oklch(78% 0.19 75);      /* MPC Gold #FFC107 */
+  --color-5: oklch(73% 0.18 110);     /* Green-Gold Mid */
 }
+
+/* ============================================
+   RTL Gradient Direction (Not native to Tailwind v4)
+   Note: Removed RTL gradient overrides - they break Tailwind v4 gradients
+   Gradients work fine in RTL without overrides
+   ============================================ */
 
 /* ============================================
    Base Styles
@@ -168,11 +191,50 @@ body {
 }
 
 /* ============================================
-   Selection Styles
+   RTL Typography (Arabic-specific adjustments)
+   ============================================ */
+
+/* Prevent disconnected Arabic letters */
+[dir="rtl"] {
+  letter-spacing: 0;
+}
+
+/* Prevent text clipping with proper line-height */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  line-height: 1.5;
+}
+
+/* Fix gradient text rendering in RTL */
+[dir="rtl"] .bg-clip-text {
+  display: inline-block;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   Selection Styles - MPC Brand
    ============================================ */
 ::selection {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
+  background-color: #4CAF50;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #4CAF50;
+  color: #ffffff;
+}
+
+.dark ::selection {
+  background-color: #66BB6A;
+  color: #1B5E20;
+}
+
+.dark ::-moz-selection {
+  background-color: #66BB6A;
+  color: #1B5E20;
 }
 
 /* ============================================
@@ -194,6 +256,35 @@ body {
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
+}
+
+/* ============================================
+   Terminal Scrollbar (MPC Green Theme)
+   ============================================ */
+.terminal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(76, 175, 80, 0.3);
+  border-radius: 4px;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(76, 175, 80, 0.5);
+}
+
+/* ============================================
+   Terminal Text Rendering
+   ============================================ */
+.terminal-text {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================
@@ -387,6 +478,25 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* ============================================
+   Terminal Input Override
+   ============================================ */
+.terminal-input-override {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.terminal-input-override:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -423,7 +533,52 @@ body {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-}
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  @keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+    }
+  15%, 35% {
+    transform: translateZ(0) rotate(90deg);
+    }
+  65%, 85% {
+    transform: translateZ(0) rotate(270deg);
+    }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+    }
+  }
+  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+  --color-color-5: var(--color-5);
+  --color-color-4: var(--color-4);
+  --color-color-3: var(--color-3);
+  --color-color-2: var(--color-2);
+  --color-color-1: var(--color-1)
+;
+  @keyframes rainbow {
+  0% {
+    background-position: 0%;
+    }
+  100% {
+    background-position: 200%;
+    }
+  }
+  --animate-rippling: rippling var(--duration) ease-out;
+  @keyframes rippling {
+  0% {
+    opacity: 1;
+    }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+    }
+  }}
 
 @layer base {
   * {
@@ -434,3 +589,88 @@ body {
   }
 }
 
+/* ============================================
+   View Transitions API - Theme Toggle
+   ============================================ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ============================================
+   3D Perspective Utility
+   ============================================ */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* ============================================
+   Geometric Pattern Utilities
+   ============================================ */
+.pattern-geometric {
+  background-image:
+    linear-gradient(30deg, rgba(76, 175, 80, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.03) 87.5%, rgba(76, 175, 80, 0.03)),
+    linear-gradient(150deg, rgba(76, 175, 80, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.03) 87.5%, rgba(76, 175, 80, 0.03)),
+    linear-gradient(30deg, rgba(76, 175, 80, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.03) 87.5%, rgba(76, 175, 80, 0.03)),
+    linear-gradient(150deg, rgba(76, 175, 80, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.03) 87.5%, rgba(76, 175, 80, 0.03)),
+    linear-gradient(60deg, rgba(255, 193, 7, 0.02) 25%, transparent 25.5%, transparent 75%, rgba(255, 193, 7, 0.02) 75%, rgba(255, 193, 7, 0.02)),
+    linear-gradient(60deg, rgba(255, 193, 7, 0.02) 25%, transparent 25.5%, transparent 75%, rgba(255, 193, 7, 0.02) 75%, rgba(255, 193, 7, 0.02));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+}
+
+.dark .pattern-geometric {
+  background-image:
+    linear-gradient(30deg, rgba(76, 175, 80, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.05) 87.5%, rgba(76, 175, 80, 0.05)),
+    linear-gradient(150deg, rgba(76, 175, 80, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.05) 87.5%, rgba(76, 175, 80, 0.05)),
+    linear-gradient(30deg, rgba(76, 175, 80, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.05) 87.5%, rgba(76, 175, 80, 0.05)),
+    linear-gradient(150deg, rgba(76, 175, 80, 0.05) 12%, transparent 12.5%, transparent 87%, rgba(76, 175, 80, 0.05) 87.5%, rgba(76, 175, 80, 0.05)),
+    linear-gradient(60deg, rgba(255, 193, 7, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(255, 193, 7, 0.03) 75%, rgba(255, 193, 7, 0.03)),
+    linear-gradient(60deg, rgba(255, 193, 7, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(255, 193, 7, 0.03) 75%, rgba(255, 193, 7, 0.03));
+}
+
+/* ============================================
+   Editorial Typography
+   ============================================ */
+.text-editorial {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+[dir="rtl"] .text-editorial {
+  font-family: var(--font-arabic);
+  font-weight: 800;
+}
+
+/* ============================================
+   Color Block Utilities
+   ============================================ */
+.color-block-green {
+  position: relative;
+  background: linear-gradient(135deg, var(--color-mpc-green-600), var(--color-mpc-green-700));
+  transform: rotate(-2deg);
+  padding: 2rem;
+}
+
+.color-block-green::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 193, 7, 0.1) 70%);
+  pointer-events: none;
+}
+
+.dark .color-block-green {
+  background: linear-gradient(135deg, var(--color-mpc-green-700), var(--color-mpc-green-800));
+}
+
+/* ============================================
+   Prose RTL (Code blocks stay LTR)
+   ============================================ */
+[dir="rtl"] .prose code,
+[dir="rtl"] .prose pre {
+  direction: ltr;
+}
