@@ -1,13 +1,11 @@
 {
   "metadata": {
     "title": "MPC - Mauritania Programmers Community",
-    "description": "Building Mauritania's Tech Future Together. Join 880+ developers sharing knowledge, opportunities, and innovation."
+    "description": "Building Mauritania's Tech Future Together. Join 900+ developers sharing knowledge, opportunities, and innovation."
   },
   "nav": {
-    "home": "Home",
     "events": "Events",
     "blog": "Blog",
-    "team": "Team",
     "join": "Join Community"
   },
   "hero": {
@@ -15,17 +13,18 @@
     "title": "Building Mauritania's",
     "titleHighlight": "Tech Future",
     "titleEnd": "Together",
-    "description": "Join 880+ developers sharing knowledge, opportunities, and building the future of technology in Mauritania.",
+    "description": "Join 900+ developers sharing knowledge, opportunities, and building the future of technology in Mauritania.",
     "cta": {
       "join": "Join WhatsApp Group",
       "events": "View Events"
     }
   },
   "stats": {
+    "membersCount": "900+",
     "members": "Members",
     "events": "Events Hosted",
     "year": "Year Strong",
-    "ideas": "Ideas Shared"
+    "projects": "Open Source Projects"
   },
   "features": {
     "title": "What We Do",
@@ -57,22 +56,28 @@
     "all": "All Events",
     "viewAll": "View All Events",
     "noEvents": "No events found.",
-    "register": "Register Now",
-    "watchRecording": "Watch Recording",
-    "viewDetails": "View Details"
-  },
-  "team": {
-    "title": "Meet the Team",
-    "subtitle": "The passionate individuals building MPC.",
-    "founder": "Founder",
-    "admins": "Admin Team"
+    "backToEvents": "Back to Events",
+    "viewDetails": "View Details",
+    "learnMore": "Learn More",
+    "status": {
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "cta": {
+      "register": "Register Now",
+      "watchRecording": "Watch Recording",
+      "rsvp": "RSVP Now",
+      "rsvpConfirmed": "RSVP Confirmed",
+      "calendar": "Calendar",
+      "share": "Share"
+    }
   },
   "community": {
     "badge": "Our Community",
     "title": "Built by the Community, for the Community",
-    "subtitle": "Join 880+ passionate developers from Mauritania who are learning, sharing, and building together.",
-    "madeWith": "Made with love in Mauritania",
-    "viewTeam": "Meet the Team"
+    "subtitle": "Join 900+ passionate developers from Mauritania who are learning, sharing, and building together.",
+    "madeWith": "Made with love in Mauritania"
   },
   "faq": {
     "badge": "FAQ",
@@ -82,7 +87,7 @@
     "items": {
       "about": {
         "question": "What is MPC?",
-        "answer": "MPC (Mauritania Programmers Community) is a community of 880+ developers from Mauritania. Founded on September 21, 2024, we bring together programmers of all skill levels to learn, share knowledge, and collaborate on projects."
+        "answer": "MPC (Mauritania Programmers Community) is a community of 900+ developers from Mauritania. Founded on September 21, 2024, we bring together programmers of all skill levels to learn, share knowledge, and collaborate on projects."
       },
       "join": {
         "question": "How can I join the community?",
@@ -103,10 +108,66 @@
     }
   },
   "cta": {
-    "badge": "Join 880+ Developers",
+    "badge": "Join 900+ Developers",
     "title": "Ready to Level Up Your Skills?",
     "description": "Join our community of passionate developers and start your journey today.",
     "button": "Join WhatsApp Group"
+  },
+  "spotlight": {
+    "badge": "Community Pulse",
+    "title": "What's Happening",
+    "subtitle": "Latest insights and upcoming events from our community",
+    "latestPosts": "Recent Articles",
+    "upcomingEvent": "Next Event",
+    "completedEvent": "Past Event",
+    "cancelledEvent": "Cancelled",
+    "readMore": "Read Article",
+    "exploreBlog": "Explore Blog",
+    "viewEvents": "All Events",
+    "noUpcomingEvents": "No upcoming events scheduled"
+  },
+  "recentPosts": {
+    "badge": "Latest Articles",
+    "title": "Recent Blog Posts",
+    "subtitle": "Stay updated with our latest technical articles and insights",
+    "viewAll": "Read All Articles"
+  },
+  "recentEvents": {
+    "badge": "Community Events",
+    "title": "Recent Events",
+    "subtitle": "Join our workshops, meetups, and learning sessions",
+    "viewAll": "Explore All Events"
+  },
+  "contribution": {
+    "badge": "Get Involved",
+    "title": "Shape the Future",
+    "subtitle": "Multiple ways to contribute and make an impact",
+    "pathways": {
+      "blog": {
+        "title": "Share Knowledge",
+        "description": "Write technical articles and share your expertise",
+        "howTo": "Submit your blog post via GitHub PR or email",
+        "cta": "Write Article"
+      },
+      "workshop": {
+        "title": "Lead Workshop",
+        "description": "Teach others and organize learning sessions",
+        "howTo": "Propose your workshop topic and we'll help you organize",
+        "cta": "Propose Workshop"
+      },
+      "project": {
+        "title": "Build Projects",
+        "description": "Collaborate on open-source community projects",
+        "howTo": "Browse our GitHub repos and contribute code",
+        "cta": "View Projects"
+      },
+      "mentor": {
+        "title": "Mentor Others",
+        "description": "Guide beginners and share your experience",
+        "howTo": "Join our mentorship program and help others grow",
+        "cta": "Become Mentor"
+      }
+    }
   },
   "footer": {
     "tagline": "Building Mauritania's Tech Future Together",
@@ -122,6 +183,39 @@
     "loading": "Loading...",
     "error": "Something went wrong",
     "tryAgain": "Try Again",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "changeLanguage": "Change language",
+    "currentLanguage": "Current language"
+  },
+  "terminal": {
+    "commands": {
+      "whoami": "developer@mauritania",
+      "uname": "MPC-Community v1.0 | 900+ developers | 4 domains",
+      "catOutput": {
+        "line1": "Active developers: 900+",
+        "line2": "Focus: Web, Security, AI, Mobile",
+        "line3": "Status: Online 24/7"
+      },
+      "sudoPassword": "[sudo] password for developer: ****",
+      "sudoSuccess": "✓ Access granted! Welcome to MPC!",
+      "help": {
+        "title": "Available commands:",
+        "whoami": "whoami - Display current user",
+        "uname": "uname -a - Show system information",
+        "sudo": "sudo join mpc-community - Join the community",
+        "help": "help - Show this help message",
+        "clear": "clear - Clear terminal screen"
+      },
+      "unknown": "Command not found. Type 'help' for available commands.",
+      "placeholder": "Type a command... (try 'help')"
+    },
+    "errors": {
+      "unknown": "bash: {command}: command not found",
+      "didYouMean": "Did you mean: {suggestion}?",
+      "tryHelp": "Type 'help' to see available commands"
+    },
+    "autocomplete": {
+      "hint": "Press Tab to autocomplete"
+    }
   }
 }
