@@ -5,8 +5,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, ArrowRight } from "lucide-react";
-import type { Post } from "@/lib/content";
+import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { formatReadingTime, formatDate, type Post, type Locale } from "@/lib/content";
+import { getAuthor, getAuthorName, getAuthorRole } from "@/lib/authors";
+import { AvatarImage } from "@/components/ui/avatar-image";
+import { MagicCard } from "@/components/ui/magic-card";
 
 interface VeliteBlogCardProps {
   post: Post;
@@ -15,23 +18,17 @@ interface VeliteBlogCardProps {
   variant?: "default" | "featured" | "compact";
 }
 
-function formatDate(date: string, locale: string): string {
-  return new Date(date).toLocaleDateString(
-    locale === "ar" ? "ar-MR" : "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
-}
-
 export function VeliteBlogCard({
   post,
   locale,
   index = 0,
   variant = "default",
 }: VeliteBlogCardProps) {
+  const author = getAuthor(post.author);
+  const authorName = getAuthorName(post.author, locale);
+  const authorRole = getAuthorRole(post.author, locale);
+  const readingTime = (post as Post & { readingTime?: number }).readingTime;
+
   if (variant === "compact") {
     return (
       <Link
@@ -45,9 +42,15 @@ export function VeliteBlogCard({
           <p className="truncate font-medium group-hover:text-mpc-green-500">
             {post.title}
           </p>
-          <p className="text-xs text-muted-foreground">
-            {formatDate(post.date, locale)}
-          </p>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>{formatDate(post.date, locale)}</span>
+            {readingTime && (
+              <>
+                <span>·</span>
+                <span>{formatReadingTime(readingTime, locale as Locale)}</span>
+              </>
+            )}
+          </div>
         </div>
       </Link>
     );
@@ -61,7 +64,8 @@ export function VeliteBlogCard({
         transition={{ duration: 0.4, delay: index * 0.1 }}
       >
         <Link href={`/${locale}/blog/${post.baseSlug}`}>
-          <Card className="group overflow-hidden border-2 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-xl">
+          <MagicCard gradientSize={300} gradientOpacity={0.25} className="rounded-xl">
+            <Card className="group overflow-hidden border-2 p-0 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-md">
             <div className="grid md:grid-cols-2">
               {post.image && (
                 <div className="relative aspect-video md:aspect-auto overflow-hidden">
@@ -88,18 +92,39 @@ export function VeliteBlogCard({
                   {post.description}
                 </p>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <User className="h-4 w-4" />
-                    {post.author}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {author?.avatar && (
+                      <div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-mpc-green-500/20">
+                        <AvatarImage
+                          src={author.avatar}
+                          alt={authorName}
+                          size={32}
+                          className="rounded-full"
+                        />
+                      </div>
+                    )}
+                    <div className="flex flex-col">
+                      <span className="font-medium text-foreground">{authorName}</span>
+                      {authorRole && (
+                        <span className="text-xs">{authorRole}</span>
+                      )}
+                    </div>
+                  </div>
                   <span className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     {formatDate(post.date, locale)}
                   </span>
+                  {readingTime && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      {formatReadingTime(readingTime, locale as Locale)}
+                    </span>
+                  )}
                 </div>
               </CardContent>
             </div>
           </Card>
+          </MagicCard>
         </Link>
       </motion.div>
     );
@@ -114,7 +139,7 @@ export function VeliteBlogCard({
       whileHover={{ y: -4 }}
     >
       <Link href={`/${locale}/blog/${post.baseSlug}`}>
-        <Card className="group h-full overflow-hidden border-2 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-xl">
+          <Card className="group h-full overflow-hidden border-2 p-0 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-md hover:scale-[1.02]">
           {post.image && (
             <div className="relative aspect-video overflow-hidden">
               <Image
@@ -146,16 +171,36 @@ export function VeliteBlogCard({
             </p>
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1">
-                  <User className="h-3.5 w-3.5" />
-                  {post.author}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  {author?.avatar && (
+                    <div className="relative h-6 w-6 overflow-hidden rounded-full ring-1 ring-mpc-green-500/20">
+                      <AvatarImage
+                        src={author.avatar}
+                        alt={authorName}
+                        size={24}
+                        className="rounded-full"
+                      />
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <span className="font-medium">{authorName}</span>
+                    {authorRole && (
+                      <span className="text-xs text-muted-foreground/80 hidden sm:block">{authorRole}</span>
+                    )}
+                  </div>
+                </div>
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3.5 w-3.5" />
                   {formatDate(post.date, locale)}
                 </span>
+                {readingTime && (
+                  <span className="hidden sm:flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    {formatReadingTime(readingTime, locale as Locale)}
+                  </span>
+                )}
               </div>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
             </div>
           </CardContent>
         </Card>
