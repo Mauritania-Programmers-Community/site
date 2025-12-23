@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { siteConfig } from "@/config/site";
 import { Github, Linkedin, Facebook } from "lucide-react";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 
 export function Footer() {
   const t = useTranslations();
@@ -16,7 +17,7 @@ export function Footer() {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-3">
             <Image
-              src="/images/logos/mpc_logo.png"
+              src="/images/logos/mpc_logo.webp"
               alt={siteConfig.name}
               width={48}
               height={48}
@@ -31,12 +32,6 @@ export function Footer() {
           </div>
           <nav className="flex gap-6">
             <Link
-              href={`/${locale}`}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {t("nav.home")}
-            </Link>
-            <Link
               href={`/${locale}/events`}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
@@ -48,14 +43,8 @@ export function Footer() {
             >
               {t("nav.blog")}
             </Link>
-            <Link
-              href={`/${locale}/team`}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {t("nav.team")}
-            </Link>
           </nav>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
             <a
               href={siteConfig.links.github}
               target="_blank"
@@ -80,6 +69,9 @@ export function Footer() {
             >
               <Facebook className="h-5 w-5" />
             </a>
+            <div className="ms-4 border-s ps-4">
+              <LocaleSwitcher />
+            </div>
           </div>
         </div>
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">

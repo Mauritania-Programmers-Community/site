@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "./theme-toggle";
 import { siteConfig } from "@/config/site";
@@ -15,139 +14,138 @@ import { cn } from "@/lib/utils";
 export function Navbar() {
   const t = useTranslations("nav");
   const locale = useLocale();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [menuState, setMenuState] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Track scroll position for enhanced navbar styling
+  // Track scroll position
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navItems = [
-    { href: `/${locale}`, label: t("home") },
     { href: `/${locale}/events`, label: t("events") },
     { href: `/${locale}/blog`, label: t("blog") },
-    { href: `/${locale}/team`, label: t("team") },
   ];
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled
-          ? "border-b bg-background/95 shadow-sm backdrop-blur-lg"
-          : "border-b border-transparent bg-transparent"
-      )}
-    >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* Logo */}
-        <Link href={`/${locale}`} className="flex items-center gap-2">
-          <Image
-            src="/images/logos/mpc_logo.png"
-            alt={siteConfig.name}
-            width={40}
-            height={40}
-            className="h-10 w-10"
-          />
-          <span className="hidden text-xl font-bold text-mpc-green-500 sm:inline">
-            {siteConfig.name}
-          </span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Actions */}
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex sm:items-center sm:gap-2">
-            <LocaleSwitcher />
-            <ThemeToggle />
-          </div>
-
-          <Button
-            asChild
-            size="sm"
-            className="hidden bg-mpc-green-500 text-white hover:bg-mpc-green-600 sm:inline-flex"
-          >
-            <a
-              href={siteConfig.links.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("join")}
-            </a>
-          </Button>
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="border-t md:hidden"
-          >
-            <nav className="container mx-auto flex flex-col gap-4 px-4 py-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="flex items-center gap-2 pt-2">
-                <LocaleSwitcher />
-                <ThemeToggle />
-              </div>
-              <Button
-                asChild
-                className="mt-2 bg-mpc-green-500 text-white hover:bg-mpc-green-600"
+    <header>
+      <nav
+        data-state={menuState ? "active" : undefined}
+        className="fixed z-50 w-full px-2"
+      >
+        <div className={cn(
+          "mx-auto mt-2 max-w-7xl px-6 transition-all duration-300 lg:px-12",
+          scrolled && "bg-background/50 max-w-5xl rounded-2xl border backdrop-blur-lg lg:px-8"
+        )}>
+          <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
+            {/* Logo & Mobile Toggle */}
+            <div className="flex w-full items-center justify-between gap-12 lg:w-auto">
+              <Link
+                href={`/${locale}`}
+                aria-label="home"
+                className="flex items-center gap-2"
               >
-                <a
-                  href={siteConfig.links.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t("join")}
-                </a>
-              </Button>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+                <Image
+                  src="/images/logos/mpc_logo.webp"
+                  alt={siteConfig.name}
+                  width={40}
+                  height={40}
+                  className="h-10 w-10"
+                />
+                <span className="hidden text-xl font-bold text-mpc-green-500 sm:inline">
+                  {siteConfig.name}
+                </span>
+              </Link>
+
+              {/* Mobile Menu Button with animated icons */}
+              <button
+                onClick={() => setMenuState(!menuState)}
+                aria-label={menuState ? "Close Menu" : "Open Menu"}
+                className="relative z-20 -m-2.5 -me-4 block cursor-pointer p-2.5 lg:hidden"
+              >
+                <Menu
+                  className={cn(
+                    "m-auto size-6 transition-all duration-200",
+                    menuState && "rotate-180 scale-0 opacity-0"
+                  )}
+                />
+                <X
+                  className={cn(
+                    "absolute inset-0 m-auto size-6 transition-all duration-200",
+                    menuState
+                      ? "rotate-0 scale-100 opacity-100"
+                      : "-rotate-180 scale-0 opacity-0"
+                  )}
+                />
+              </button>
+
+              {/* Desktop Navigation */}
+              <div className="hidden lg:block">
+                <ul className="flex gap-8 text-sm">
+                  {navItems.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="text-muted-foreground hover:text-foreground block font-medium transition-colors duration-150"
+                      >
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Desktop Actions & Mobile Menu */}
+            <div
+              className={cn(
+                "bg-background mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent",
+                menuState && "block"
+              )}
+            >
+              {/* Mobile Navigation Links */}
+              <div className="lg:hidden">
+                <ul className="space-y-6 text-base">
+                  {navItems.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMenuState(false)}
+                        className="text-muted-foreground hover:text-foreground block font-medium transition-colors duration-150"
+                      >
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex w-full flex-col gap-3 sm:flex-row md:w-fit">
+                <div className="flex h-10 items-center gap-2">
+                  <LocaleSwitcher />
+                  <ThemeToggle />
+                </div>
+                <RainbowButton className="h-10 w-full sm:w-auto" asChild>
+                  <a
+                    href={siteConfig.links.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t("join")}
+                  </a>
+                </RainbowButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      {/* Spacer to account for fixed navbar */}
+      <div className="h-[72px] lg:h-20" />
+    </header>
   );
 }
