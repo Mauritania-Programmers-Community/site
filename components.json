@@ -20,13 +20,26 @@
   },
   "registries": {
     "@magicui": {
-      "url": "https://magicui.design/r"
+      "url": "https://magicui.design/r/{name}.json"
     },
     "@kokonutui": {
-      "url": "https://kokonut-ui.vercel.app/r"
+      "url": "https://kokonut-ui.vercel.app/r/{name}.json"
     },
     "@originui": {
-      "url": "https://originui.com/r"
-    }
+      "url": "https://originui.com/r/{name}.json"
+    },
+    "@aceternity": {
+      "url": "https://ui.aceternity.com/registry/{name}.json"
+    },
+    "@motion-primitives": {
+      "url": "https://motion-primitives.com/c/{name}.json"
+    },
+    "@hextaui": {
+      "url": "https://hextaui.com/r/{name}.json"
+    },
+    "@cult-ui": {
+      "url": "https://cult-ui.com/r/{name}.json"
+    },
+    "@tailark": "https://tailark.com/r/{name}.json"
   }
 }
