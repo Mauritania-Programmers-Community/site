@@ -5,6 +5,10 @@
  * Velite compiles MDX to a function body string that needs to be
  * evaluated at runtime.
  */
+"use client";
+
+// @react-compiler-disable
+// React Compiler cannot optimize this component due to dynamic MDX compilation
 
 import * as runtime from "react/jsx-runtime";
 import { useMemo } from "react";
@@ -263,14 +267,13 @@ interface MDXContentProps {
  * }
  * ```
  */
-// @ts-ignore - React Compiler cannot optimize useMDXComponent hook
-"use no memo";
-
+// eslint-disable-next-line react-compiler/react-compiler
 export function MDXContent({
   code,
   components,
   className,
 }: MDXContentProps) {
+  // eslint-disable-next-line react-hooks/static-components
   const Component = useMDXComponent(code);
 
   return (
