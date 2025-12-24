@@ -93,13 +93,13 @@ export function Navbar() {
               >
                 <Menu
                   className={cn(
-                    "m-auto size-6 transition-all duration-200",
+                    "m-auto size-6 transition-transform duration-200",
                     menuState && "rotate-180 scale-0 opacity-0"
                   )}
                 />
                 <X
                   className={cn(
-                    "absolute inset-0 m-auto size-6 transition-all duration-200",
+                    "absolute inset-0 m-auto size-6 transition-transform duration-200",
                     menuState
                       ? "rotate-0 scale-100 opacity-100"
                       : "-rotate-180 scale-0 opacity-0"

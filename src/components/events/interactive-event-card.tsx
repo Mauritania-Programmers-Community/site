@@ -73,19 +73,6 @@ export function InteractiveEventCard({
     ? getAuthorRole(event.speaker, locale)
     : undefined;
 
-  const eventData: EventData = {
-    title: event.title,
-    description: event.description,
-    location: event.location || event.platform,
-    url: `${typeof window !== "undefined" ? window.location.origin : ""}${event.permalink}`,
-    startDate: new Date(event.date),
-    endDate: event.endDate ? new Date(event.endDate) : undefined,
-    organizer: {
-      name: "MPC Community",
-      email: "contact@mpc-community.org",
-    },
-  };
-
   // TODO: Implement RSVP backend integration
   // - Add API endpoint for RSVP submission
   // - Store RSVPs in database with user info
@@ -104,6 +91,18 @@ export function InteractiveEventCard({
   // - Test with major calendar apps (Apple, Google, Outlook)
   const handleDownloadCalendar = async () => {
     try {
+      const eventData: EventData = {
+        title: event.title,
+        description: event.description,
+        location: event.location || event.platform,
+        url: `${window.location.origin}${event.permalink}`,
+        startDate: new Date(event.date),
+        endDate: event.endDate ? new Date(event.endDate) : undefined,
+        organizer: {
+          name: "MPC Community",
+          email: "contact@mpc-community.org",
+        },
+      };
       await downloadCalendarFile(eventData, `${event.baseSlug}.ics`);
       toast.success(t("toast.calendarDownloaded"));
     } catch (error) {
@@ -115,7 +114,7 @@ export function InteractiveEventCard({
     const shareData = {
       title: event.title,
       text: event.description,
-      url: `${typeof window !== "undefined" ? window.location.origin : ""}${event.permalink}`,
+      url: `${window.location.origin}${event.permalink}`,
     };
 
     if (navigator.share) {

@@ -138,23 +138,10 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
           >
             <Link
               href={`/${locale}/events/${event.baseSlug}`}
-              aria-label={
-                isPast
-                  ? `${t("viewDetails")}: ${event.title}`
-                  : `${t("learnMore")}: ${event.title}`
-              }
+              aria-label={`${t("viewDetails")}: ${event.title}`}
             >
-              {isPast ? (
-                <>
-                  {t("viewDetails")}
-                  <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
-                </>
-              ) : (
-                <>
-                  {t("learnMore")}
-                  <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
-                </>
-              )}
+              {t("viewDetails")}
+              <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
             </Link>
           </Button>
         </CardFooter>

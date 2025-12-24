@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { List } from "lucide-react";
 
@@ -45,66 +45,46 @@ export function TableOfContents({
     }
   }, []);
 
-  // Handle scroll to find active heading
-  const handleScroll = useCallback(() => {
-    if (headings.length === 0) return;
-
-    const headingPositions = headings.map((heading) => {
-      const element = document.getElementById(heading.id);
-      return {
-        id: heading.id,
-        top: element ? element.getBoundingClientRect().top : Infinity,
-      };
-    });
-
-    // Find heading in viewport (with 100px offset for header)
-    let activeHeading = headingPositions.find(
-      (heading) => heading.top >= 0 && heading.top <= 150
-    );
-
-    // If none in viewport, find the closest one above
-    if (!activeHeading) {
-      const headingsAbove = headingPositions
-        .filter((heading) => heading.top < 0)
-        .sort((a, b) => b.top - a.top);
-      activeHeading = headingsAbove[0];
-    }
-
-    // If still none, find the closest one below
-    if (!activeHeading) {
-      const headingsBelow = headingPositions
-        .filter((heading) => heading.top > 150)
-        .sort((a, b) => a.top - b.top);
-      activeHeading = headingsBelow[0];
-    }
-
-    if (activeHeading && activeHeading.id !== activeId) {
-      setActiveId(activeHeading.id);
-    }
-  }, [headings, activeId]);
-
-  // Set up scroll listener and intersection observer
+  // Use IntersectionObserver to track active heading (eliminates forced reflows)
   useEffect(() => {
     if (headings.length === 0) return;
 
-    // Initial check after a small delay
-    const initialTimeout = setTimeout(handleScroll, 0);
+    const intersectingHeadings = new Set<string>();
 
-    // Throttled scroll handler
-    let scrollTimeout: NodeJS.Timeout;
-    const throttledScroll = () => {
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(handleScroll, 50);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            intersectingHeadings.add(entry.target.id);
+          } else {
+            intersectingHeadings.delete(entry.target.id);
+          }
+        });
 
-    window.addEventListener("scroll", throttledScroll, { passive: true });
+        // Find first intersecting heading in document order
+        const firstIntersecting = headings.find((h) =>
+          intersectingHeadings.has(h.id)
+        );
+
+        if (firstIntersecting) {
+          setActiveId(firstIntersecting.id);
+        }
+      },
+      {
+        rootMargin: "-80px 0px -80% 0px",
+        threshold: [0, 1],
+      }
+    );
+
+    headings.forEach((heading) => {
+      const element = document.getElementById(heading.id);
+      if (element) observer.observe(element);
+    });
 
     return () => {
-      clearTimeout(initialTimeout);
-      window.removeEventListener("scroll", throttledScroll);
-      if (scrollTimeout) clearTimeout(scrollTimeout);
+      observer.disconnect();
     };
-  }, [headings, handleScroll]);
+  }, [headings]);
 
   // Handle click with smooth scroll
   const handleClick = async (id: string) => {

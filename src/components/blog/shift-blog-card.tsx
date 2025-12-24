@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -36,7 +36,7 @@ interface ShiftBlogCardProps {
 }
 
 export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
-  const [isBookmarked, setIsBookmarked] = useState(() => {
+  const getInitialBookmarkState = () => {
     if (typeof window !== "undefined") {
       const bookmarks = JSON.parse(
         localStorage.getItem("mpc-bookmarks") || "[]"
@@ -44,8 +44,15 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
       return bookmarks.includes(post.baseSlug);
     }
     return false;
-  });
+  };
+
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    setIsBookmarked(getInitialBookmarkState());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [post.baseSlug]);
 
   const author = getAuthor(post.author);
   const authorName = getAuthorName(post.author, locale);
@@ -176,12 +183,13 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
 
             {/* Shifted Actions Panel - Revealed on hover */}
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
+              initial={{ scaleY: 0, opacity: 0 }}
               animate={{
-                height: isHovered ? "auto" : 0,
+                scaleY: isHovered ? 1 : 0,
                 opacity: isHovered ? 1 : 0,
               }}
               transition={{ duration: 0.3 }}
+              style={{ transformOrigin: "top" }}
               className="overflow-hidden"
               onClick={(e) => e.preventDefault()}
             >

@@ -154,6 +154,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   const frameCountRef = useRef(0)
   const wordIndexRef = useRef(0)
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isRightClick: false })
+  const canvasRectRef = useRef<DOMRect | null>(null)
 
   // Performance optimizations
   const isMobile = useMediaQuery(BREAKPOINTS.MOBILE)
@@ -349,6 +350,15 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       ctx.scale(dpr, dpr)
     }
 
+    // Cache canvas rect for mouse event handlers (eliminates forced reflows)
+    const updateCanvasRect = () => {
+      canvasRectRef.current = canvas.getBoundingClientRect()
+    }
+    updateCanvasRect()
+
+    // Update cached rect on resize
+    window.addEventListener("resize", updateCanvasRect)
+
     // Initialize with first word
     nextWord(words[0], canvas)
 
@@ -359,9 +369,10 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const handleMouseDown = (e: MouseEvent) => {
       mouseRef.current.isPressed = true
       mouseRef.current.isRightClick = e.button === 2
-      const rect = canvas.getBoundingClientRect()
-      mouseRef.current.x = e.clientX - rect.left
-      mouseRef.current.y = e.clientY - rect.top
+      if (canvasRectRef.current) {
+        mouseRef.current.x = e.clientX - canvasRectRef.current.left
+        mouseRef.current.y = e.clientY - canvasRectRef.current.top
+      }
     }
 
     const handleMouseUp = () => {
@@ -374,9 +385,10 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const handleMouseMove = (e: MouseEvent) => {
       if (rafId) return
       rafId = requestAnimationFrame(() => {
-        const rect = canvas.getBoundingClientRect()
-        mouseRef.current.x = e.clientX - rect.left
-        mouseRef.current.y = e.clientY - rect.top
+        if (canvasRectRef.current) {
+          mouseRef.current.x = e.clientX - canvasRectRef.current.left
+          mouseRef.current.y = e.clientY - canvasRectRef.current.top
+        }
         rafId = null
       })
     }
@@ -397,6 +409,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       if (rafId) {
         cancelAnimationFrame(rafId)
       }
+      window.removeEventListener("resize", updateCanvasRect)
       canvas.removeEventListener("mousedown", handleMouseDown)
       canvas.removeEventListener("mouseup", handleMouseUp)
       canvas.removeEventListener("mousemove", handleMouseMove)
