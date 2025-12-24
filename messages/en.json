@@ -229,6 +229,7 @@
     }
   },
   "terminal": {
+    "hint": "Type 'help' to see available commands",
     "commands": {
       "whoami": "developer@mauritania",
       "uname": "MPC-Community v1.0 | 900+ developers | 4 domains",
