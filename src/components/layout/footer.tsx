@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
@@ -10,6 +11,11 @@ import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 export function Footer() {
   const t = useTranslations();
   const locale = useLocale();
+  const [currentYear, setCurrentYear] = useState(2025);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="border-t py-12">
@@ -78,7 +84,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          {t("footer.copyright", { year: new Date().getFullYear() })}
+          {t("footer.copyright", { year: currentYear })}
         </div>
       </div>
     </footer>

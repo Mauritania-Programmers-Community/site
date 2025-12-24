@@ -48,8 +48,10 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setIsBookmarked(getInitialBookmarkState());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.baseSlug]);
@@ -63,7 +65,7 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
   const shareData: ShareData = {
     title: post.title,
     description: post.description,
-    url: `${typeof window !== "undefined" ? window.location.origin : ""}${post.permalink}`,
+    url: mounted ? `${window.location.origin}${post.permalink}` : post.permalink,
     hashtags: post.tags.slice(0, 3),
   };
 
