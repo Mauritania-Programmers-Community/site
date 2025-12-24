@@ -115,7 +115,7 @@ function StaticTerminal({
       <AnimatedSpan className="text-muted-foreground">
         {t("terminal.commands.whoami")}
       </AnimatedSpan>
-      <AnimatedSpan />
+      <AnimatedSpan>{""}</AnimatedSpan>
 
       <TypingAnimation typingSpeed={30}>
         $ uname -a
@@ -123,7 +123,7 @@ function StaticTerminal({
       <AnimatedSpan className="text-muted-foreground">
         {t("terminal.commands.uname")}
       </AnimatedSpan>
-      <AnimatedSpan />
+      <AnimatedSpan>{""}</AnimatedSpan>
 
       <TypingAnimation typingSpeed={30}>
         $ sudo join mpc-community
