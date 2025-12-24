@@ -46,7 +46,7 @@ export function EventsPageClient({ locale, events }: EventsPageClientProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-mpc-green-500/10 py-20">
+      <section className="relative overflow-hidden bg-linear-to-br from-background via-background to-mpc-green-500/10 py-20">
         {/* Animated background elements - disabled on mobile for performance */}
         {!isMobile && (
           <>

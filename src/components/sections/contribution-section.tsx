@@ -21,10 +21,10 @@ const pathwayIcons = {
 } as const;
 
 const pathwayColors = {
-  blog: "bg-gradient-to-br from-mpc-green-500 to-mpc-green-600",
-  workshop: "bg-gradient-to-br from-mpc-gold-500 to-mpc-gold-600",
-  project: "bg-gradient-to-br from-mpc-green-600 to-mpc-green-700",
-  mentor: "bg-gradient-to-br from-mpc-gold-600 to-mpc-gold-700",
+  blog: "bg-linear-to-br from-mpc-green-500 to-mpc-green-600",
+  workshop: "bg-linear-to-br from-mpc-gold-500 to-mpc-gold-600",
+  project: "bg-linear-to-br from-mpc-green-600 to-mpc-green-700",
+  mentor: "bg-linear-to-br from-mpc-gold-600 to-mpc-gold-700",
 } as const;
 
 function PathwayCard({
@@ -177,7 +177,7 @@ export function ContributionSection({ locale }: ContributionSectionProps) {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="h-1 w-32 rounded-full bg-gradient-to-r from-mpc-green-500 via-mpc-gold-500 to-mpc-green-500"
+            className="h-1 w-32 rounded-full bg-linear-to-r from-mpc-green-500 via-mpc-gold-500 to-mpc-green-500"
           />
         </div>
       </div>

@@ -73,10 +73,10 @@ export function HeroGlobe() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-background">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-mpc-green-950/20 via-background to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-mpc-green-950/20 via-background to-background" />
 
       {/* Grid pattern overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.03)_1px,transparent_1px)] bg-size-[60px_60px]" />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-20">
         <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-12">
@@ -108,7 +108,7 @@ export function HeroGlobe() {
               transition={{ delay: 0.3 }}
             >
               <span className="block text-foreground">{t("hero.title")}</span>
-              <span className="block bg-gradient-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent">
+              <span className="block bg-linear-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent">
                 {t("hero.titleHighlight")}
               </span>
               <span className="block text-foreground">{t("hero.titleEnd")}</span>
@@ -228,7 +228,7 @@ export function HeroGlobe() {
       </div>
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent" />
     </section>
   )
 }

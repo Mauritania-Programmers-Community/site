@@ -67,7 +67,7 @@ export function FeaturesSection() {
         />
 
         {/* Grid lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.02)_1px,transparent_1px)] bg-size-[80px_80px]" />
       </div>
 
       <div className="container relative mx-auto px-4">
@@ -98,7 +98,7 @@ export function FeaturesSection() {
                 <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-transparent hover:shadow-lg">
                   {/* Gradient border on hover */}
                   <motion.div
-                    className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${feature.gradient} transition-opacity duration-500`}
+                    className={`absolute inset-0 rounded-3xl bg-linear-to-br ${feature.gradient} transition-opacity duration-500`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isHovered ? 1 : 0 }}
                     style={{ padding: "2px" }}
@@ -116,19 +116,19 @@ export function FeaturesSection() {
                         animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.gradient} text-white shadow-md`}>
+                        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${feature.gradient} text-white shadow-md`}>
                           <feature.icon className="h-8 w-8" />
                         </div>
                         {/* Glow effect */}
                         <motion.div
-                          className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} blur-xl transition-opacity duration-500`}
+                          className={`absolute inset-0 rounded-2xl bg-linear-to-br ${feature.gradient} blur-xl transition-opacity duration-500`}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: isHovered ? 0.3 : 0 }}
                         />
                       </motion.div>
 
                       {/* Feature number */}
-                      <span className={`bg-gradient-to-r ${feature.gradient} bg-clip-text text-5xl font-bold text-transparent opacity-20`}>
+                      <span className={`bg-linear-to-r ${feature.gradient} bg-clip-text text-5xl font-bold text-transparent opacity-20`}>
                         0{index + 1}
                       </span>
                     </div>
@@ -146,7 +146,7 @@ export function FeaturesSection() {
 
                   {/* Decorative elements */}
                   <motion.div
-                    className={`absolute -end-16 -bottom-16 h-48 w-48 rounded-full bg-gradient-to-br ${feature.bgGradient} blur-3xl`}
+                    className={`absolute -end-16 -bottom-16 h-48 w-48 rounded-full bg-linear-to-br ${feature.bgGradient} blur-3xl`}
                     animate={{ scale: isHovered ? 1.5 : 1, opacity: isHovered ? 0.5 : 0.2 }}
                     transition={{ duration: 0.5 }}
                   />

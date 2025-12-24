@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-background relative">
       {/* FlickeringGrid Background - MagicUI Style */}
-      <div className="absolute top-0 start-0 z-0 w-full h-[200px] [mask-image:linear-gradient(to_top,transparent_25%,black_95%)]">
+      <div className="absolute top-0 start-0 z-0 w-full h-[200px] mask-[linear-gradient(to_top,transparent_25%,black_95%)]">
         <FlickeringGrid
           className="absolute top-0 start-0 h-full w-full"
           squareSize={4}

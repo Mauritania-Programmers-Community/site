@@ -85,7 +85,7 @@ export function HeroTailark() {
         {/* Enhanced background */}
         <div className="absolute inset-0 -z-10">
           {/* Base gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/30" />
+          <div className="absolute inset-0 bg-linear-to-b from-background via-background to-muted/30" />
 
           {/* Animated gradient orbs */}
           <GradientOrb
@@ -102,7 +102,7 @@ export function HeroTailark() {
           />
 
           {/* Grid overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.03)_1px,transparent_1px)] bg-size-[60px_60px] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
           {/* Radial gradient overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(76,175,80,0.1),transparent_50%)]" />
@@ -147,7 +147,7 @@ export function HeroTailark() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="mt-2"
             >
-              <span className="text-balance text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_3s_linear_infinite]">
+              <span className="text-balance text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl bg-linear-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_3s_linear_infinite]">
                 {titleHighlight}
               </span>
             </motion.div>
@@ -221,7 +221,7 @@ export function HeroTailark() {
               >
                 {/* Background decorative card */}
                 <motion.div
-                  className="absolute inset-0 mx-auto w-72 -translate-y-8 rounded-[2rem] border border-border/30 bg-card/50 p-2 opacity-40 sm:w-80 sm:-translate-x-6 sm:-translate-y-12 [mask-image:linear-gradient(to_bottom,#000_30%,transparent_80%)]"
+                  className="absolute inset-0 mx-auto w-72 -translate-y-8 rounded-[2rem] border border-border/30 bg-card/50 p-2 opacity-40 sm:w-80 sm:-translate-x-6 sm:-translate-y-12 mask-[linear-gradient(to_bottom,#000_30%,transparent_80%)]"
                   animate={{ y: [-12, -8, -12] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 >
@@ -241,7 +241,7 @@ export function HeroTailark() {
 
                 {/* Main terminal card */}
                 <motion.div
-                  className="relative mx-auto w-72 rounded-[2rem] border border-mpc-green-500/30 bg-card/90 p-2 shadow-2xl shadow-mpc-green-500/10 backdrop-blur-xl sm:w-80 sm:translate-x-6 [mask-image:linear-gradient(to_bottom,#000_50%,transparent_95%)]"
+                  className="relative mx-auto w-72 rounded-[2rem] border border-mpc-green-500/30 bg-card/90 p-2 shadow-2xl shadow-mpc-green-500/10 backdrop-blur-xl sm:w-80 sm:translate-x-6 mask-[linear-gradient(to_bottom,#000_50%,transparent_95%)]"
                   whileHover={{ y: -5, scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >

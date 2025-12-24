@@ -268,7 +268,7 @@ export function HeroPong() {
       {/* Static MPC logo fallback for reduced motion */}
       {prefersReducedMotion && (
         <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div className="text-8xl font-bold bg-gradient-to-r from-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent">
+          <div className="text-8xl font-bold bg-linear-to-r from-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent">
             MPC
           </div>
         </div>
@@ -291,7 +291,7 @@ export function HeroPong() {
             >
               {/* Visible heading for SEO and users with reduced motion */}
               <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl lg:text-5xl">
-                <span className="bg-gradient-to-r from-mpc-green-400 to-mpc-gold-400 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-mpc-green-400 to-mpc-gold-400 bg-clip-text text-transparent">
                   MPC
                 </span>
               </h1>
@@ -335,7 +335,7 @@ export function HeroPong() {
       </AnimatePresence>
 
       {/* Gradient overlay at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#0a0a0a] to-transparent" aria-hidden="true" />
+      <div className="absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-[#0a0a0a] to-transparent" aria-hidden="true" />
     </div>
   );
 }

@@ -82,7 +82,7 @@ export function HeroParticle() {
     <section className="relative min-h-screen overflow-hidden bg-background">
       {/* Gradient background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/10 to-background" />
+        <div className="absolute inset-0 bg-linear-to-br from-background via-muted/10 to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(76,175,80,0.15),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,193,7,0.1),transparent_50%)]" />
       </div>
@@ -91,7 +91,7 @@ export function HeroParticle() {
       <ParticleField />
 
       {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.03)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.03)_1px,transparent_1px)] bg-size-[80px_80px] mask-[radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
 
       <div className="container relative mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-20 text-center">
         {/* Floating badge */}
@@ -101,7 +101,7 @@ export function HeroParticle() {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-mpc-green-500/30 bg-gradient-to-r from-mpc-green-500/10 to-mpc-gold-500/10 px-6 py-3 text-sm font-medium text-mpc-green-600 shadow-lg shadow-mpc-green-500/10 backdrop-blur-md dark:text-mpc-green-400">
+          <span className="inline-flex items-center gap-2 rounded-full border border-mpc-green-500/30 bg-linear-to-r from-mpc-green-500/10 to-mpc-gold-500/10 px-6 py-3 text-sm font-medium text-mpc-green-600 shadow-lg shadow-mpc-green-500/10 backdrop-blur-md dark:text-mpc-green-400">
             <Sparkles className="h-4 w-4" />
             {t("hero.badge")}
             <motion.span
@@ -117,7 +117,7 @@ export function HeroParticle() {
           <AnimatedTitle delay={0.1}>{t("hero.title")}</AnimatedTitle>
           <br />
           <motion.span
-            className="inline-block bg-gradient-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent"
+            className="inline-block bg-linear-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -157,7 +157,7 @@ export function HeroParticle() {
             >
               {/* Shine effect */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
                 animate={{ x: ["-100%", "100%"] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
               />
@@ -213,7 +213,7 @@ export function HeroParticle() {
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent" />
     </section>
   );
 }

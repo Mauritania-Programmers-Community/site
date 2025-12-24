@@ -15,7 +15,7 @@ import {
   GitBranch,
   Code2,
 } from "lucide-react";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { InteractiveTerminal, Terminal, TypingAnimation, AnimatedSpan } from "@/components/magicui/terminal";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Image from "next/image";
@@ -25,7 +25,7 @@ function MeshGradient({ prefersReducedMotion }: { prefersReducedMotion: boolean 
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
       {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/20" />
+      <div className="absolute inset-0 bg-linear-to-br from-background via-background to-muted/20" />
 
       {/* Animated mesh gradient */}
       <motion.div
@@ -58,7 +58,7 @@ function MeshGradient({ prefersReducedMotion }: { prefersReducedMotion: boolean 
       />
 
       {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(76,175,80,0.02)_1.5px,transparent_1.5px)] bg-[size:50px_50px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(76,175,80,0.02)_1.5px,transparent_1.5px)] bg-size-[50px_50px]" />
 
       {/* Noise texture */}
       <div className="absolute inset-0 opacity-20 mix-blend-soft-light" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }} />
@@ -160,6 +160,12 @@ export function HeroSection() {
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const containerRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Avoid hydration mismatch by only rendering terminal on client
+  useEffect(() => {
+    setIsMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
+  }, []);
 
   // Terminal command handler
   const handleCommand = useCallback((command: string): string | string[] | React.ReactNode => {
@@ -272,7 +278,7 @@ export function HeroSection() {
             >
               <span>{t("hero.title")} </span>
               <motion.span
-                className={`${isRTL ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent`}
+                className={`${isRTL ? 'bg-linear-to-l' : 'bg-linear-to-r'} from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent`}
                 animate={prefersReducedMotion || isRTL ? {} : {
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                 }}
@@ -365,7 +371,7 @@ export function HeroSection() {
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               {/* Glow effect */}
-              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-mpc-green-500/20 to-mpc-gold-500/20 blur-2xl" aria-hidden="true" />
+              <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-mpc-green-500/20 to-mpc-gold-500/20 blur-2xl" aria-hidden="true" />
 
               {/* Background layers */}
               <div className="absolute -end-4 -top-4 h-full w-full rounded-2xl border border-mpc-green-500/20 bg-mpc-green-500/5 sm:-end-6 sm:-top-6" aria-hidden="true" />
@@ -380,9 +386,9 @@ export function HeroSection() {
                 {/* Window controls */}
                 <div className="mb-4 flex items-center justify-between border-b border-border/50 pb-4">
                   <div className="flex gap-2">
-                    <div className="h-3 w-3 rounded-full bg-[#FF5F57] hover:brightness-110 transition-all" />
-                    <div className="h-3 w-3 rounded-full bg-[#FFBD2E] hover:brightness-110 transition-all" />
-                    <div className="h-3 w-3 rounded-full bg-[#28CA42] hover:brightness-110 transition-all" />
+                    <div className="h-3 w-3 rounded-full bg-traffic-red hover:brightness-110 transition-all" />
+                    <div className="h-3 w-3 rounded-full bg-traffic-yellow hover:brightness-110 transition-all" />
+                    <div className="h-3 w-3 rounded-full bg-traffic-green hover:brightness-110 transition-all" />
                   </div>
                   <span className="text-xs text-muted-foreground font-mono flex items-center gap-1">
                     <TerminalIcon className="h-3 w-3" />
@@ -392,32 +398,44 @@ export function HeroSection() {
 
                 {/* Terminal content - responsive switching */}
                 <div className="min-h-[200px]">
-                  {/* Mobile: Static animation (no input) */}
-                  <div className="block lg:hidden">
-                    <StaticTerminal t={t} ArrowIcon={ArrowIcon} />
-                  </div>
-
-                  {/* Desktop: Interactive terminal with hint */}
-                  <div className="hidden lg:block">
-                    <div className="mb-2 text-xs text-muted-foreground/60">
-                      💡 {t("terminal.hint")}
+                  {!isMounted ? (
+                    // SSR placeholder - prevents hydration mismatch
+                    <div className="space-y-1.5 font-mono text-xs sm:text-sm text-muted-foreground/60">
+                      <div className="flex items-start gap-2">
+                        <span className="text-mpc-green-500">$</span>
+                        <span>Loading terminal...</span>
+                      </div>
                     </div>
-                    <InteractiveTerminal
-                      commandHandler={handleCommand}
-                      placeholder={t("terminal.commands.placeholder")}
-                      initialCommands={[
-                        { type: "command", content: "$ whoami" },
-                        { type: "output", content: t("terminal.commands.whoami"), className: "text-muted-foreground" },
-                        { type: "output", content: "" },
-                        { type: "command", content: "$ uname -a" },
-                        { type: "output", content: t("terminal.commands.uname"), className: "text-muted-foreground" },
-                        { type: "output", content: "" },
-                        { type: "command", content: "$ sudo join mpc-community" },
-                        { type: "output", content: t("terminal.commands.sudoPassword"), className: "text-muted-foreground" },
-                        { type: "output", content: t("terminal.commands.sudoSuccess"), className: "text-mpc-green-400" },
-                      ]}
-                    />
-                  </div>
+                  ) : (
+                    <>
+                      {/* Mobile: Static animation (no input) */}
+                      <div className="block lg:hidden">
+                        <StaticTerminal t={t} ArrowIcon={ArrowIcon} />
+                      </div>
+
+                      {/* Desktop: Interactive terminal with hint */}
+                      <div className="hidden lg:block">
+                        <div className="mb-2 text-xs text-muted-foreground/60">
+                          💡 {t("terminal.hint")}
+                        </div>
+                        <InteractiveTerminal
+                          commandHandler={handleCommand}
+                          placeholder={t("terminal.commands.placeholder")}
+                          initialCommands={[
+                            { type: "command", content: "$ whoami" },
+                            { type: "output", content: t("terminal.commands.whoami"), className: "text-muted-foreground" },
+                            { type: "output", content: "" },
+                            { type: "command", content: "$ uname -a" },
+                            { type: "output", content: t("terminal.commands.uname"), className: "text-muted-foreground" },
+                            { type: "output", content: "" },
+                            { type: "command", content: "$ sudo join mpc-community" },
+                            { type: "output", content: t("terminal.commands.sudoPassword"), className: "text-muted-foreground" },
+                            { type: "output", content: t("terminal.commands.sudoSuccess"), className: "text-mpc-green-400" },
+                          ]}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </motion.div>
             </motion.div>
@@ -426,7 +444,7 @@ export function HeroSection() {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent" aria-hidden="true" />
     </section>
   );
 }

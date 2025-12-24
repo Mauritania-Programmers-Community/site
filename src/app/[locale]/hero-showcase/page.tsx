@@ -151,7 +151,7 @@ export default function HeroShowcasePage() {
         <section key={hero.id} id={hero.id} className="relative">
           {/* Section Divider */}
           {index > 0 && (
-            <div className="h-px bg-gradient-to-r from-transparent via-mpc-green-500/50 to-transparent" />
+            <div className="h-px bg-linear-to-r from-transparent via-mpc-green-500/50 to-transparent" />
           )}
 
           {/* Section Label */}

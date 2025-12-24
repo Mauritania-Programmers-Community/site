@@ -61,7 +61,7 @@ export function HeroNeural() {
             transition={{ delay: 0.1, duration: 0.8 }}
           >
             <span className="block">{t("hero.title")}</span>
-            <span className="block font-normal bg-gradient-to-r from-mpc-green-400 via-emerald-300 to-mpc-gold-400 bg-clip-text text-transparent">
+            <span className="block font-normal bg-linear-to-r from-mpc-green-400 via-emerald-300 to-mpc-gold-400 bg-clip-text text-transparent">
               {t("hero.titleHighlight")}
             </span>
             <span className="block">{t("hero.titleEnd")}</span>

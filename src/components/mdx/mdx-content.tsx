@@ -267,7 +267,6 @@ interface MDXContentProps {
  * }
  * ```
  */
-// eslint-disable-next-line react-compiler/react-compiler
 export function MDXContent({
   code,
   components,
@@ -278,6 +277,7 @@ export function MDXContent({
 
   return (
     <div className={className}>
+      {/* eslint-disable-next-line react-hooks/static-components */}
       <Component components={{ ...mdxComponents, ...components }} />
     </div>
   );

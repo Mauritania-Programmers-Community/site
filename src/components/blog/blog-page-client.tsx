@@ -73,9 +73,9 @@ export function BlogPageClient({ locale, posts, tags }: BlogPageClientProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-mpc-green-500/5 py-20">
+      <section className="relative overflow-hidden bg-linear-to-br from-background via-background to-mpc-green-500/5 py-20">
         {/* FlickeringGrid Background */}
-        <div className="absolute inset-0 z-0 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]">
+        <div className="absolute inset-0 z-0 mask-[linear-gradient(to_bottom,white_20%,transparent_90%)]">
           <FlickeringGrid
             className="h-full w-full"
             squareSize={4}
@@ -114,7 +114,7 @@ export function BlogPageClient({ locale, posts, tags }: BlogPageClientProps) {
               transition={{ delay: 0.2 }}
             >
               {t("title")}{" "}
-              <span className="bg-gradient-to-r from-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent">
                 {t("titleHighlight")}
               </span>
             </motion.h1>

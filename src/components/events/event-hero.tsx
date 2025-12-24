@@ -30,7 +30,7 @@ export function EventHero({ event, locale }: EventHeroProps) {
   const isPast = event.status === "completed";
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-mpc-green-500/10 py-12">
+    <section className="relative overflow-hidden bg-linear-to-br from-background via-background to-mpc-green-500/10 py-12">
       <div className="container mx-auto px-4">
         {/* Back button */}
         <Link

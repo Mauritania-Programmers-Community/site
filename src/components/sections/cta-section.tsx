@@ -44,11 +44,11 @@ export function CTASection() {
       {/* Background with gradient mesh */}
       <div className="absolute inset-0">
         {/* Main gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-mpc-green-600 via-mpc-green-500 to-emerald-600" />
+        <div className="absolute inset-0 bg-linear-to-br from-mpc-green-600 via-mpc-green-500 to-emerald-600" />
 
         {/* Animated gradient overlay */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-mpc-gold-500/20 via-transparent to-emerald-400/20"
+          className="absolute inset-0 bg-linear-to-tr from-mpc-gold-500/20 via-transparent to-emerald-400/20"
           animate={{
             opacity: [0.3, 0.5, 0.3],
           }}
@@ -112,7 +112,7 @@ export function CTASection() {
         />
 
         {/* Subtle grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[50px_50px]" />
       </div>
 
       <div className="container relative mx-auto px-4">
@@ -208,7 +208,7 @@ export function CTASection() {
                       <ArrowIcon className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                     </span>
                     {/* Shine effect on hover */}
-                    <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-mpc-green-100/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                    <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-mpc-green-100/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   </a>
                 </Button>
               </motion.div>

@@ -98,7 +98,7 @@ export function StatsSection() {
       {/* Background elements */}
       <div className="absolute inset-0">
         {/* Gradient mesh */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
+        <div className="absolute inset-0 bg-linear-to-b from-background via-muted/30 to-background" />
 
         {/* Decorative blobs */}
         <motion.div
@@ -113,7 +113,7 @@ export function StatsSection() {
         />
 
         {/* Dotted pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(76,175,80,0.1)_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(76,175,80,0.1)_1px,transparent_1px)] bg-size-[24px_24px]" />
       </div>
 
       <div className="container relative mx-auto px-4">
@@ -138,7 +138,7 @@ export function StatsSection() {
             >
               <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-mpc-green-500/30 hover:shadow-md hover:scale-[1.02]">
                 {/* Background gradient on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 transition-opacity duration-500 group-hover:opacity-5`} />
+                <div className={`absolute inset-0 bg-linear-to-br ${stat.color} opacity-0 transition-opacity duration-500 group-hover:opacity-5`} />
 
                 {/* Icon with animated background */}
                 <motion.div
@@ -157,7 +157,7 @@ export function StatsSection() {
 
                 {/* Value with counter animation */}
                 <div className="mb-2">
-                  <span className={`bg-gradient-to-r ${stat.color} bg-clip-text text-5xl font-bold text-transparent`}>
+                  <span className={`bg-linear-to-r ${stat.color} bg-clip-text text-5xl font-bold text-transparent`}>
                     <Counter target={stat.value} suffix={stat.suffix} />
                   </span>
                 </div>
@@ -168,7 +168,7 @@ export function StatsSection() {
                 </p>
 
                 {/* Decorative corner accent */}
-                <div className={`absolute -end-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br ${stat.color} opacity-10 blur-2xl transition-all duration-500 group-hover:opacity-20 group-hover:scale-150`} />
+                <div className={`absolute -end-8 -top-8 h-24 w-24 rounded-full bg-linear-to-br ${stat.color} opacity-10 blur-2xl transition-all duration-500 group-hover:opacity-20 group-hover:scale-150`} />
               </div>
             </motion.div>
           ))}

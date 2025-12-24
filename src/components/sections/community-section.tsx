@@ -54,7 +54,7 @@ export function CommunitySection() {
     <section className="relative overflow-hidden py-24">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-muted/20 to-transparent" />
         {/* Decorative blobs */}
         <motion.div
           className="absolute top-1/4 start-1/4 h-64 w-64 rounded-full bg-mpc-green-500/5 blur-3xl"

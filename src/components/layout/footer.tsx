@@ -14,7 +14,7 @@ export function Footer() {
   const [currentYear, setCurrentYear] = useState(2025);
 
   useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
+    setCurrentYear(new Date().getFullYear()); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
 
   return (

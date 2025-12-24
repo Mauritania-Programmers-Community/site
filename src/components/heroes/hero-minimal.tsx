@@ -25,7 +25,7 @@ function MeshGradient() {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/20" />
+      <div className="absolute inset-0 bg-linear-to-br from-background via-background to-muted/20" />
 
       {/* Animated mesh gradient */}
       <motion.div
@@ -58,7 +58,7 @@ function MeshGradient() {
       />
 
       {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(76,175,80,0.02)_1.5px,transparent_1.5px)] bg-[size:50px_50px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(76,175,80,0.02)_1.5px,transparent_1.5px)] bg-size-[50px_50px]" />
 
       {/* Noise texture */}
       <div className="absolute inset-0 opacity-20 mix-blend-soft-light" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }} />
@@ -236,7 +236,7 @@ export function HeroMinimal() {
             >
               <span className="block">{t("hero.title")}</span>
               <motion.span
-                className="block bg-gradient-to-r from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent"
+                className="block bg-linear-to-r from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent"
                 animate={{
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                 }}
@@ -352,7 +352,7 @@ export function HeroMinimal() {
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               {/* Glow effect */}
-              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-mpc-green-500/20 to-mpc-gold-500/20 blur-2xl" />
+              <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-mpc-green-500/20 to-mpc-gold-500/20 blur-2xl" />
 
               {/* Background layers */}
               <div className="absolute -end-4 -top-4 h-full w-full rounded-2xl border border-mpc-green-500/20 bg-mpc-green-500/5 sm:-end-6 sm:-top-6" />
@@ -388,7 +388,7 @@ export function HeroMinimal() {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent" />
     </section>
   );
 }

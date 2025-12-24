@@ -44,7 +44,7 @@ export function FAQSection() {
     <section className="relative overflow-hidden bg-muted/30 py-24">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,175,80,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(76,175,80,0.02)_1px,transparent_1px)] bg-size-[60px_60px]" />
       </div>
 
       <div className="container relative mx-auto px-4">

@@ -10,15 +10,13 @@ import { Button } from "@/components/ui/button";
 import {
   Calendar,
   Clock,
-  ArrowRight,
-  Share2,
   Bookmark,
   Linkedin,
   Link as LinkIcon,
   Check,
 } from "lucide-react";
 import { formatReadingTime, formatDate, type Post, type Locale } from "@/lib/content";
-import { getAuthor, getAuthorName, getAuthorRole } from "@/lib/authors";
+import { getAuthor, getAuthorName } from "@/lib/authors";
 import { AvatarImage } from "@/components/ui/avatar-image";
 import { XIcon } from "@/components/icons/x-icon";
 import {
@@ -58,7 +56,6 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
 
   const author = getAuthor(post.author);
   const authorName = getAuthorName(post.author, locale);
-  const authorRole = getAuthorRole(post.author, locale);
   const readingTime = (post as Post & { readingTime?: number }).readingTime;
   const isRTL = locale === "ar";
 
@@ -128,7 +125,7 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
                   className="object-cover"
                 />
               </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-background/60 to-transparent" />
             </div>
           )}
 

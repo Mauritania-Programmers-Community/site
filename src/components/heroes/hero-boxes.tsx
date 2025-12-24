@@ -30,7 +30,7 @@ export function HeroBoxes() {
       </div>
 
       {/* Gradient overlays for better text readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/60" />
+      <div className="absolute inset-0 z-10 bg-linear-to-t from-slate-900 via-slate-900/80 to-slate-900/60" />
       <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(15,23,42,0.8)_70%)]" />
 
       <div className="container relative z-20 mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-20 text-center">
@@ -61,12 +61,12 @@ export function HeroBoxes() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <span className="bg-gradient-to-r from-mpc-green-400 via-emerald-400 to-mpc-gold-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-mpc-green-400 via-emerald-400 to-mpc-gold-400 bg-clip-text text-transparent">
               {t("hero.titleHighlight")}
             </span>
             {/* Underline decoration */}
             <motion.div
-              className="absolute -bottom-2 left-1/2 h-1 -translate-x-1/2 rounded-full bg-gradient-to-r from-mpc-green-500 to-mpc-gold-500"
+              className="absolute -bottom-2 left-1/2 h-1 -translate-x-1/2 rounded-full bg-linear-to-r from-mpc-green-500 to-mpc-gold-500"
               initial={{ width: 0 }}
               animate={{ width: "60%" }}
               transition={{ delay: 0.6, duration: 0.8 }}
@@ -153,7 +153,7 @@ export function HeroBoxes() {
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 h-32 bg-gradient-to-t from-slate-900 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 z-20 h-32 bg-linear-to-t from-slate-900 to-transparent" />
     </section>
   );
 }

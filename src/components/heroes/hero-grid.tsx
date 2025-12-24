@@ -40,13 +40,13 @@ export function HeroGrid() {
         duration={3}
         repeatDelay={1}
         className={cn(
-          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
+          "mask-[radial-gradient(600px_circle_at_center,white,transparent)]",
           "fill-mpc-green-500/30 stroke-mpc-green-500/20"
         )}
       />
 
       {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+      <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(76,175,80,0.15),transparent_50%)]" />
 
       <div className="container relative mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-20 text-center">
@@ -75,7 +75,7 @@ export function HeroGrid() {
         >
           <span className="block">{t("hero.title")}</span>
           <motion.span
-            className="block bg-gradient-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent"
+            className="block bg-linear-to-r from-mpc-green-400 via-mpc-green-500 to-mpc-gold-500 bg-clip-text text-transparent"
             animate={{
               backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
             }}

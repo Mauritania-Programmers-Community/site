@@ -44,8 +44,8 @@ export function HeroNeon() {
       </div>
 
       {/* Gradient overlay for text readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-neutral-950/90 via-neutral-950/50 to-transparent" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-transparent to-neutral-950/50" />
+      <div className="absolute inset-0 z-10 bg-linear-to-r from-neutral-950/90 via-neutral-950/50 to-transparent" />
+      <div className="absolute inset-0 z-10 bg-linear-to-t from-neutral-950 via-transparent to-neutral-950/50" />
 
       {/* Content */}
       <div className="container relative z-20 mx-auto flex min-h-screen items-center px-6 py-20 lg:px-16">
@@ -75,7 +75,7 @@ export function HeroNeon() {
             transition={{ delay: 0.1, duration: 0.6 }}
           >
             <span className="block">{t("hero.title")}</span>
-            <span className="block bg-gradient-to-r from-mpc-green-400 to-emerald-300 bg-clip-text text-transparent">
+            <span className="block bg-linear-to-r from-mpc-green-400 to-emerald-300 bg-clip-text text-transparent">
               {t("hero.titleHighlight")}
             </span>
             <span className="block">{t("hero.titleEnd")}</span>
