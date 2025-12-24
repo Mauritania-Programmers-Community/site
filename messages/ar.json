@@ -59,6 +59,14 @@
     "backToEvents": "العودة إلى الأحداث",
     "viewDetails": "عرض التفاصيل",
     "learnMore": "اعرف المزيد",
+    "empty": {
+      "noEvents": "لا توجد فعاليات بعد",
+      "noEventsDescription": "نخطط لفعاليات رائعة قريبًا. ابقَ على اطلاع!",
+      "noUpcoming": "لا توجد فعاليات قادمة",
+      "noUpcomingDescription": "لا توجد فعاليات مجدولة حاليًا. تحقق مرة أخرى قريبًا!",
+      "noPast": "لا توجد فعاليات سابقة",
+      "noPastDescription": "لم تكن هناك فعاليات بعد. كن أول من يحضر!"
+    },
     "status": {
       "upcoming": "قادم",
       "completed": "انتهى",
@@ -71,6 +79,17 @@
       "rsvpConfirmed": "تم التسجيل",
       "calendar": "التقويم",
       "share": "مشاركة"
+    },
+    "toast": {
+      "rsvpSuccess": "تم التسجيل بنجاح!",
+      "calendarDownloaded": "تم تنزيل ملف التقويم",
+      "downloadFailed": "فشل التنزيل",
+      "shared": "تمت المشاركة",
+      "linkCopied": "تم نسخ الرابط"
+    },
+    "badge": {
+      "upcoming": "قريباً",
+      "registered": "المسجلون"
     }
   },
   "community": {
@@ -175,7 +194,10 @@
       "title": "روابط سريعة"
     },
     "social": {
-      "title": "تابعنا"
+      "title": "تابعنا",
+      "github": "تابعنا على GitHub",
+      "linkedin": "تابعنا على LinkedIn",
+      "facebook": "تابعنا على Facebook"
     },
     "copyright": "© {year} مجتمع مبرمجي موريتانيا. جميع الحقوق محفوظة."
   },
@@ -186,6 +208,25 @@
     "backToHome": "العودة للرئيسية",
     "changeLanguage": "تغيير اللغة",
     "currentLanguage": "اللغة الحالية"
+  },
+  "blog": {
+    "badge": "المدونة",
+    "title": "أفكار ورؤى من",
+    "titleHighlight": "مجتمعنا",
+    "subtitle": "مقالات ودروس وأفكار من مجتمع مبرمجي موريتانيا. تعلم، شارك، وتطور معنا.",
+    "search": "ابحث في المقالات...",
+    "filter": {
+      "all": "الكل"
+    },
+    "allPosts": "جميع المقالات",
+    "recentPosts": "أحدث المقالات",
+    "tags": "الوسوم",
+    "clearFilters": "مسح الفلاتر",
+    "empty": {
+      "noPosts": "لا توجد مقالات بعد",
+      "noPostsDescription": "نعمل على إنشاء محتوى رائع لك. تحقق مرة أخرى قريبًا!",
+      "noResults": "لم يتم العثور على مقالات"
+    }
   },
   "terminal": {
     "commands": {

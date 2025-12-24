@@ -49,6 +49,7 @@ export function Footer() {
               href={siteConfig.links.github}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={t("footer.social.github")}
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
               <Github className="h-5 w-5" />
@@ -57,6 +58,7 @@ export function Footer() {
               href={siteConfig.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={t("footer.social.linkedin")}
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
               <Linkedin className="h-5 w-5" />
@@ -65,6 +67,7 @@ export function Footer() {
               href={siteConfig.links.facebook}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={t("footer.social.facebook")}
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
               <Facebook className="h-5 w-5" />

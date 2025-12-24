@@ -6,6 +6,17 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  experimental: {
+    optimizePackageImports: [
+      "framer-motion",
+      "@radix-ui/react-icons",
+      "three",
+      "gsap",
+      "@gsap/react",
+      "lucide-react",
+    ],
+    optimizeCss: true,
+  },
   images: {
     remotePatterns: [
       {

@@ -73,6 +73,9 @@ export function VeliteBlogCard({
                     src={post.image}
                     alt={post.title}
                     fill
+                    priority={index === 0}
+                    loading={index === 0 ? undefined : "lazy"}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -146,6 +149,9 @@ export function VeliteBlogCard({
                 src={post.image}
                 alt={post.title}
                 fill
+                priority={index === 0}
+                loading={index === 0 ? undefined : "lazy"}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />

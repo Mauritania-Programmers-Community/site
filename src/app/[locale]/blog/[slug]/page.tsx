@@ -23,6 +23,10 @@ import {
 } from "@/components/blog/table-of-contents";
 import { VeliteBlogCard } from "@/components/blog/velite-blog-card";
 
+export const dynamic = "force-static";
+export const dynamicParams = false;
+export const revalidate = 3600;
+
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
@@ -169,6 +173,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 src={post.image}
                 alt={post.title}
                 fill
+                quality={90}
                 className="object-cover"
                 priority
               />

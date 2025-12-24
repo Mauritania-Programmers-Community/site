@@ -263,12 +263,14 @@ interface MDXContentProps {
  * }
  * ```
  */
+// @ts-ignore - React Compiler cannot optimize useMDXComponent hook
+"use no memo";
+
 export function MDXContent({
   code,
   components,
   className,
 }: MDXContentProps) {
-  // eslint-disable-next-line react-hooks/static-components
   const Component = useMDXComponent(code);
 
   return (

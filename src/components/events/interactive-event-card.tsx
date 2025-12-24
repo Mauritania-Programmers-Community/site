@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,7 @@ export function InteractiveEventCard({
   attendeeCount = 0,
   capacity,
 }: InteractiveEventCardProps) {
+  const t = useTranslations("events");
   const [isRSVPed, setIsRSVPed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const isPast = event.status === "completed";
@@ -92,7 +94,7 @@ export function InteractiveEventCard({
   // - Add user authentication requirement
   const handleRSVP = () => {
     setIsRSVPed(true);
-    toast.success(isRTL ? "تم التسجيل بنجاح!" : "RSVP Successful!");
+    toast.success(t("toast.rsvpSuccess"));
   };
 
   // TODO: Improve calendar implementation
@@ -103,11 +105,9 @@ export function InteractiveEventCard({
   const handleDownloadCalendar = async () => {
     try {
       await downloadCalendarFile(eventData, `${event.baseSlug}.ics`);
-      toast.success(
-        isRTL ? "تم تنزيل ملف التقويم" : "Calendar file downloaded"
-      );
+      toast.success(t("toast.calendarDownloaded"));
     } catch (error) {
-      toast.error(isRTL ? "فشل التنزيل" : "Download failed");
+      toast.error(t("toast.downloadFailed"));
     }
   };
 
@@ -121,13 +121,13 @@ export function InteractiveEventCard({
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-        toast.success(isRTL ? "تمت المشاركة" : "Shared successfully");
+        toast.success(t("toast.shared"));
       } catch (error) {
         // User cancelled
       }
     } else {
       await navigator.clipboard.writeText(shareData.url);
-      toast.success(isRTL ? "تم نسخ الرابط" : "Link copied");
+      toast.success(t("toast.linkCopied"));
     }
   };
 
@@ -158,13 +158,14 @@ export function InteractiveEventCard({
                   src={event.image}
                   alt={event.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
 
                 {/* Status badge */}
                 {!isPast && (
                   <Badge className="absolute top-4 start-4 bg-mpc-green-500 text-white shadow-sm">
-                    {isRTL ? "قريباً" : "Upcoming"}
+                    {t("badge.upcoming")}
                   </Badge>
                 )}
               </div>
@@ -234,7 +235,7 @@ export function InteractiveEventCard({
                 <div className="mb-1.5 flex items-center justify-between text-xs">
                   <span className="flex items-center gap-1 text-muted-foreground">
                     <Users className="h-3 w-3" />
-                    {isRTL ? "المسجلون" : "Registered"}
+                    {t("badge.registered")}
                   </span>
                   <span className="font-medium">
                     {attendeeCount}/{capacity}
@@ -270,7 +271,7 @@ export function InteractiveEventCard({
                       className="w-full bg-mpc-green-500 text-white hover:bg-mpc-green-600"
                     >
                       <Check className="me-1 h-3 w-3" />
-                      {isRTL ? "تأكيد الحضور" : "RSVP Now"}
+                      {t("cta.rsvp")}
                     </Button>
                   )}
 
@@ -281,7 +282,7 @@ export function InteractiveEventCard({
                       className="w-full bg-mpc-green-500/20 text-mpc-green-600"
                     >
                       <Check className="me-1 h-3 w-3" />
-                      {isRTL ? "تم التسجيل" : "RSVP Confirmed"}
+                      {t("cta.rsvpConfirmed")}
                     </Button>
                   )}
 
@@ -294,7 +295,7 @@ export function InteractiveEventCard({
                       className="flex-1"
                     >
                       <Download className="me-1 h-3 w-3" />
-                      {isRTL ? "تقويم" : "Calendar"}
+                      {t("cta.calendar")}
                     </Button>
                     <Button
                       variant="outline"
@@ -303,7 +304,7 @@ export function InteractiveEventCard({
                       className="flex-1"
                     >
                       <Share2 className="me-1 h-3 w-3" />
-                      {isRTL ? "مشاركة" : "Share"}
+                      {t("cta.share")}
                     </Button>
                   </div>
                 </div>

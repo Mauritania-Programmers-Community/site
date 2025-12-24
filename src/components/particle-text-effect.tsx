@@ -1,6 +1,13 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import {
+  CANVAS_PERFORMANCE,
+  PARTICLE_CONFIG,
+  BREAKPOINTS,
+} from "@/lib/constants"
 
 interface Vector2D {
   x: number
@@ -148,7 +155,14 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   const wordIndexRef = useRef(0)
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isRightClick: false })
 
-  const pixelSteps = 6
+  // Performance optimizations
+  const isMobile = useMediaQuery(BREAKPOINTS.MOBILE)
+  const prefersReducedMotion = useReducedMotion()
+
+  // Increase pixel steps on mobile to reduce particle count (fewer particles = better performance)
+  const pixelSteps = isMobile
+    ? PARTICLE_CONFIG.MOBILE_PIXEL_STEPS
+    : PARTICLE_CONFIG.DESKTOP_PIXEL_STEPS
   const drawAsPoints = true
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
@@ -270,7 +284,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const particles = particlesRef.current
 
     // Background with motion blur
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)"
+    ctx.fillStyle = `rgba(0, 0, 0, ${PARTICLE_CONFIG.MOTION_BLUR_ALPHA})`
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     // Update and draw particles
@@ -306,7 +320,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
 
     // Auto-advance words
     frameCountRef.current++
-    if (frameCountRef.current % 240 === 0) {
+    if (frameCountRef.current % PARTICLE_CONFIG.FRAME_ADVANCE_INTERVAL === 0) {
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length
       nextWord(words[wordIndexRef.current], canvas)
     }
@@ -318,8 +332,22 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const canvas = canvasRef.current
     if (!canvas) return
 
-    canvas.width = 1000
-    canvas.height = 500
+    // Lower DPR on mobile for better performance
+    const dpr = isMobile
+      ? CANVAS_PERFORMANCE.MOBILE_DPR
+      : Math.min(window.devicePixelRatio, CANVAS_PERFORMANCE.DESKTOP_DPR_MAX)
+    const baseWidth = PARTICLE_CONFIG.BASE_WIDTH
+    const baseHeight = PARTICLE_CONFIG.BASE_HEIGHT
+
+    canvas.width = baseWidth * dpr
+    canvas.height = baseHeight * dpr
+    canvas.style.width = `${baseWidth}px`
+    canvas.style.height = `${baseHeight}px`
+
+    const ctx = canvas.getContext("2d")
+    if (ctx) {
+      ctx.scale(dpr, dpr)
+    }
 
     // Initialize with first word
     nextWord(words[0], canvas)
@@ -341,10 +369,16 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       mouseRef.current.isRightClick = false
     }
 
+    // Throttle mouse move for better performance
+    let rafId: number | null = null
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      mouseRef.current.x = e.clientX - rect.left
-      mouseRef.current.y = e.clientY - rect.top
+      if (rafId) return
+      rafId = requestAnimationFrame(() => {
+        const rect = canvas.getBoundingClientRect()
+        mouseRef.current.x = e.clientX - rect.left
+        mouseRef.current.y = e.clientY - rect.top
+        rafId = null
+      })
     }
 
     const handleContextMenu = (e: MouseEvent) => {
@@ -360,12 +394,15 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+      }
       canvas.removeEventListener("mousedown", handleMouseDown)
       canvas.removeEventListener("mouseup", handleMouseUp)
       canvas.removeEventListener("mousemove", handleMouseMove)
       canvas.removeEventListener("contextmenu", handleContextMenu)
     }
-  }, [])
+  }, [isMobile, words])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black p-4">

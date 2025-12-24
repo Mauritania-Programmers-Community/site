@@ -5,6 +5,10 @@ import type { Metadata } from "next";
 import { MDXContent } from "@/components/mdx/mdx-content";
 import { EventHero } from "@/components/events/event-hero";
 
+export const dynamic = "force-static";
+export const dynamicParams = false;
+export const revalidate = 1800;
+
 type PageProps = {
   params: Promise<{ locale: string; id: string }>;
 };

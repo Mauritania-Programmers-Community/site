@@ -1,10 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useMemo, type ReactNode, type RefObject } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -44,45 +40,61 @@ export function ScrollReveal({
 
     const wordElements = container.querySelectorAll(".scroll-reveal-word");
 
-    // Set initial state
-    gsap.set(wordElements, {
-      opacity: baseOpacity,
-      rotateX: baseRotation,
-      filter: enableBlur ? `blur(${blurStrength}px)` : "blur(0px)",
-    });
+    // Lazy load GSAP and ScrollTrigger
+    let cleanup: (() => void) | undefined;
 
-    // Create scroll-triggered animation
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        scroller: scrollContainerRef?.current || undefined,
-        start: "top 80%",
-        end: wordAnimationEnd,
-        scrub: 1,
-      },
-    });
+    const initScrollTrigger = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
 
-    // Animate each word
-    wordElements.forEach((word, index) => {
-      timeline.to(
-        word,
-        {
-          opacity: 1,
-          rotateX: 0,
-          filter: "blur(0px)",
-          duration: 0.5,
-          ease: "power2.out",
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Set initial state
+      gsap.set(wordElements, {
+        opacity: baseOpacity,
+        rotateX: baseRotation,
+        filter: enableBlur ? `blur(${blurStrength}px)` : "blur(0px)",
+      });
+
+      // Create scroll-triggered animation
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          scroller: scrollContainerRef?.current || undefined,
+          start: "top 80%",
+          end: wordAnimationEnd,
+          scrub: 1,
         },
-        index * 0.05
-      );
-    });
+      });
+
+      // Animate each word
+      wordElements.forEach((word, index) => {
+        timeline.to(
+          word,
+          {
+            opacity: 1,
+            rotateX: 0,
+            filter: "blur(0px)",
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          index * 0.05
+        );
+      });
+
+      cleanup = () => {
+        ScrollTrigger.getAll().forEach((trigger) => {
+          if (trigger.trigger === container) {
+            trigger.kill();
+          }
+        });
+      };
+    };
+
+    initScrollTrigger();
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.trigger === container) {
-          trigger.kill();
-        }
-      });
+      if (cleanup) cleanup();
     };
   }, [
     words,
@@ -100,7 +112,7 @@ export function ScrollReveal({
   }
 
   return (
-    <p ref={containerRef} className={containerClassName}>
+    <p ref={containerRef} className={`relative ${containerClassName}`}>
       {words.map((word, index) => (
         <span
           key={`${word}-${index}`}

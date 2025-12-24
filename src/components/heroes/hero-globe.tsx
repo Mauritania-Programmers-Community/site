@@ -3,8 +3,8 @@
 import { useTranslations, useLocale } from "next-intl"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
-import { Globe } from "@/components/ui/globe"
 import { siteConfig } from "@/config/site"
 import {
   ArrowRight,
@@ -17,6 +17,17 @@ import {
   MapPin,
 } from "lucide-react"
 import type { COBEOptions } from "cobe"
+
+// Dynamically import Globe component (uses cobe library)
+const Globe = dynamic(
+  () => import("@/components/ui/globe").then(mod => ({ default: mod.Globe })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full animate-pulse rounded-full bg-mpc-green-500/10" />
+    ),
+  }
+)
 
 // MPC Globe Configuration - Featuring Mauritania
 const MPC_GLOBE_CONFIG: COBEOptions = {

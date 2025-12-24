@@ -113,6 +113,9 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
                   src={post.image}
                   alt={post.title}
                   fill
+                  priority={index === 0}
+                  loading={index === 0 ? undefined : "lazy"}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover"
                 />
               </motion.div>

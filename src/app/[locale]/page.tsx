@@ -9,6 +9,9 @@ import { RecentPostsSection } from "@/components/sections/recent-posts-section";
 import { RecentEventsSection } from "@/components/sections/recent-events-section";
 import { getRecentPosts, getRecentEvents, type Locale } from "@/lib/content";
 
+// Force static generation for this page
+export const dynamic = "force-static";
+
 export default async function HomePage({
   params,
 }: {

@@ -59,6 +59,9 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
               src={event.image}
               alt={event.title}
               fill
+              priority={index === 0}
+              loading={index === 0 ? undefined : "lazy"}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
@@ -133,7 +136,14 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
             }`}
             asChild
           >
-            <Link href={`/${locale}/events/${event.baseSlug}`}>
+            <Link
+              href={`/${locale}/events/${event.baseSlug}`}
+              aria-label={
+                isPast
+                  ? `${t("viewDetails")}: ${event.title}`
+                  : `${t("learnMore")}: ${event.title}`
+              }
+            >
               {isPast ? (
                 <>
                   {t("viewDetails")}

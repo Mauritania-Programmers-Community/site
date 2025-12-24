@@ -143,6 +143,7 @@ export function EventHero({ event, locale }: EventHeroProps) {
                 src={event.image}
                 alt={event.title}
                 fill
+                quality={90}
                 className="object-cover object-center"
                 priority
               />

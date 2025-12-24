@@ -8,8 +8,6 @@ import {
   Shield,
   Brain,
   Calendar,
-  ChevronRight,
-  ChevronLeft,
 } from "lucide-react";
 import { SectionHeader } from "./section-header";
 
@@ -45,9 +43,6 @@ export function FeaturesSection() {
   const locale = useLocale();
   const isRTL = locale === "ar";
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  // Direction-aware chevron
-  const ChevronIcon = isRTL ? ChevronLeft : ChevronRight;
 
   return (
     <section className="relative overflow-hidden bg-muted/30 py-24">
@@ -147,19 +142,6 @@ export function FeaturesSection() {
                         {t(`features.items.${feature.id}.description`)}
                       </p>
                     </div>
-
-                    {/* CTA link */}
-                    <motion.div
-                      className="flex items-center gap-2 text-sm font-semibold"
-                      animate={{ x: isHovered ? (isRTL ? -5 : 5) : 0 }}
-                    >
-                      <span className={`bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
-                        {isRTL ? "اكتشف المزيد" : "Explore More"}
-                      </span>
-                      <span className={`bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
-                        <ChevronIcon className="h-4 w-4" />
-                      </span>
-                    </motion.div>
                   </div>
 
                   {/* Decorative elements */}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Cairo } from "next/font/google";
+import { Inter, Cairo, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
@@ -20,6 +20,13 @@ const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
   display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -100,8 +107,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
 
   return (
     <html lang={locale} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.dicebear.com" />
+      </head>
       <body
-        className={`${inter.variable} ${cairo.variable} ${isRtl ? "font-arabic" : "font-sans"} antialiased`}
+        className={`${inter.variable} ${cairo.variable} ${jetbrainsMono.variable} ${isRtl ? "font-arabic" : "font-sans"} antialiased`}
       >
         <ThemeProvider
           attribute="class"

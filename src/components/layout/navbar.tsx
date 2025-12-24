@@ -3,24 +3,28 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { buttonVariants } from "@/components/ui/button";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "./theme-toggle";
 import { siteConfig } from "@/config/site";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SCROLL_CONFIG } from "@/lib/constants";
 
 export function Navbar() {
   const t = useTranslations("nav");
   const locale = useLocale();
+  const pathname = usePathname();
   const [menuState, setMenuState] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   // Track scroll position
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > SCROLL_CONFIG.NAVBAR_SCROLL_THRESHOLD);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -30,6 +34,25 @@ export function Navbar() {
     { href: `/${locale}/events`, label: t("events") },
     { href: `/${locale}/blog`, label: t("blog") },
   ];
+
+  const isActive = (href: string) => {
+    // Don't highlight on homepage
+    if (pathname === `/${locale}` || pathname === '/') return false;
+    // Match if current path starts with nav item path
+    return pathname.startsWith(href);
+  };
+
+  const getNavLinkClasses = (isActive: boolean, isMobile = false) => {
+    return cn(
+      buttonVariants({ variant: "ghost", size: isMobile ? "default" : "sm" }),
+      "transition-all duration-200",
+      isMobile && "justify-start w-full",
+      // Inactive state - subtle brand color on hover
+      !isActive && "hover:bg-mpc-green-50 hover:text-mpc-green-700 dark:hover:bg-mpc-green-900/30 dark:hover:text-mpc-green-400",
+      // Active state - matches hover state for consistency
+      isActive && "bg-mpc-green-50 text-mpc-green-700 dark:bg-mpc-green-900/30 dark:text-mpc-green-400"
+    );
+  };
 
   return (
     <header>
@@ -54,6 +77,7 @@ export function Navbar() {
                   alt={siteConfig.name}
                   width={40}
                   height={40}
+                  priority
                   className="h-10 w-10"
                 />
                 <span className="hidden text-xl font-bold text-mpc-green-500 sm:inline">
@@ -85,14 +109,14 @@ export function Navbar() {
 
               {/* Desktop Navigation */}
               <div className="hidden lg:block">
-                <ul className="flex gap-8 text-sm">
+                <ul className="flex gap-2 text-sm">
                   {navItems.map((item) => (
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className="text-muted-foreground hover:text-foreground block font-medium transition-colors duration-150"
+                        className={getNavLinkClasses(isActive(item.href))}
                       >
-                        <span>{item.label}</span>
+                        {item.label}
                       </Link>
                     </li>
                   ))}
@@ -109,15 +133,15 @@ export function Navbar() {
             >
               {/* Mobile Navigation Links */}
               <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
+                <ul className="space-y-2 text-base">
                   {navItems.map((item) => (
                     <li key={item.href}>
                       <Link
                         href={item.href}
                         onClick={() => setMenuState(false)}
-                        className="text-muted-foreground hover:text-foreground block font-medium transition-colors duration-150"
+                        className={getNavLinkClasses(isActive(item.href), true)}
                       >
-                        <span>{item.label}</span>
+                        {item.label}
                       </Link>
                     </li>
                   ))}

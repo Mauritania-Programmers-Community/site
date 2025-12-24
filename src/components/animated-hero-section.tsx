@@ -1,6 +1,13 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { useReducedMotion } from "@/hooks/use-reduced-motion"
+import {
+  CANVAS_PERFORMANCE,
+  PONG_CONFIG,
+  BREAKPOINTS,
+} from "@/lib/constants"
 
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
@@ -149,6 +156,10 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
 
+  // Performance optimizations
+  const isMobile = useMediaQuery(BREAKPOINTS.MOBILE)
+  const prefersReducedMotion = useReducedMotion()
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -157,17 +168,28 @@ export function PromptingIsAllYouNeed() {
     if (!ctx) return
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      scaleRef.current = Math.min(canvas.width / 1000, canvas.height / 1000)
+      // Lower DPR on mobile for better performance
+      const dpr = isMobile
+        ? CANVAS_PERFORMANCE.MOBILE_DPR
+        : Math.min(window.devicePixelRatio, CANVAS_PERFORMANCE.DESKTOP_DPR_MAX)
+      canvas.width = window.innerWidth * dpr
+      canvas.height = window.innerHeight * dpr
+      canvas.style.width = `${window.innerWidth}px`
+      canvas.style.height = `${window.innerHeight}px`
+      ctx.scale(dpr, dpr)
+      scaleRef.current = Math.min(window.innerWidth / 1000, window.innerHeight / 1000)
       initializeGame()
     }
 
     const initializeGame = () => {
       const scale = scaleRef.current
-      const LARGE_PIXEL_SIZE = 8 * scale
-      const SMALL_PIXEL_SIZE = 4 * scale
-      const BALL_SPEED = 6 * scale
+      // Reduce pixel size on mobile for fewer particles
+      const pixelSizeMultiplier = isMobile
+        ? PONG_CONFIG.MOBILE_PIXEL_SIZE_MULTIPLIER
+        : PONG_CONFIG.DESKTOP_PIXEL_SIZE_MULTIPLIER
+      const LARGE_PIXEL_SIZE = PONG_CONFIG.LARGE_PIXEL_SIZE * scale * pixelSizeMultiplier
+      const SMALL_PIXEL_SIZE = PONG_CONFIG.SMALL_PIXEL_SIZE * scale * pixelSizeMultiplier
+      const BALL_SPEED = (isMobile ? PONG_CONFIG.MOBILE_BALL_SPEED : PONG_CONFIG.DESKTOP_BALL_SPEED) * scale
 
       pixelsRef.current = []
       const words = ["PROMPTING", "IS ALL YOU NEED"]
@@ -407,7 +429,7 @@ export function PromptingIsAllYouNeed() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <canvas

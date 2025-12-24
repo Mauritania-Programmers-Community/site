@@ -59,6 +59,14 @@
     "backToEvents": "Back to Events",
     "viewDetails": "View Details",
     "learnMore": "Learn More",
+    "empty": {
+      "noEvents": "No Events Yet",
+      "noEventsDescription": "We're planning amazing events soon. Stay tuned!",
+      "noUpcoming": "No Upcoming Events",
+      "noUpcomingDescription": "No events scheduled at the moment. Check back soon for new events!",
+      "noPast": "No Past Events",
+      "noPastDescription": "No past events yet. Be among the first to attend!"
+    },
     "status": {
       "upcoming": "Upcoming",
       "completed": "Completed",
@@ -71,6 +79,17 @@
       "rsvpConfirmed": "RSVP Confirmed",
       "calendar": "Calendar",
       "share": "Share"
+    },
+    "toast": {
+      "rsvpSuccess": "RSVP Successful!",
+      "calendarDownloaded": "Calendar file downloaded",
+      "downloadFailed": "Download failed",
+      "shared": "Shared successfully",
+      "linkCopied": "Link copied"
+    },
+    "badge": {
+      "upcoming": "Upcoming",
+      "registered": "Registered"
     }
   },
   "community": {
@@ -175,7 +194,10 @@
       "title": "Quick Links"
     },
     "social": {
-      "title": "Follow Us"
+      "title": "Follow Us",
+      "github": "Follow us on GitHub",
+      "linkedin": "Follow us on LinkedIn",
+      "facebook": "Follow us on Facebook"
     },
     "copyright": "© {year} Mauritania Programmers Community. All rights reserved."
   },
@@ -186,6 +208,25 @@
     "backToHome": "Back to Home",
     "changeLanguage": "Change language",
     "currentLanguage": "Current language"
+  },
+  "blog": {
+    "badge": "Blog",
+    "title": "Ideas & Insights from",
+    "titleHighlight": "Our Community",
+    "subtitle": "Articles, tutorials, and insights from the MPC community. Learn, share, and grow with us.",
+    "search": "Search articles...",
+    "filter": {
+      "all": "All"
+    },
+    "allPosts": "All Posts",
+    "recentPosts": "Recent Posts",
+    "tags": "Tags",
+    "clearFilters": "Clear filters",
+    "empty": {
+      "noPosts": "No Blog Posts Yet",
+      "noPostsDescription": "We're working on creating great content for you. Check back soon!",
+      "noResults": "No posts found"
+    }
   },
   "terminal": {
     "commands": {
