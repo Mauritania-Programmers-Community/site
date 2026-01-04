@@ -4,29 +4,10 @@ import { FC, useMemo, useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Plane } from '@react-three/drei'
 import * as THREE from 'three'
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { BREAKPOINTS, CANVAS_PERFORMANCE } from '@/lib/constants';
 // import { Perf } from 'r3f-perf'
-
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkIsMobile = () => {
-      const userAgent = navigator.userAgent
-      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-      const isSmallScreen = window.innerWidth <= 768
-      
-      setIsMobile(mobileRegex.test(userAgent) || (isTouchDevice && isSmallScreen))
-    }
-
-    checkIsMobile()
-    window.addEventListener('resize', checkIsMobile)
-    
-    return () => window.removeEventListener('resize', checkIsMobile)
-  }, [])
-
-  return isMobile
-}
 const MAX_STEPS = 128
 const PRECISION = 0.0005
 
@@ -353,10 +334,11 @@ const AnimationController: FC<AnimationControllerProps> = ({ animationState }) =
 }
 
 export const Scene: FC = () => {
-  const isMobile = useIsMobile()
+  const isMobile = useMediaQuery(BREAKPOINTS.MOBILE);
+  const prefersReducedMotion = useReducedMotion();
   const amount = isMobile ? 3 : 4
   const [animationState] = useState<AnimationState>(() => createInitialState(amount))
-  
+
   const cameraConfig = useMemo(() => ({
     position: [0, 0, 15] as [number, number, number],
     fov: 50,
@@ -364,19 +346,25 @@ export const Scene: FC = () => {
     far: 2000,
   }), [])
 
-  return (
-    <div
-    className='w-full h-full bg-linear-to-b from-neutral-950 to-green-900'
+  // Skip heavy animations if reduced motion is preferred
+  if (prefersReducedMotion) {
+    return (
+      <div className='w-full h-full bg-gradient-to-b from-neutral-950 to-green-900'>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-900/20 via-neutral-950 to-neutral-950" />
+      </div>
+    );
+  }
 
-    >
+  return (
+    <div className='w-full h-full bg-linear-to-b from-neutral-950 to-green-900'>
       <Canvas
         camera={cameraConfig}
-        dpr={1}
+        dpr={[CANVAS_PERFORMANCE.MOBILE_DPR, CANVAS_PERFORMANCE.DESKTOP_DPR_MAX]}
         frameloop="always"
-        gl={{ 
+        gl={{
           alpha: true,
-          antialias: !isMobile,
-          powerPreference: "high-performance"
+          antialias: !isMobile, // Disable antialiasing on mobile for performance
+          powerPreference: isMobile ? "default" : "high-performance"
         }}
       >
         <AnimationController animationState={animationState} />

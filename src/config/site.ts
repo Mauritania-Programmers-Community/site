@@ -14,7 +14,7 @@ export const siteConfig = {
   founder: "Deidin",
   foundedDate: "2024-09-21",
   stats: {
-    members: 900,
+    members: 1023,
     events: 11,
     projects: 4,
     yearFounded: 2024,

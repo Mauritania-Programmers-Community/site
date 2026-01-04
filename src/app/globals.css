@@ -674,3 +674,46 @@ body {
 [dir="rtl"] .prose pre {
   direction: ltr;
 }
+
+/* ============================================
+   GPU Acceleration Hints (Mobile Performance)
+   ============================================ */
+/* Force GPU acceleration for transform-heavy elements */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Event cards with hover scale */
+.group:hover .group-hover\:scale-105,
+.hover\:scale-105:hover {
+  will-change: transform;
+  transform: translate3d(0, 0, 0) scale(1.05);
+}
+
+/* Navbar scroll animations */
+.navbar-animated {
+  will-change: transform, opacity, backdrop-filter;
+}
+
+/* Hero section parallax elements */
+.parallax-element {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Animated grid patterns */
+.animate-fade-in,
+.animate-fade-up,
+.animate-float,
+.animate-float-delayed {
+  will-change: transform, opacity;
+}
+
+/* Mobile: Disable will-change on touch devices (auto fallback) */
+@media (hover: none) and (pointer: coarse) {
+  .hover\:scale-105:hover,
+  .group:hover .group-hover\:scale-105 {
+    will-change: auto;
+    transform: none;
+  }
+}

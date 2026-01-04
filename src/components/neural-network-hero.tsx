@@ -8,6 +8,9 @@ import * as THREE from 'three';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import { BREAKPOINTS, CANVAS_PERFORMANCE } from '@/lib/constants';
 
 gsap.registerPlugin(SplitText, useGSAP);
 
@@ -190,19 +193,21 @@ function ShaderPlane() {
 
 function ShaderBackground() {
   const canvasRef = useRef<HTMLDivElement | null>(null);
-  
+  const isMobile = useMediaQuery(BREAKPOINTS.MOBILE);
+  const prefersReducedMotion = useReducedMotion();
+
   const camera = useMemo(() => ({ position: [0, 0, 1] as [number, number, number], fov: 75, near: 0.1, far: 1000 }), []);
-  
+
   useGSAP(
     () => {
-      if (!canvasRef.current) return;
-      
+      if (!canvasRef.current || prefersReducedMotion) return;
+
       gsap.set(canvasRef.current, {
         filter: 'blur(20px)',
         scale: 1.1,
         autoAlpha: 0.7
       });
-      
+
       gsap.to(canvasRef.current, {
         filter: 'blur(0px)',
         scale: 1,
@@ -212,15 +217,29 @@ function ShaderBackground() {
         delay: 0.3
       });
     },
-    { scope: canvasRef }
+    { scope: canvasRef, dependencies: [prefersReducedMotion] }
   );
-  
+
+  // Skip heavy animations if reduced motion is preferred
+  if (prefersReducedMotion) {
+    return (
+      <div className="bg-black absolute inset-0 -z-10 w-full h-full" aria-hidden>
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-black/20" />
+      </div>
+    );
+  }
+
   return (
     <div ref={canvasRef} className="bg-black absolute inset-0 -z-10 w-full h-full" aria-hidden>
       <Canvas
         camera={camera}
-        gl={{ antialias: true, alpha: false }}
-        dpr={[1, 2]}
+        gl={{
+          antialias: !isMobile, // Disable antialiasing on mobile for performance
+          alpha: false,
+          powerPreference: isMobile ? "default" : "high-performance"
+        }}
+        dpr={[CANVAS_PERFORMANCE.MOBILE_DPR, CANVAS_PERFORMANCE.DESKTOP_DPR_MAX]}
         style={{ width: '100%', height: '100%' }}
       >
         <ShaderPlane />

@@ -17,8 +17,8 @@ interface RecentPostsSectionProps {
 export function RecentPostsSection({ posts, locale }: RecentPostsSectionProps) {
   const t = useTranslations("recentPosts");
 
-  // Hide section if less than 3 posts
-  if (!posts || posts.length < 3) {
+  // Hide section only if no posts at all
+  if (!posts || posts.length === 0) {
     return null;
   }
 

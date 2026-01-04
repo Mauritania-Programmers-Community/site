@@ -17,8 +17,8 @@ interface RecentEventsSectionProps {
 export function RecentEventsSection({ events, locale }: RecentEventsSectionProps) {
   const t = useTranslations("recentEvents");
 
-  // Hide section if less than 3 events
-  if (!events || events.length < 3) {
+  // Hide section only if no events at all
+  if (!events || events.length === 0) {
     return null;
   }
 

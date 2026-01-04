@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check for large image files
+echo "🔍 Checking for large image files..."
+
+# Find images larger than 500KB in public/images
+large_images=$(find public/images -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -size +500k 2>/dev/null)
+
+if [ -n "$large_images" ]; then
+  echo "⚠️  Warning: Large image files detected (>500KB):"
+  echo "$large_images" | while read file; do
+    size=$(du -h "$file" | cut -f1)
+    echo "   - $file ($size)"
+  done
+  echo ""
+  echo "💡 Consider optimizing with: node scripts/optimize-images.mjs"
+  echo "   Or use online tools: tinypng.com, squoosh.app"
+  echo ""
+  read -p "Continue commit anyway? (y/N) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+fi
+
+echo "✅ Image check passed"
