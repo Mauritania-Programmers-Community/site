@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "MPC - Mauritania Programmers Community",
-    "description": "Building Mauritania's Tech Future Together. Join 900+ developers sharing knowledge, opportunities, and innovation."
+    "description": "Building Mauritania's Tech Future Together. Join 1023+ developers sharing knowledge, opportunities, and innovation."
   },
   "nav": {
     "events": "Events",
@@ -13,14 +13,14 @@
     "title": "Building Mauritania's",
     "titleHighlight": "Tech Future",
     "titleEnd": "Together",
-    "description": "Join 900+ developers sharing knowledge, opportunities, and building the future of technology in Mauritania.",
+    "description": "Join 1023+ developers sharing knowledge, opportunities, and building the future of technology in Mauritania.",
     "cta": {
       "join": "Join WhatsApp Group",
       "events": "View Events"
     }
   },
   "stats": {
-    "membersCount": "900+",
+    "membersCount": "1023+",
     "members": "Members",
     "events": "Events Hosted",
     "year": "Year Strong",
@@ -95,7 +95,7 @@
   "community": {
     "badge": "Our Community",
     "title": "Built by the Community, for the Community",
-    "subtitle": "Join 900+ passionate developers from Mauritania who are learning, sharing, and building together.",
+    "subtitle": "Join 1023+ passionate developers from Mauritania who are learning, sharing, and building together.",
     "madeWith": "Made with love in Mauritania"
   },
   "faq": {
@@ -106,7 +106,7 @@
     "items": {
       "about": {
         "question": "What is MPC?",
-        "answer": "MPC (Mauritania Programmers Community) is a community of 900+ developers from Mauritania. Founded on September 21, 2024, we bring together programmers of all skill levels to learn, share knowledge, and collaborate on projects."
+        "answer": "MPC (Mauritania Programmers Community) is a community of 1023+ developers from Mauritania. Founded on September 21, 2024, we bring together programmers of all skill levels to learn, share knowledge, and collaborate on projects."
       },
       "join": {
         "question": "How can I join the community?",
@@ -127,7 +127,7 @@
     }
   },
   "cta": {
-    "badge": "Join 900+ Developers",
+    "badge": "Join 1023+ Developers",
     "title": "Ready to Level Up Your Skills?",
     "description": "Join our community of passionate developers and start your journey today.",
     "button": "Join WhatsApp Group"
@@ -232,9 +232,9 @@
     "hint": "Type 'help' to see available commands",
     "commands": {
       "whoami": "developer@mauritania",
-      "uname": "MPC-Community v1.0 | 900+ developers | 4 domains",
+      "uname": "MPC-Community v1.0 | 1023+ developers | 4 domains",
       "catOutput": {
-        "line1": "Active developers: 900+",
+        "line1": "Active developers: 1023+",
         "line2": "Focus: Web, Security, AI, Mobile",
         "line3": "Status: Online 24/7"
       },
