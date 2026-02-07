@@ -11,60 +11,103 @@ export type Locale = "en" | "ar";
 export type Post = (typeof posts)[number];
 export type Event = (typeof events)[number];
 
-// ============================================
-// Blog Post Helpers
-// ============================================
+const LOCALES: Locale[] = ["en", "ar"];
+
+type DatedContent = { date: string };
+type LocalizedContent = { locale: Locale };
+type SluggedContent = { locale: Locale; baseSlug: string };
+
+const toTimestamp = (value: string): number => new Date(value).getTime();
+const sortByDateDesc = <T extends DatedContent>(a: T, b: T) =>
+  toTimestamp(b.date) - toTimestamp(a.date);
+const sortByDateAsc = <T extends DatedContent>(a: T, b: T) =>
+  toTimestamp(a.date) - toTimestamp(b.date);
+
+function createLocaleBuckets<T extends LocalizedContent>(items: T[]): Record<Locale, T[]> {
+  const buckets: Record<Locale, T[]> = {
+    en: [],
+    ar: [],
+  };
+
+  for (const item of items) {
+    buckets[item.locale].push(item);
+  }
+
+  return buckets;
+}
+
+function createSlugIndex<T extends SluggedContent>(items: T[]): Map<string, T> {
+  const index = new Map<string, T>();
+  for (const item of items) {
+    index.set(`${item.locale}:${item.baseSlug}`, item);
+  }
+  return index;
+}
+
+function uniqueSorted<T>(values: Iterable<T>): T[] {
+  return Array.from(new Set(values)).sort();
+}
+
+// Build immutable indexes from Velite output once per process for fast runtime lookups.
+const publishedPosts = posts.filter((post) => post.published);
+const publishedEvents = events.filter((event) => event.published);
+
+const postSlugs = uniqueSorted(publishedPosts.map((post) => post.baseSlug));
+const eventSlugs = uniqueSorted(publishedEvents.map((event) => event.baseSlug));
+
+const postsByLocale = createLocaleBuckets(publishedPosts);
+const eventsByLocale = createLocaleBuckets(publishedEvents);
+
+for (const locale of LOCALES) {
+  postsByLocale[locale].sort(sortByDateDesc);
+  eventsByLocale[locale].sort(sortByDateDesc);
+}
+
+const postIndex = createSlugIndex(publishedPosts);
+const eventIndex = createSlugIndex(publishedEvents);
+
+const tagsByLocale: Record<Locale, string[]> = {
+  en: uniqueSorted(
+    postsByLocale.en.flatMap((post) => post.tags).filter((tag) => tag.trim() !== "")
+  ),
+  ar: uniqueSorted(
+    postsByLocale.ar.flatMap((post) => post.tags).filter((tag) => tag.trim() !== "")
+  ),
+};
 
 /**
  * Get all published posts for a specific locale
  */
 export function getPostsByLocale(locale: Locale): Post[] {
-  return posts
-    .filter((post) => post.locale === locale && post.published)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return [...postsByLocale[locale]];
 }
 
 /**
  * Get a specific post by slug and locale
  */
 export function getPost(slug: string, locale: Locale): Post | undefined {
-  return posts.find(
-    (post) =>
-      post.baseSlug === slug && post.locale === locale && post.published
-  );
+  return postIndex.get(`${locale}:${slug}`);
 }
 
 /**
  * Get all unique post slugs (for static generation)
  */
 export function getAllPostSlugs(): string[] {
-  const slugs = new Set(posts.map((post) => post.baseSlug));
-  return Array.from(slugs);
+  return [...postSlugs];
 }
 
 /**
  * Get posts by tag for a specific locale
  */
 export function getPostsByTag(tag: string, locale: Locale): Post[] {
-  return posts.filter(
-    (post) =>
-      post.locale === locale &&
-      post.published &&
-      post.tags.includes(tag)
-  );
+  return postsByLocale[locale].filter((post) => post.tags.includes(tag));
 }
 
 /**
  * Get all unique tags for a locale
  */
 export function getAllTags(locale: Locale): string[] {
-  const tags = new Set<string>();
-  posts
-    .filter((post) => post.locale === locale && post.published)
-    .forEach((post) => {
-      post.tags.forEach((tag) => tags.add(tag));
-    });
-  return Array.from(tags);
+  return [...tagsByLocale[locale]];
 }
 
 /**
@@ -82,14 +125,18 @@ export function getRelatedPosts(
   locale: Locale,
   limit: number = 3
 ): Post[] {
-  return posts
+  return postsByLocale[locale]
     .filter(
-      (p) =>
-        p.baseSlug !== post.baseSlug &&
-        p.locale === locale &&
-        p.published &&
-        p.tags.some((tag) => post.tags.includes(tag))
+      (candidate) =>
+        candidate.baseSlug !== post.baseSlug &&
+        candidate.tags.some((tag) => post.tags.includes(tag))
     )
+    .sort((a, b) => {
+      const aOverlap = a.tags.filter((tag) => post.tags.includes(tag)).length;
+      const bOverlap = b.tags.filter((tag) => post.tags.includes(tag)).length;
+      if (bOverlap !== aOverlap) return bOverlap - aOverlap;
+      return sortByDateDesc(a, b);
+    })
     .slice(0, limit);
 }
 
@@ -97,9 +144,7 @@ export function getRelatedPosts(
  * Check if translation exists for a post
  */
 export function hasTranslation(slug: string, locale: Locale): boolean {
-  return posts.some(
-    (post) => post.baseSlug === slug && post.locale === locale && post.published
-  );
+  return postIndex.has(`${locale}:${slug}`);
 }
 
 // ============================================
@@ -110,51 +155,39 @@ export function hasTranslation(slug: string, locale: Locale): boolean {
  * Get all published events for a specific locale
  */
 export function getEventsByLocale(locale: Locale): Event[] {
-  return events
-    .filter((event) => event.locale === locale && event.published)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return [...eventsByLocale[locale]];
 }
 
 /**
  * Get a specific event by slug and locale
  */
 export function getEvent(slug: string, locale: Locale): Event | undefined {
-  return events.find(
-    (event) =>
-      event.baseSlug === slug && event.locale === locale && event.published
-  );
+  return eventIndex.get(`${locale}:${slug}`);
 }
 
 /**
  * Get all unique event slugs (for static generation)
  */
 export function getAllEventSlugs(): string[] {
-  const slugs = new Set(events.map((event) => event.baseSlug));
-  return Array.from(slugs);
+  return [...eventSlugs];
 }
 
 /**
  * Get upcoming events for a locale
  */
 export function getUpcomingEvents(locale: Locale): Event[] {
-  return events.filter(
-    (event) =>
-      event.locale === locale &&
-      event.published &&
-      event.status === "upcoming"
-  );
+  return eventsByLocale[locale]
+    .filter((event) => event.status === "upcoming")
+    .sort(sortByDateAsc);
 }
 
 /**
  * Get past/completed events for a locale
  */
 export function getPastEvents(locale: Locale): Event[] {
-  return events.filter(
-    (event) =>
-      event.locale === locale &&
-      event.published &&
-      event.status === "completed"
-  );
+  return eventsByLocale[locale]
+    .filter((event) => event.status === "completed")
+    .sort(sortByDateDesc);
 }
 
 /**
@@ -172,20 +205,14 @@ export function getEventsByType(
   type: Event["type"],
   locale: Locale
 ): Event[] {
-  return events.filter(
-    (event) =>
-      event.locale === locale && event.published && event.type === type
-  );
+  return eventsByLocale[locale].filter((event) => event.type === type);
 }
 
 /**
  * Check if translation exists for an event
  */
 export function hasEventTranslation(slug: string, locale: Locale): boolean {
-  return events.some(
-    (event) =>
-      event.baseSlug === slug && event.locale === locale && event.published
-  );
+  return eventIndex.has(`${locale}:${slug}`);
 }
 
 // ============================================
@@ -229,9 +256,7 @@ export function formatDate(
  * Get static params for blog posts (for generateStaticParams)
  */
 export function getBlogStaticParams() {
-  return posts
-    .filter((post) => post.published)
-    .map((post) => ({
+  return publishedPosts.map((post) => ({
       locale: post.locale,
       slug: post.baseSlug,
     }));
@@ -241,11 +266,9 @@ export function getBlogStaticParams() {
  * Get static params for events (for generateStaticParams)
  */
 export function getEventStaticParams() {
-  return events
-    .filter((event) => event.published)
-    .map((event) => ({
+  return publishedEvents.map((event) => ({
       locale: event.locale,
-      slug: event.baseSlug,
+      id: event.baseSlug,
     }));
 }
 

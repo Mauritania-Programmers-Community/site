@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -106,7 +106,7 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/${locale}/blog/${post.baseSlug}`}>
+      <Link href={`/blog/${post.baseSlug}`}>
         <Card className="group overflow-hidden border-2 p-0 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-md hover:scale-[1.02] cursor-pointer">
           {/* Cover Image */}
           {post.image && (

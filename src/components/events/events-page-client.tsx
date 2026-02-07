@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InteractiveEventCard } from "@/components/events/interactive-event-card";
-import { getEventsByLocale, type Locale } from "@/lib/content";
+import { getEventsByLocale } from "@/lib/content";
 import { Calendar } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { BREAKPOINTS, BLOB_ANIMATION } from "@/lib/constants";

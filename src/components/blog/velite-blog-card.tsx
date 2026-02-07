@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,7 +32,7 @@ export function VeliteBlogCard({
   if (variant === "compact") {
     return (
       <Link
-        href={`/${locale}/blog/${post.baseSlug}`}
+        href={`/blog/${post.baseSlug}`}
         className="group flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50"
       >
         <span className="text-2xl font-bold text-muted-foreground/50 group-hover:text-mpc-green-500">
@@ -63,7 +63,7 @@ export function VeliteBlogCard({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.1 }}
       >
-        <Link href={`/${locale}/blog/${post.baseSlug}`}>
+        <Link href={`/blog/${post.baseSlug}`}>
           <MagicCard gradientSize={300} gradientOpacity={0.25} className="rounded-xl">
             <Card className="group overflow-hidden border-2 p-0 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-md">
             <div className="grid md:grid-cols-2">
@@ -141,7 +141,7 @@ export function VeliteBlogCard({
       transition={{ duration: 0.4, delay: index * 0.1 }}
       whileHover={{ y: -4 }}
     >
-      <Link href={`/${locale}/blog/${post.baseSlug}`}>
+      <Link href={`/blog/${post.baseSlug}`}>
           <Card className="group h-full overflow-hidden border-2 p-0 transition-all duration-300 hover:border-mpc-green-500/50 hover:shadow-md hover:scale-[1.02]">
           {post.image && (
             <div className="relative aspect-video overflow-hidden">

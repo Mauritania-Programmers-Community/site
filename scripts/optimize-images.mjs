@@ -7,7 +7,7 @@
  */
 
 import sharp from 'sharp';
-import { readdir, stat, mkdir } from 'fs/promises';
+import { stat } from 'fs/promises';
 import { join, dirname, basename, extname } from 'path';
 import { fileURLToPath } from 'url';
 

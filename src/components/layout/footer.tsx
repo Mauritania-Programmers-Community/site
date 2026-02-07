@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { siteConfig } from "@/config/site";
 import { Github, Linkedin, Facebook } from "lucide-react";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { Link } from "@/i18n/navigation";
 
 export function Footer() {
   const t = useTranslations();
-  const locale = useLocale();
   const [currentYear, setCurrentYear] = useState(2025);
 
   useEffect(() => {
@@ -38,13 +37,13 @@ export function Footer() {
           </div>
           <nav className="flex gap-6">
             <Link
-              href={`/${locale}/events`}
+              href="/events"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {t("nav.events")}
             </Link>
             <Link
-              href={`/${locale}/blog`}
+              href="/blog"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {t("nav.blog")}

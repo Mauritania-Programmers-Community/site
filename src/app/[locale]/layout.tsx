@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
-import { routing, rtlLocales, type Locale } from "@/i18n/routing";
+import { isLocale, isRtlLocale, routing } from "@/i18n/routing";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "sonner";
@@ -93,7 +93,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   const { locale } = await params;
 
   // Ensure that the incoming `locale` is valid
-  if (!routing.locales.includes(locale as Locale)) {
+  if (!isLocale(locale)) {
     notFound();
   }
 
@@ -103,7 +103,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   // Providing all messages to the client
   const messages = await getMessages();
 
-  const isRtl = rtlLocales.includes(locale as (typeof rtlLocales)[number]);
+  const isRtl = isRtlLocale(locale);
 
   return (
     <html lang={locale} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>

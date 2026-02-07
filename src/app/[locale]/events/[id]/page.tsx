@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { getEvent, getAllEventSlugs, formatDate, type Locale } from "@/lib/content";
+import { getEvent, getEventStaticParams, hasEventTranslation } from "@/lib/content";
 import type { Metadata } from "next";
 import { MDXContent } from "@/components/mdx/mdx-content";
 import { EventHero } from "@/components/events/event-hero";
+import { toLocale } from "@/i18n/routing";
+import { getLocaleAlternates, getLocalizedUrl, toAbsoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -14,22 +16,15 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  const slugs = getAllEventSlugs();
-  const locales = ["en", "ar"];
-
-  return locales.flatMap((locale) =>
-    slugs.map((slug) => ({
-      locale,
-      id: slug,
-    }))
-  );
+  return getEventStaticParams();
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { locale, id } = await params;
-  const event = getEvent(id, locale as Locale);
+  const resolvedLocale = toLocale(locale);
+  const event = getEvent(id, resolvedLocale);
 
   if (!event) {
     return {
@@ -37,29 +32,32 @@ export async function generateMetadata({
     };
   }
 
+  const localePaths: { en?: string; ar?: string } = {};
+  if (hasEventTranslation(id, "en")) localePaths.en = `/events/${id}`;
+  if (hasEventTranslation(id, "ar")) localePaths.ar = `/events/${id}`;
+  if (Object.keys(localePaths).length === 0) {
+    localePaths[resolvedLocale] = `/events/${id}`;
+  }
+
   return {
     title: `${event.title} | MPC Events`,
     description: event.description,
+    alternates: getLocaleAlternates(localePaths, resolvedLocale),
     openGraph: {
       title: event.title,
       description: event.description,
-      images: event.image ? [event.image] : [],
+      url: getLocalizedUrl(resolvedLocale, `/events/${id}`),
+      images: event.image ? [toAbsoluteUrl(event.image)] : [],
     },
   };
 }
 
-const eventTypeColors: Record<string, string> = {
-  workshop: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-  meetup: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-  hackathon: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
-  webinar: "bg-green-500/10 text-green-600 dark:text-green-400",
-};
-
 export default async function EventPage({ params }: PageProps) {
   const { locale, id } = await params;
-  setRequestLocale(locale);
+  const resolvedLocale = toLocale(locale);
+  setRequestLocale(resolvedLocale);
 
-  const event = getEvent(id, locale as Locale);
+  const event = getEvent(id, resolvedLocale);
 
   if (!event) {
     notFound();
@@ -68,7 +66,7 @@ export default async function EventPage({ params }: PageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <EventHero event={event} locale={locale as Locale} />
+      <EventHero event={event} locale={resolvedLocale} />
 
       {/* Content Section */}
       <section className="container mx-auto px-4 py-12">

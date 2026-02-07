@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { formatReadingTime, formatDate, type Post, type Locale } from "@/lib/content";
@@ -29,7 +29,7 @@ export function BlogCardGrid({
 
   return (
     <Link
-      href={`/${locale}/blog/${post.baseSlug}`}
+      href={`/blog/${post.baseSlug}`}
       className={cn(
         // MagicUI grid-line style with pseudo-elements
         "group block relative",

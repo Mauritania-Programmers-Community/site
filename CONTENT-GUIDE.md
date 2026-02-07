@@ -60,22 +60,15 @@ content/
 
 ## Creating Blog Posts
 
-### Method 1: Using Slash Command (Recommended)
+### Method 1: Using CLI Generator (Recommended)
 
-In Claude Code, run:
+Run:
 
+```bash
+pnpm create:post getting-started-with-nextjs
 ```
-/create-post getting-started-with-nextjs
-```
 
-Claude will ask for:
-- Title (English & Arabic)
-- Description (English & Arabic)
-- Author name
-- Tags
-- Cover image path
-
-This creates both language files automatically.
+This creates both language files with a bilingual draft template.
 
 ### Method 2: Manual Creation
 
@@ -140,7 +133,7 @@ published: false
 | `title` | string | Yes | Post title (max 99 chars) |
 | `description` | string | Yes | SEO description (max 999 chars) |
 | `date` | YYYY-MM-DD | Yes | Publication date |
-| `author` | string | Yes | Author name |
+| `author` | string | Yes | Author key (e.g. `mpc`, `ahmed-abdat`) |
 | `tags` | string[] | No | Array of tags |
 | `image` | string | No | Cover image path |
 | `published` | boolean | No | Set `true` to publish (default: `true`) |
@@ -149,20 +142,13 @@ published: false
 
 ## Creating Events
 
-### Method 1: Using Slash Command (Recommended)
+### Method 1: Using CLI Generator (Recommended)
 
-```
-/create-event nextjs-workshop-2025
+```bash
+pnpm create:event nextjs-workshop-2025
 ```
 
-Claude will ask for:
-- Title (English & Arabic)
-- Description (English & Arabic)
-- Date and time
-- Event type (workshop, meetup, hackathon, webinar)
-- Status (upcoming, completed, cancelled)
-- Speaker, Platform, Location
-- Registration/Recording URLs
+This creates both language files with a bilingual draft template.
 
 ### Method 2: Manual Creation
 
@@ -235,8 +221,8 @@ Join us for an exciting workshop on modern web development!
 ┌─────────────────────────────────────────────────────────────┐
 │  STEP 1: CREATE CONTENT                                     │
 │                                                             │
-│  Option A: /create-event my-new-event                       │
-│  Option B: /create-post my-new-post                         │
+│  Option A: pnpm create:event my-new-event                   │
+│  Option B: pnpm create:post my-new-post                     │
 │  Option C: Manually create MDX files                        │
 ├─────────────────────────────────────────────────────────────┤
 │  STEP 2: ADD IMAGES                                         │
@@ -253,10 +239,14 @@ Join us for an exciting workshop on modern web development!
 ├─────────────────────────────────────────────────────────────┤
 │  STEP 4: SET PUBLISHED                                      │
 │                                                             │
-│  Change published: false → published: true                  │
+│  pnpm content:publish post my-post                          │
+│  # or                                                      │
+│  pnpm content:publish event my-event                        │
 ├─────────────────────────────────────────────────────────────┤
 │  STEP 5: BUILD & TEST                                       │
 │                                                             │
+│  pnpm content:status # Show drafts/missing locale pairs     │
+│  pnpm content:check # Validate locale pairs/frontmatter     │
 │  pnpm build    # Processes MDX with Velite                  │
 │  pnpm dev      # Preview locally                            │
 │                                                             │
@@ -278,8 +268,12 @@ Join us for an exciting workshop on modern web development!
 
 | Task | Command |
 |------|---------|
-| Create blog post | `/create-post [slug]` |
-| Create event | `/create-event [slug]` |
+| Create blog post | `pnpm create:post [slug]` |
+| Create event | `pnpm create:event [slug]` |
+| Publish post/event | `pnpm content:publish [post\|event] [slug]` |
+| Unpublish post/event | `pnpm content:unpublish [post\|event] [slug]` |
+| Content dashboard | `pnpm content:status` |
+| Validate content | `pnpm content:check` |
 | Build project | `pnpm build` |
 | Start dev server | `pnpm dev` |
 | Process content only | `npx velite build` |
@@ -439,7 +433,7 @@ const formatted = formatDate("2025-01-15", "ar");
 ## Need Help?
 
 - Check existing content files for examples
-- Use slash commands for guided creation
+- Use `pnpm create:post` / `pnpm create:event` for guided drafts
 - Ask in the MPC community Discord
 
 ---

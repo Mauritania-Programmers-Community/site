@@ -15,3 +15,17 @@ export const routing = defineRouting({
 export const rtlLocales = ["ar"] as const;
 
 export type Locale = (typeof routing.locales)[number];
+
+export function isLocale(value: string): value is Locale {
+  return routing.locales.includes(value as Locale);
+}
+
+export function isRtlLocale(
+  value: string
+): value is (typeof rtlLocales)[number] {
+  return rtlLocales.includes(value as (typeof rtlLocales)[number]);
+}
+
+export function toLocale(value: string): Locale {
+  return isLocale(value) ? value : routing.defaultLocale;
+}

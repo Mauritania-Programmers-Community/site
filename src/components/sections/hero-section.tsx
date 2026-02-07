@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Button } from "@/components/ui/button";
@@ -336,7 +336,7 @@ export function HeroSection() {
                 className="group h-12 gap-2 border-2 px-6 font-semibold hover:border-mpc-green-500 hover:bg-mpc-green-500/10 transition-all duration-300"
                 asChild
               >
-                <Link href={`/${locale}/events`}>
+                <Link href="/events">
                   <Play className="h-4 w-4 order-first rtl:order-last" />
                   {t("hero.cta.events")}
                 </Link>

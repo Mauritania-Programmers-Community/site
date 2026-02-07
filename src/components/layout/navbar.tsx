@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { buttonVariants } from "@/components/ui/button";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -13,10 +11,10 @@ import { siteConfig } from "@/config/site";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SCROLL_CONFIG } from "@/lib/constants";
+import { Link, usePathname } from "@/i18n/navigation";
 
 export function Navbar() {
   const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
   const [menuState, setMenuState] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -31,15 +29,15 @@ export function Navbar() {
   }, []);
 
   const navItems = [
-    { href: `/${locale}/events`, label: t("events") },
-    { href: `/${locale}/blog`, label: t("blog") },
+    { href: "/events", label: t("events") },
+    { href: "/blog", label: t("blog") },
   ];
 
   const isActive = (href: string) => {
     // Don't highlight on homepage
-    if (pathname === `/${locale}` || pathname === '/') return false;
+    if (pathname === "/") return false;
     // Match if current path starts with nav item path
-    return pathname.startsWith(href);
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   const getNavLinkClasses = (isActive: boolean, isMobile = false) => {
@@ -68,7 +66,7 @@ export function Navbar() {
             {/* Logo & Mobile Toggle */}
             <div className="flex w-full items-center justify-between gap-12 lg:w-auto">
               <Link
-                href={`/${locale}`}
+                href="/"
                 aria-label="home"
                 className="flex items-center gap-2"
               >

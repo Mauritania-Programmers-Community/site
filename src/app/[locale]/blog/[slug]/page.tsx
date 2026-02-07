@@ -2,18 +2,17 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import {
   getPost,
-  getAllPostSlugs,
+  getBlogStaticParams,
   getRelatedPosts,
+  hasTranslation,
   formatReadingTime,
   formatDate,
-  type Locale,
   type Post,
 } from "@/lib/content";
 import type { Metadata } from "next";
 import { MDXContent } from "@/components/mdx/mdx-content";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ArrowLeft, Tag } from "lucide-react";
-import Link from "next/link";
+import { Clock, ArrowLeft } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { AuthorCard } from "@/components/blog/author-card";
@@ -22,6 +21,8 @@ import {
   MobileTableOfContents,
 } from "@/components/blog/table-of-contents";
 import { VeliteBlogCard } from "@/components/blog/velite-blog-card";
+import { toLocale } from "@/i18n/routing";
+import { getLocaleAlternates, getLocalizedUrl, toAbsoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -32,22 +33,15 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  const slugs = getAllPostSlugs();
-  const locales = ["en", "ar"];
-
-  return locales.flatMap((locale) =>
-    slugs.map((slug) => ({
-      locale,
-      slug,
-    }))
-  );
+  return getBlogStaticParams();
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = getPost(slug, locale as Locale);
+  const resolvedLocale = toLocale(locale);
+  const post = getPost(slug, resolvedLocale);
 
   if (!post) {
     return {
@@ -55,16 +49,25 @@ export async function generateMetadata({
     };
   }
 
+  const localePaths: { en?: string; ar?: string } = {};
+  if (hasTranslation(slug, "en")) localePaths.en = `/blog/${slug}`;
+  if (hasTranslation(slug, "ar")) localePaths.ar = `/blog/${slug}`;
+  if (Object.keys(localePaths).length === 0) {
+    localePaths[resolvedLocale] = `/blog/${slug}`;
+  }
+
   return {
     title: `${post.title} | MPC Blog`,
     description: post.description,
+    alternates: getLocaleAlternates(localePaths, resolvedLocale),
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
+      url: getLocalizedUrl(resolvedLocale, `/blog/${slug}`),
       publishedTime: post.date,
       authors: [post.author],
-      images: post.image ? [post.image] : [],
+      images: post.image ? [toAbsoluteUrl(post.image)] : [],
     },
     twitter: {
       card: "summary_large_image",
@@ -76,9 +79,10 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
+  const resolvedLocale = toLocale(locale);
+  setRequestLocale(resolvedLocale);
 
-  const post = getPost(slug, locale as Locale);
+  const post = getPost(slug, resolvedLocale);
 
   if (!post) {
     notFound();
@@ -88,7 +92,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const readingTime = (post as Post & { readingTime?: number }).readingTime;
 
   // Get related posts
-  const relatedPosts = getRelatedPosts(post, locale as Locale, 3);
+  const relatedPosts = getRelatedPosts(post, resolvedLocale, 3);
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -110,12 +114,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           {/* Meta row: Back button, Tags, Date, Reading Time */}
           <div className="flex flex-wrap items-center gap-3 gap-y-4 text-sm text-muted-foreground">
             <Link
-              href={`/${locale}/blog`}
+              href="/blog"
               className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border hover:bg-muted transition-colors"
             >
               <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
               <span className="sr-only">
-                {locale === "ar" ? "العودة" : "Back"}
+                {resolvedLocale === "ar" ? "العودة" : "Back"}
               </span>
             </Link>
 
@@ -132,14 +136,14 @@ export default async function BlogPostPage({ params }: PageProps) {
               </div>
             )}
 
-            <time className="font-medium">{formatDate(post.date, locale as Locale, { weekday: "long" })}</time>
+            <time className="font-medium">{formatDate(post.date, resolvedLocale, { weekday: "long" })}</time>
 
             {readingTime && (
               <>
                 <span className="text-border">·</span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="h-4 w-4" />
-                  {formatReadingTime(readingTime, locale as Locale)}
+                  {formatReadingTime(readingTime, resolvedLocale)}
                 </span>
               </>
             )}
@@ -191,14 +195,14 @@ export default async function BlogPostPage({ params }: PageProps) {
           {relatedPosts.length > 0 && (
             <div className="border-t border-border p-6 lg:p-10">
               <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-                {locale === "ar" ? "اقرأ المزيد" : "Read More"}
+                {resolvedLocale === "ar" ? "اقرأ المزيد" : "Read More"}
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {relatedPosts.map((relatedPost, index) => (
                   <VeliteBlogCard
                     key={relatedPost.baseSlug}
                     post={relatedPost}
-                    locale={locale}
+                    locale={resolvedLocale}
                     index={index}
                   />
                 ))}
@@ -211,12 +215,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         <aside className="hidden lg:block w-[350px] flex-shrink-0 p-6 lg:p-10 bg-muted/50 dark:bg-muted/20">
           <div className="sticky top-20 space-y-8">
             {/* Author Card */}
-            <AuthorCard authorKey={post.author} locale={locale} />
+            <AuthorCard authorKey={post.author} locale={resolvedLocale} />
 
             {/* Table of Contents */}
             <div className="border border-border rounded-lg p-6 bg-card">
               <TableOfContents
-                title={locale === "ar" ? "في هذه الصفحة" : "On this page"}
+                title={resolvedLocale === "ar" ? "في هذه الصفحة" : "On this page"}
               />
             </div>
           </div>
@@ -227,7 +231,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <MobileTableOfContents
         title="On this page"
         titleAr="في هذه الصفحة"
-        locale={locale}
+        locale={resolvedLocale}
       />
     </div>
   );

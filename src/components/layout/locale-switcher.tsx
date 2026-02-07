@@ -2,9 +2,10 @@
 
 import { useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Languages, ChevronDown, Check } from "lucide-react";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { isLocale, type Locale } from "@/i18n/routing";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,19 +24,16 @@ export function LocaleSwitcher() {
   const pathname = usePathname();
   const t = useTranslations("common");
 
-  const handleLocaleChange = (newLocale: string) => {
-    if (newLocale === locale) return;
+  const handleLocaleChange = (newLocale: Locale) => {
+    if (!isLocale(locale) || newLocale === locale) return;
 
     localStorage.setItem("preferred-locale", newLocale);
-
-    const pathWithoutLocale = pathname.replace(/^\/(en|ar)/, "");
-    const newPath = `/${newLocale}${pathWithoutLocale || ""}`;
-    router.push(newPath);
+    router.replace(pathname, { locale: newLocale });
   };
 
   useEffect(() => {
     const saved = localStorage.getItem("preferred-locale");
-    if (saved && saved !== locale && languages.some(lang => lang.code === saved)) {
+    if (saved && saved !== locale && isLocale(saved)) {
       handleLocaleChange(saved);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

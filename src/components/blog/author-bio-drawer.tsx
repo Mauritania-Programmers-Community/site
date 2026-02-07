@@ -14,7 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import { AvatarImage } from "@/components/ui/avatar-image";
 import { getAuthor, getAuthorName, getAuthorRole } from "@/lib/authors";
 import { Twitter, Github, Linkedin, Globe, Mail } from "lucide-react";
-import type { Author } from "@/lib/authors";
 
 interface AuthorBioDrawerProps {
   authorId: string;

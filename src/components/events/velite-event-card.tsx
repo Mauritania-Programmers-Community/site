@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -137,7 +137,7 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
             asChild
           >
             <Link
-              href={`/${locale}/events/${event.baseSlug}`}
+              href={`/events/${event.baseSlug}`}
               aria-label={`${t("viewDetails")}: ${event.title}`}
             >
               {t("viewDetails")}

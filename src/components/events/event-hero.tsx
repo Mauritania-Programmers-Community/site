@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { Calendar, MapPin, Video, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { AuthorCard } from "@/components/blog/author-card";
 import { formatDate, type Locale } from "@/lib/content";
@@ -34,7 +34,7 @@ export function EventHero({ event, locale }: EventHeroProps) {
       <div className="container mx-auto px-4">
         {/* Back button */}
         <Link
-          href={`/${locale}/events`}
+          href="/events"
           className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4 rtl:rotate-180" />

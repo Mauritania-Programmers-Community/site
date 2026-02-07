@@ -60,10 +60,23 @@ mpc-platform/
 
 ## Content Management
 
-Create new content using slash commands:
+Create new content with CLI helpers:
 ```bash
-/create-post [slug]    # Create bilingual blog post
-/create-event [slug]   # Create bilingual event
+pnpm create:post [slug]   # Create bilingual blog drafts
+pnpm create:event [slug]  # Create bilingual event drafts
+```
+
+Validate content before publishing:
+```bash
+pnpm content:check
+pnpm content:status
+```
+
+Publish or unpublish both locales in one command:
+```bash
+pnpm content:publish post [slug]
+pnpm content:publish event [slug]
+pnpm content:unpublish post [slug]
 ```
 
 See `CONTENT-GUIDE.md` for full documentation.

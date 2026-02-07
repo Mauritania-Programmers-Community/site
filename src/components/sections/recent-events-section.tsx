@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "./section-header";
@@ -60,7 +60,7 @@ export function RecentEventsSection({ events, locale }: RecentEventsSectionProps
           transition={{ duration: 0.5, delay: 0.6 }}
           className="mt-12 flex justify-center"
         >
-          <Link href={`/${locale}/events`}>
+          <Link href="/events">
             <Button size="lg" variant="outline" className="group border-mpc-gold-500 hover:bg-mpc-gold-500/10">
               {t("viewAll")}
               <ArrowRight className="ms-2 h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />

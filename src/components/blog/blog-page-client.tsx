@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { VeliteBlogCard } from "@/components/blog/velite-blog-card";
 import { ShiftBlogCard } from "@/components/blog/shift-blog-card";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { getPostsByLocale, getAllTags, type Locale } from "@/lib/content";
+import { getPostsByLocale, getAllTags } from "@/lib/content";
 import {
   BookOpen,
   Search,

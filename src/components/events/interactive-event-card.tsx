@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -18,7 +18,7 @@ import {
   Check,
 } from "lucide-react";
 import { formatDate, type Event } from "@/lib/content";
-import { getAuthor, getAuthorName, getAuthorRole } from "@/lib/authors";
+import { getAuthor, getAuthorName } from "@/lib/authors";
 import { AvatarImage } from "@/components/ui/avatar-image";
 import { MagicCard } from "@/components/ui/magic-card";
 import {
@@ -42,16 +42,6 @@ const eventTypeColors: Record<string, string> = {
   webinar: "bg-green-500/10 text-green-600 dark:text-green-400",
 };
 
-function formatEventTime(date: string, locale: string): string {
-  return new Date(date).toLocaleTimeString(
-    locale === "ar" ? "ar-u-nu-latn" : "en-US",
-    {
-      hour: "2-digit",
-      minute: "2-digit",
-    }
-  );
-}
-
 export function InteractiveEventCard({
   event,
   locale,
@@ -63,14 +53,10 @@ export function InteractiveEventCard({
   const [isRSVPed, setIsRSVPed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const isPast = event.status === "completed";
-  const isRTL = locale === "ar";
 
   const speaker = event.speaker ? getAuthor(event.speaker) : undefined;
   const speakerName = event.speaker
     ? getAuthorName(event.speaker, locale)
-    : undefined;
-  const speakerRole = event.speaker
-    ? getAuthorRole(event.speaker, locale)
     : undefined;
 
   // TODO: Implement RSVP backend integration
@@ -105,7 +91,7 @@ export function InteractiveEventCard({
       };
       await downloadCalendarFile(eventData, `${event.baseSlug}.ics`);
       toast.success(t("toast.calendarDownloaded"));
-    } catch (error) {
+    } catch {
       toast.error(t("toast.downloadFailed"));
     }
   };
@@ -121,7 +107,7 @@ export function InteractiveEventCard({
       try {
         await navigator.share(shareData);
         toast.success(t("toast.shared"));
-      } catch (error) {
+      } catch {
         // User cancelled
       }
     } else {
@@ -151,7 +137,7 @@ export function InteractiveEventCard({
         >
           {/* Cover Image */}
           {event.image && (
-            <Link href={`/${locale}/events/${event.baseSlug}`}>
+            <Link href={`/events/${event.baseSlug}`}>
               <div className="relative aspect-video overflow-hidden">
                 <Image
                   src={event.image}
@@ -188,7 +174,7 @@ export function InteractiveEventCard({
             </div>
 
             {/* Title & Description */}
-            <Link href={`/${locale}/events/${event.baseSlug}`}>
+            <Link href={`/events/${event.baseSlug}`}>
               <h3 className="mb-2 line-clamp-2 text-lg font-semibold transition-colors group-hover:text-mpc-green-500 min-h-[3.5rem]">
                 {event.title}
               </h3>

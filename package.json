@@ -9,6 +9,13 @@
     "build": "velite && next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --test scripts/__tests__/*.test.mjs",
+    "create:post": "node scripts/create-content.mjs post",
+    "create:event": "node scripts/create-content.mjs event",
+    "content:check": "node scripts/content-check.mjs",
+    "content:status": "node scripts/content-status.mjs",
+    "content:publish": "node scripts/content-publish.mjs",
+    "content:unpublish": "node scripts/content-publish.mjs --unpublish",
     "optimize:images": "node scripts/optimize-images.mjs",
     "prepare": "husky"
   },

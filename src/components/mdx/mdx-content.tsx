@@ -13,7 +13,7 @@
 import * as runtime from "react/jsx-runtime";
 import { useMemo } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 // Custom MDX components
 const mdxComponents = {
