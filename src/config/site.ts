@@ -6,7 +6,7 @@ export const siteConfig = {
   url: "https://mpc.mr",
   ogImage: "/og-image.png",
   links: {
-    whatsapp: "https://chat.whatsapp.com/FCJK9TWao4v843sIo2kHNU",
+    whatsapp: "https://chat.whatsapp.com/FCJK9TWao4v843sIo2kHNU", // Note: should be checked, can expire
     github: "https://github.com/Mauritania-Programmers-Community",
     linkedin: "https://www.linkedin.com/company/%D9%85%D8%A8%D8%B1%D9%85%D8%AC%D9%8A-%D9%85%D9%88%D8%B1%D9%8A%D8%AA%D8%A7%D9%86%D9%8A%D8%A7",
     facebook: "https://www.facebook.com/profile.php?id=61581985272862",
