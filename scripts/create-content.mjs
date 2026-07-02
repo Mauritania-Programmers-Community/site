@@ -24,13 +24,19 @@ const slug = normalizeSlug(slugArg);
 const date = new Date().toISOString().slice(0, 10);
 
 const drafts = buildDrafts(kind, slug, date);
+const targets = drafts.map((draft) => ({
+  ...draft,
+  fullPath: path.join(ROOT, draft.relativePath),
+}));
 
-for (const draft of drafts) {
-  const fullPath = path.join(ROOT, draft.relativePath);
-  await ensureNotExists(fullPath);
-  await mkdir(path.dirname(fullPath), { recursive: true });
-  await writeFile(fullPath, draft.content, "utf8");
-  console.log(`Created ${draft.relativePath}`);
+for (const target of targets) {
+  await ensureNotExists(target.fullPath);
+}
+
+for (const target of targets) {
+  await mkdir(path.dirname(target.fullPath), { recursive: true });
+  await writeFile(target.fullPath, target.content, "utf8");
+  console.log(`Created ${target.relativePath}`);
 }
 
 console.log("");

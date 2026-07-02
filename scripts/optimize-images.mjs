@@ -69,6 +69,7 @@ async function main() {
 
   let totalOriginalSize = 0;
   let totalOptimizedSize = 0;
+  let hasErrors = false;
 
   for (const filename of TARGET_FILES) {
     const inputPath = join(IMAGES_DIR, filename);
@@ -86,19 +87,29 @@ async function main() {
 
     } catch (error) {
       console.error(`\n❌ Error processing ${filename}:`, error.message);
+      hasErrors = true;
     }
   }
 
+  const savings =
+    totalOriginalSize > 0
+      ? ((1 - totalOptimizedSize / totalOriginalSize) * 100).toFixed(1)
+      : "0.0";
+
   console.log('\n' + '='.repeat(60));
-  console.log('✨ Optimization complete!\n');
+  console.log(hasErrors ? '⚠️ Optimization completed with errors.\n' : '✨ Optimization complete!\n');
   console.log(`📊 Total original size: ${(totalOriginalSize / 1024 / 1024).toFixed(2)} MB`);
   console.log(`📊 Total optimized size: ${(totalOptimizedSize / 1024 / 1024).toFixed(2)} MB`);
-  console.log(`💰 Total savings: ${((1 - totalOptimizedSize / totalOriginalSize) * 100).toFixed(1)}%`);
+  console.log(`💰 Total savings: ${savings}%`);
   console.log('\n📝 Next steps:');
   console.log('   1. Update MDX frontmatter to use .webp images');
   console.log('   2. Test image display in both locales');
   console.log('   3. Consider removing original .png files after verification');
   console.log('='.repeat(60) + '\n');
+
+  if (hasErrors) {
+    process.exitCode = 1;
+  }
 }
 
 main().catch(console.error);

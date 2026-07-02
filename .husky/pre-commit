@@ -17,11 +17,12 @@ if [ -n "$large_images" ]; then
   echo "💡 Consider optimizing with: node scripts/optimize-images.mjs"
   echo "   Or use online tools: tinypng.com, squoosh.app"
   echo ""
-  read -p "Continue commit anyway? (y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    exit 1
-  fi
+  printf "Continue commit anyway? (y/N) "
+  IFS= read -r REPLY
+  case "$REPLY" in
+    [Yy]) ;;
+    *) exit 1 ;;
+  esac
 fi
 
 echo "✅ Image check passed"

@@ -25,23 +25,19 @@ if (!kindArg || !slugArg) {
 const collection = normalizeCollection(kindArg);
 const slug = normalizeSlug(slugArg);
 const locales = ["en", "ar"];
-const missingFiles = [];
-
-for (const locale of locales) {
+const targets = locales.map((locale) => {
   const relativePath = `content/${collection}/${locale}/${slug}.mdx`;
   const fullPath = path.join(ROOT, relativePath);
+  return { relativePath, fullPath };
+});
+const missingFiles = [];
 
+for (const { relativePath, fullPath } of targets) {
   try {
     await access(fullPath, constants.F_OK);
   } catch {
     missingFiles.push(relativePath);
-    continue;
   }
-
-  const original = await readFile(fullPath, "utf8");
-  const updated = setPublishedInMdx(original, shouldPublish);
-  await writeFileAtomicUtf8(fullPath, updated);
-  console.log(`Updated ${relativePath} -> published: ${shouldPublish}`);
 }
 
 if (missingFiles.length > 0) {
@@ -51,6 +47,13 @@ if (missingFiles.length > 0) {
     console.error(`- ${file}`);
   }
   process.exit(1);
+}
+
+for (const { relativePath, fullPath } of targets) {
+  const original = await readFile(fullPath, "utf8");
+  const updated = setPublishedInMdx(original, shouldPublish);
+  await writeFileAtomicUtf8(fullPath, updated);
+  console.log(`Updated ${relativePath} -> published: ${shouldPublish}`);
 }
 
 console.log("");
