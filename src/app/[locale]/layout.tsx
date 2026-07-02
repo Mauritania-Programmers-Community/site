@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { MotionConfig } from "framer-motion";
 import { notFound } from "next/navigation";
 import { isLocale, isRtlLocale, routing } from "@/i18n/routing";
+import { siteConfig } from "@/config/site";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "sonner";
@@ -31,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mpc.mr"),
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: "MPC - Mauritania Programmers Community",
     template: "%s | MPC",
