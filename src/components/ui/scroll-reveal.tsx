@@ -38,6 +38,14 @@ export function ScrollReveal({
     const container = containerRef.current;
     if (!container) return;
 
+    // Skip the scroll-scrubbed reveal (and the GSAP download) on mobile and
+    // for reduced-motion users — words simply render fully visible. This keeps
+    // the text/layout identical while dropping a jank-prone mobile animation.
+    const skipAnimation =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 767px)").matches;
+    if (skipAnimation) return;
+
     const wordElements = container.querySelectorAll(".scroll-reveal-word");
 
     // Lazy load GSAP and ScrollTrigger

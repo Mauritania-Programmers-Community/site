@@ -1,7 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { Reveal } from "@/components/ui/reveal";
 
 interface SectionHeaderProps {
   badge?: {
@@ -13,6 +11,11 @@ interface SectionHeaderProps {
   className?: string;
 }
 
+/**
+ * Shared component (no "use client"): renders on the server when its parent
+ * is a server component, so the header markup stays out of the client bundle.
+ * The scroll-in fade is provided by the small <Reveal> client island.
+ */
 export function SectionHeader({
   badge,
   title,
@@ -20,27 +23,15 @@ export function SectionHeader({
   className = "",
 }: SectionHeaderProps) {
   return (
-    <motion.div
-      className={`mb-16 text-center ${className}`}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-    >
+    <Reveal className={`mb-16 text-center ${className}`}>
       {/* Badge */}
       {badge && (
-        <motion.div
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-mpc-green-500/20 bg-mpc-green-500/5 px-4 py-2"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-        >
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-mpc-green-500/20 bg-mpc-green-500/5 px-4 py-2">
           {badge.icon && <badge.icon className="h-4 w-4 text-mpc-green-500" />}
           <span className="text-sm font-medium text-mpc-green-600 dark:text-mpc-green-400">
             {badge.text}
           </span>
-        </motion.div>
+        </div>
       )}
 
       {/* Title */}
@@ -52,6 +43,6 @@ export function SectionHeader({
           {description}
         </p>
       )}
-    </motion.div>
+    </Reveal>
   );
 }

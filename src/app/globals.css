@@ -716,4 +716,29 @@ body {
     will-change: auto;
     transform: none;
   }
+
+  /* Calm the always-on rainbow gradient loop on touch devices.
+     The gradient border stays (static) — only the motion stops. */
+  .animate-rainbow,
+  .animate-rainbow::before {
+    animation: none;
+  }
+}
+
+/* ============================================
+   Reduced Motion (accessibility + battery)
+   ============================================ */
+/* Honor the OS "reduce motion" setting: neutralize CSS keyframe loops
+   (rainbow button, float, shimmer, morph, etc.) and long transitions.
+   framer-motion animations are handled separately via <MotionConfig
+   reducedMotion="user"> and the useAmbientMotion() hook. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -28,6 +28,8 @@ export function AvatarImage({
         alt={alt}
         width={size}
         height={size}
+        loading="lazy"
+        decoding="async"
         className={cn("object-cover", className)}
       />
     );

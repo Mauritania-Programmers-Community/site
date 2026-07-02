@@ -2,7 +2,8 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useAmbientMotion } from "@/hooks/use-ambient-motion";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
@@ -159,7 +160,9 @@ export function HeroSection() {
   const isRTL = locale === "ar";
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
   const containerRef = useRef<HTMLElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+  // Ambient/infinite hero effects run on desktop only (mobile + reduced-motion stay calm).
+  const ambient = useAmbientMotion();
+  const calm = !ambient;
   const [isMounted, setIsMounted] = useState(false);
 
   // Avoid hydration mismatch by only rendering terminal on client
@@ -242,12 +245,12 @@ export function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  const codeY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 100]);
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 50]);
+  const codeY = useTransform(scrollYProgress, [0, 1], [0, calm ? 0 : 100]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, calm ? 0 : 50]);
 
   return (
     <section ref={containerRef} className="relative min-h-screen overflow-hidden bg-background">
-      <MeshGradient prefersReducedMotion={!!prefersReducedMotion} />
+      <MeshGradient prefersReducedMotion={calm} />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-16 sm:py-20 xl:py-0">
         <div className="flex w-full flex-col gap-10 xl:grid xl:grid-cols-2 xl:gap-16 2xl:gap-24">
@@ -279,7 +282,7 @@ export function HeroSection() {
               <span>{t("hero.title")} </span>
               <motion.span
                 className={`${isRTL ? 'bg-linear-to-l' : 'bg-linear-to-r'} from-mpc-green-500 via-mpc-green-400 to-mpc-gold-500 bg-clip-text text-transparent`}
-                animate={prefersReducedMotion || isRTL ? {} : {
+                animate={calm || isRTL ? {} : {
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                 }}
                 transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
@@ -354,13 +357,13 @@ export function HeroSection() {
               icon={Braces}
               className="hidden -start-4 top-1/4 lg:block"
               delay={0.8}
-              prefersReducedMotion={!!prefersReducedMotion}
+              prefersReducedMotion={calm}
             />
             <FloatingIcon
               icon={GitBranch}
               className="hidden -end-4 bottom-1/3 lg:block"
               delay={1}
-              prefersReducedMotion={!!prefersReducedMotion}
+              prefersReducedMotion={calm}
             />
 
             {/* Main terminal card */}
@@ -380,7 +383,7 @@ export function HeroSection() {
               {/* Main card */}
               <motion.div
                 className="relative z-10 rounded-2xl border border-border/50 bg-card/95 p-4 shadow-2xl backdrop-blur-xl sm:p-6"
-                whileHover={prefersReducedMotion ? {} : { y: -5 }}
+                whileHover={calm ? {} : { y: -5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 {/* Window controls */}

@@ -3,6 +3,7 @@ import { Inter, Cairo, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
+import { MotionConfig } from "framer-motion";
 import { notFound } from "next/navigation";
 import { isLocale, isRtlLocale, routing } from "@/i18n/routing";
 import { Navbar } from "@/components/layout/navbar";
@@ -122,12 +123,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            <div className="relative flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster richColors position="top-center" />
+            {/* Respect the OS "reduce motion" setting for every framer-motion animation */}
+            <MotionConfig reducedMotion="user">
+              <div className="relative flex min-h-screen flex-col">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+              <Toaster richColors position="top-center" />
+            </MotionConfig>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

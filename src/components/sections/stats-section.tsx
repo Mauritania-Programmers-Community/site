@@ -1,57 +1,14 @@
-"use client";
-
-import { useTranslations, useLocale } from "next-intl";
-import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { getTranslations, getLocale } from "next-intl/server";
 import { siteConfig } from "@/config/site";
 import { Users, Calendar, Clock, FolderGit, TrendingUp, Star } from "lucide-react";
 import { SectionHeader } from "./section-header";
+import { SectionBlobs } from "./section-decor";
+import { StatCounter } from "./stat-counter";
+import { Reveal } from "@/components/ui/reveal";
 
-interface CounterProps {
-  target: number;
-  suffix?: string;
-  duration?: number;
-}
-
-function Counter({ target, suffix = "", duration = 2 }: CounterProps) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    let startTime: number;
-    let animationFrame: number;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-
-      // Easing function for smooth deceleration
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeOut * target));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isInView, target, duration]);
-
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
-}
-
-export function StatsSection() {
-  const t = useTranslations();
-  const locale = useLocale();
+export async function StatsSection() {
+  const t = await getTranslations();
+  const locale = await getLocale();
   const isRTL = locale === "ar";
 
   const stats = [
@@ -100,16 +57,12 @@ export function StatsSection() {
         {/* Gradient mesh */}
         <div className="absolute inset-0 bg-linear-to-b from-background via-muted/30 to-background" />
 
-        {/* Decorative blobs */}
-        <motion.div
-          className="absolute top-0 start-1/4 h-64 w-64 rounded-full bg-mpc-green-500/5 blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 end-1/4 h-64 w-64 rounded-full bg-mpc-gold-500/5 blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
+        {/* Decorative blobs — animated on desktop, static on mobile/reduced-motion */}
+        <SectionBlobs
+          blobs={[
+            { className: "absolute top-0 start-1/4 h-64 w-64 rounded-full bg-mpc-green-500/5 blur-3xl", duration: 8 },
+            { className: "absolute bottom-0 end-1/4 h-64 w-64 rounded-full bg-mpc-gold-500/5 blur-3xl", duration: 8 },
+          ]}
         />
 
         {/* Dotted pattern */}
@@ -128,24 +81,13 @@ export function StatsSection() {
         {/* Stats grid - Bento-style layout */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              className="group relative"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
+            <Reveal key={index} className="group relative" y={30} delay={index * 0.1}>
               <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-mpc-green-500/30 hover:shadow-md hover:scale-[1.02]">
                 {/* Background gradient on hover */}
                 <div className={`absolute inset-0 bg-linear-to-br ${stat.color} opacity-0 transition-opacity duration-500 group-hover:opacity-5`} />
 
-                {/* Icon with animated background */}
-                <motion.div
-                  className="relative mb-6"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
+                {/* Icon with hover scale (CSS-driven, no JS) */}
+                <div className="relative mb-6 transition-transform duration-300 group-hover:scale-110">
                   <div className={`inline-flex h-16 w-16 items-center justify-center rounded-2xl ${stat.bgColor} ${stat.textColor} transition-all duration-300 group-hover:shadow-lg`}>
                     <stat.icon className="h-8 w-8" />
                   </div>
@@ -153,12 +95,12 @@ export function StatsSection() {
                   <div className={`absolute inset-0 h-16 w-16 rounded-2xl border-2 border-dashed ${stat.textColor} opacity-0 transition-opacity group-hover:opacity-30`}
                     style={{ transform: "scale(1.3)" }}
                   />
-                </motion.div>
+                </div>
 
                 {/* Value with counter animation */}
                 <div className="mb-2">
                   <span className={`bg-linear-to-r ${stat.color} bg-clip-text text-5xl font-bold text-transparent`}>
-                    <Counter target={stat.value} suffix={stat.suffix} />
+                    <StatCounter target={stat.value} suffix={stat.suffix} />
                   </span>
                 </div>
 
@@ -170,24 +112,18 @@ export function StatsSection() {
                 {/* Decorative corner accent */}
                 <div className={`absolute -end-8 -top-8 h-24 w-24 rounded-full bg-linear-to-br ${stat.color} opacity-10 blur-2xl transition-all duration-500 group-hover:opacity-20 group-hover:scale-150`} />
               </div>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
 
         {/* Bottom accent */}
-        <motion.div
-          className="mt-16 flex items-center justify-center gap-2 text-muted-foreground"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-        >
+        <Reveal delay={0.5} y={0} className="mt-16 flex items-center justify-center gap-2 text-muted-foreground">
           <Star className="h-4 w-4 text-mpc-gold-500" />
           <span className="text-sm">
             {isRTL ? "ونستمر في النمو كل يوم" : "And growing every day"}
           </span>
           <Star className="h-4 w-4 text-mpc-gold-500" />
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

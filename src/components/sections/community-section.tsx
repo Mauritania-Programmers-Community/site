@@ -1,14 +1,13 @@
-"use client";
-
-import { useTranslations, useLocale } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations, getLocale } from "next-intl/server";
 import { Users } from "lucide-react";
 import { SectionHeader } from "./section-header";
+import { SectionBlobs } from "./section-decor";
+import { Reveal } from "@/components/ui/reveal";
 import AvatarGroup from "@/components/ui/avatar-group";
 
-export function CommunitySection() {
-  const t = useTranslations();
-  const locale = useLocale();
+export async function CommunitySection() {
+  const t = await getTranslations();
+  const locale = await getLocale();
 
   // Mock community members for avatar display (no team.json needed)
   const communityMembers = [
@@ -55,16 +54,11 @@ export function CommunitySection() {
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-muted/20 to-transparent" />
-        {/* Decorative blobs */}
-        <motion.div
-          className="absolute top-1/4 start-1/4 h-64 w-64 rounded-full bg-mpc-green-500/5 blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 end-1/4 h-64 w-64 rounded-full bg-mpc-gold-500/5 blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity }}
+        <SectionBlobs
+          blobs={[
+            { className: "absolute top-1/4 start-1/4 h-64 w-64 rounded-full bg-mpc-green-500/5 blur-3xl", duration: 10 },
+            { className: "absolute bottom-1/4 end-1/4 h-64 w-64 rounded-full bg-mpc-gold-500/5 blur-3xl", duration: 10 },
+          ]}
         />
       </div>
 
@@ -79,13 +73,7 @@ export function CommunitySection() {
         />
 
         {/* Avatar group badges */}
-        <motion.div
-          className="mx-auto mb-12 flex justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-        >
+        <Reveal delay={0.2} className="mx-auto mb-12 flex justify-center">
           <AvatarGroup
             items={communityMembers}
             locale={locale}
@@ -93,7 +81,7 @@ export function CommunitySection() {
             size="lg"
             totalCount={884}
           />
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

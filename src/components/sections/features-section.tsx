@@ -1,8 +1,4 @@
-"use client";
-
-import { useTranslations, useLocale } from "next-intl";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { getTranslations, getLocale } from "next-intl/server";
 import {
   Code2,
   Shield,
@@ -10,6 +6,8 @@ import {
   Calendar,
 } from "lucide-react";
 import { SectionHeader } from "./section-header";
+import { SectionBlobs } from "./section-decor";
+import { Reveal } from "@/components/ui/reveal";
 
 const features = [
   {
@@ -38,32 +36,21 @@ const features = [
   },
 ];
 
-export function FeaturesSection() {
-  const t = useTranslations();
-  const locale = useLocale();
+export async function FeaturesSection() {
+  const t = await getTranslations();
+  const locale = await getLocale();
   const isRTL = locale === "ar";
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <section className="relative overflow-hidden bg-muted/30 py-24">
       {/* Background */}
       <div className="absolute inset-0">
-        {/* Animated gradient blobs */}
-        <motion.div
-          className="absolute top-1/4 -start-32 h-96 w-96 rounded-full bg-mpc-green-500/10 blur-[120px]"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{ duration: 15, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 -end-32 h-96 w-96 rounded-full bg-mpc-gold-500/10 blur-[120px]"
-          animate={{
-            x: [0, -50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{ duration: 15, repeat: Infinity }}
+        {/* Gradient blobs — animated on desktop, static on mobile/reduced-motion */}
+        <SectionBlobs
+          blobs={[
+            { className: "absolute top-1/4 -start-32 h-96 w-96 rounded-full bg-mpc-green-500/10 blur-[120px]", kind: "drift", driftX: 50, driftY: -30, duration: 15 },
+            { className: "absolute bottom-1/4 -end-32 h-96 w-96 rounded-full bg-mpc-gold-500/10 blur-[120px]", kind: "drift", driftX: -50, driftY: 30, duration: 15 },
+          ]}
         />
 
         {/* Grid lines */}
@@ -79,83 +66,59 @@ export function FeaturesSection() {
           description={t("features.subtitle")}
         />
 
-        {/* Features grid - Interactive cards */}
+        {/* Features grid - Interactive cards (hover is CSS-driven, no JS) */}
         <div className="grid gap-6 md:grid-cols-2">
-          {features.map((feature, index) => {
-            const isHovered = hoveredIndex === index;
+          {features.map((feature, index) => (
+            <Reveal key={feature.id} className="group relative" y={30} delay={index * 0.1}>
+              <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-transparent hover:shadow-lg">
+                {/* Gradient border on hover */}
+                <div
+                  className={`absolute inset-0 rounded-3xl bg-linear-to-br ${feature.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                  style={{ padding: "2px" }}
+                >
+                  <div className="h-full w-full rounded-3xl bg-card" />
+                </div>
 
-            return (
-              <motion.div
-                key={feature.id}
-                className="group relative"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div className="relative h-full overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-transparent hover:shadow-lg">
-                  {/* Gradient border on hover */}
-                  <motion.div
-                    className={`absolute inset-0 rounded-3xl bg-linear-to-br ${feature.gradient} transition-opacity duration-500`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isHovered ? 1 : 0 }}
-                    style={{ padding: "2px" }}
-                  >
-                    <div className="h-full w-full rounded-3xl bg-card" />
-                  </motion.div>
-
-                  {/* Content wrapper */}
-                  <div className="relative z-10">
-                    {/* Icon and number row */}
-                    <div className="mb-8 flex items-start justify-between">
-                      {/* Icon container with animated background */}
-                      <motion.div
-                        className="relative"
-                        animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${feature.gradient} text-white shadow-md`}>
-                          <feature.icon className="h-8 w-8" />
-                        </div>
-                        {/* Glow effect */}
-                        <motion.div
-                          className={`absolute inset-0 rounded-2xl bg-linear-to-br ${feature.gradient} blur-xl transition-opacity duration-500`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: isHovered ? 0.3 : 0 }}
-                        />
-                      </motion.div>
-
-                      {/* Feature number */}
-                      <span className={`bg-linear-to-r ${feature.gradient} bg-clip-text text-5xl font-bold text-transparent opacity-20`}>
-                        0{index + 1}
-                      </span>
+                {/* Content wrapper */}
+                <div className="relative z-10">
+                  {/* Icon and number row */}
+                  <div className="mb-8 flex items-start justify-between">
+                    {/* Icon container with hover scale/rotate */}
+                    <div className="relative transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[5deg]">
+                      <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${feature.gradient} text-white shadow-md`}>
+                        <feature.icon className="h-8 w-8" />
+                      </div>
+                      {/* Glow effect */}
+                      <div
+                        className={`absolute inset-0 rounded-2xl bg-linear-to-br ${feature.gradient} opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-30`}
+                      />
                     </div>
 
-                    {/* Title and description */}
-                    <div className="mb-6">
-                      <h3 className="mb-3 text-2xl font-bold transition-colors">
-                        {t(`features.items.${feature.id}.title`)}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {t(`features.items.${feature.id}.description`)}
-                      </p>
-                    </div>
+                    {/* Feature number */}
+                    <span className={`bg-linear-to-r ${feature.gradient} bg-clip-text text-5xl font-bold text-transparent opacity-20`}>
+                      0{index + 1}
+                    </span>
                   </div>
 
-                  {/* Decorative elements */}
-                  <motion.div
-                    className={`absolute -end-16 -bottom-16 h-48 w-48 rounded-full bg-linear-to-br ${feature.bgGradient} blur-3xl`}
-                    animate={{ scale: isHovered ? 1.5 : 1, opacity: isHovered ? 0.5 : 0.2 }}
-                    transition={{ duration: 0.5 }}
-                  />
+                  {/* Title and description */}
+                  <div className="mb-6">
+                    <h3 className="mb-3 text-2xl font-bold transition-colors">
+                      {t(`features.items.${feature.id}.title`)}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {t(`features.items.${feature.id}.description`)}
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
 
+                {/* Decorative elements */}
+                <div
+                  className={`absolute -end-16 -bottom-16 h-48 w-48 rounded-full bg-linear-to-br ${feature.bgGradient} opacity-20 blur-3xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-50`}
+                />
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
