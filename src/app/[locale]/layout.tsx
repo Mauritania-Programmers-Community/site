@@ -128,7 +128,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
               <div className="relative flex min-h-screen flex-col">
                 <Navbar />
                 <main className="flex-1">{children}</main>
-                <Footer />
+                <Footer year={new Date().getFullYear()} />
               </div>
               <Toaster richColors position="top-center" />
             </MotionConfig>

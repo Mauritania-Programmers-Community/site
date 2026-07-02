@@ -244,6 +244,10 @@ export function formatDate(
     year: "numeric",
     month: "long",
     day: "numeric",
+    // Pin to UTC: content dates are date-only (e.g. "2025-12-14"), parsed as
+    // UTC midnight. Without this, the server (UTC) and the client (local TZ)
+    // can format different days, causing a React hydration mismatch (#418).
+    timeZone: "UTC",
     ...options,
   };
   return new Date(date).toLocaleDateString(

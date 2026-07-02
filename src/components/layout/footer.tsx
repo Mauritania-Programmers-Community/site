@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { siteConfig } from "@/config/site";
@@ -8,13 +7,9 @@ import { Github, Linkedin, Facebook } from "lucide-react";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { Link } from "@/i18n/navigation";
 
-export function Footer() {
+export function Footer({ year }: { year: number }) {
   const t = useTranslations();
-  const [currentYear, setCurrentYear] = useState(2025);
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear()); // eslint-disable-line react-hooks/set-state-in-effect
-  }, []);
+  const currentYear = year;
 
   return (
     <footer className="border-t py-12">
