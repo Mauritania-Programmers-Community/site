@@ -5,7 +5,7 @@ export const siteConfig = {
   descriptionAr: "مجتمع مبرمجي موريتانيا - نبني مستقبل موريتانيا التقني معًا",
   // No custom domain yet — using the Vercel production alias for now.
   // TODO: switch to https://mpc.mr once the custom domain is configured.
-  url: "https://mpc-website-ahmedabdats-projects.vercel.app",
+  url: "https://mpc-community.vercel.app",
   ogImage: "/og-image.png",
   links: {
   whatsapp: "https://chat.whatsapp.com/FCJK9TWao4v843sIo2kHNU?mode=gi_t", // Note: should be checked, can expire
