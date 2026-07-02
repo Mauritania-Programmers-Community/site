@@ -81,6 +81,7 @@ export function HeroPong() {
   useEffect(() => {
     // If user prefers reduced motion, show content immediately
     if (prefersReducedMotion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowContent(true);
       return;
     }

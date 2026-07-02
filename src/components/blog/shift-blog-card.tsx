@@ -49,8 +49,11 @@ export function ShiftBlogCard({ post, locale, index = 0 }: ShiftBlogCardProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Mount-time init (SSR-safe localStorage read); intentional synchronous setState.
+    /* eslint-disable react-hooks/set-state-in-effect */
     setMounted(true);
     setIsBookmarked(getInitialBookmarkState());
+    /* eslint-enable react-hooks/set-state-in-effect */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.baseSlug]);
 
