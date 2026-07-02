@@ -15,9 +15,10 @@ import {
   Braces,
   GitBranch,
   Code2,
+  ChevronRight,
 } from "lucide-react";
 import { useRef, useCallback, useState, useEffect } from "react";
-import { InteractiveTerminal, Terminal, TypingAnimation, AnimatedSpan } from "@/components/magicui/terminal";
+import { InteractiveTerminal } from "@/components/magicui/terminal";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Image from "next/image";
 
@@ -100,7 +101,9 @@ function FloatingIcon({
   );
 }
 
-// Static terminal for mobile (no user input)
+// Static terminal for mobile — fully server-rendered, no typing animation.
+// Renders the final state immediately so there's no layout shift or per-frame
+// churn on mobile (kept deliberately simple for smooth first paint).
 function StaticTerminal({
   t,
   ArrowIcon
@@ -108,35 +111,33 @@ function StaticTerminal({
   t: ReturnType<typeof useTranslations>;
   ArrowIcon: typeof ArrowRight | typeof ArrowLeft;
 }) {
+  const commands = [
+    { cmd: "whoami", lines: [{ text: t("terminal.commands.whoami"), className: "text-muted-foreground" }] },
+    { cmd: "uname -a", lines: [{ text: t("terminal.commands.uname"), className: "text-muted-foreground" }] },
+    {
+      cmd: "sudo join mpc-community",
+      lines: [
+        { text: t("terminal.commands.sudoPassword"), className: "text-muted-foreground" },
+        { text: t("terminal.commands.sudoSuccess"), className: "text-mpc-green-400" },
+      ],
+    },
+  ];
+
   return (
-    <Terminal className="min-h-[200px]">
-      <TypingAnimation typingSpeed={30}>
-        $ whoami
-      </TypingAnimation>
-      <AnimatedSpan className="text-muted-foreground">
-        {t("terminal.commands.whoami")}
-      </AnimatedSpan>
-      <AnimatedSpan>{""}</AnimatedSpan>
+    <div className="space-y-1.5 font-mono text-xs sm:text-sm">
+      {commands.map((c) => (
+        <div key={c.cmd} className="space-y-1.5">
+          <div className="flex items-start gap-2 text-foreground">
+            <ChevronRight className="h-3 w-3 mt-1 text-mpc-green-500 flex-shrink-0" />
+            <span>{c.cmd}</span>
+          </div>
+          {c.lines.map((line, i) => (
+            <div key={i} className={`ps-5 ${line.className}`}>{line.text}</div>
+          ))}
+        </div>
+      ))}
 
-      <TypingAnimation typingSpeed={30}>
-        $ uname -a
-      </TypingAnimation>
-      <AnimatedSpan className="text-muted-foreground">
-        {t("terminal.commands.uname")}
-      </AnimatedSpan>
-      <AnimatedSpan>{""}</AnimatedSpan>
-
-      <TypingAnimation typingSpeed={30}>
-        $ sudo join mpc-community
-      </TypingAnimation>
-      <AnimatedSpan className="text-muted-foreground">
-        {t("terminal.commands.sudoPassword")}
-      </AnimatedSpan>
-      <AnimatedSpan className="text-mpc-green-400">
-        {t("terminal.commands.sudoSuccess")}
-      </AnimatedSpan>
-
-      {/* Join button - rendered after animation */}
+      {/* Join button */}
       <div className="mt-4 flex justify-start">
         <a
           href={siteConfig.links.whatsapp}
@@ -149,7 +150,7 @@ function StaticTerminal({
           <ArrowIcon className="h-3 w-3 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
         </a>
       </div>
-    </Terminal>
+    </div>
   );
 }
 
@@ -261,8 +262,8 @@ export function HeroSection() {
           >
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.5 }}
               className="mb-6 sm:mb-8"
             >
@@ -275,8 +276,8 @@ export function HeroSection() {
             {/* Title */}
             <motion.h1
               className="mb-6 text-4xl font-bold tracking-tight sm:mb-8 sm:text-5xl md:text-6xl xl:text-7xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
             >
               <span>{t("hero.title")} </span>
@@ -296,8 +297,8 @@ export function HeroSection() {
             {/* Description */}
             <motion.div
               className="mb-8 sm:max-w-lg sm:mb-10"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
               <ScrollReveal
@@ -313,8 +314,8 @@ export function HeroSection() {
             {/* CTAs */}
             <motion.div
               className="flex flex-col gap-3 sm:flex-row sm:gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
               <RainbowButton
@@ -369,8 +370,8 @@ export function HeroSection() {
             {/* Main terminal card */}
             <motion.div
               className="relative w-full max-w-sm sm:max-w-md"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ scale: 0.96 }}
+              animate={{ scale: 1 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               {/* Glow effect */}
@@ -399,46 +400,37 @@ export function HeroSection() {
                   </span>
                 </div>
 
-                {/* Terminal content - responsive switching */}
-                <div className="min-h-[200px]">
-                  {!isMounted ? (
-                    // SSR placeholder - prevents hydration mismatch
-                    <div className="space-y-1.5 font-mono text-xs sm:text-sm text-muted-foreground/60">
-                      <div className="flex items-start gap-2">
-                        <span className="text-mpc-green-500">$</span>
-                        <span>Loading terminal...</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      {/* Mobile: Static animation (no input) */}
-                      <div className="block lg:hidden">
-                        <StaticTerminal t={t} ArrowIcon={ArrowIcon} />
-                      </div>
+                {/* Terminal content - responsive switching. Height reserved so
+                    neither the mobile static terminal nor the desktop swap shifts layout. */}
+                <div className="min-h-[220px] lg:min-h-[384px]">
+                  {/* Mobile: fully static terminal, server-rendered (no typing, no layout shift) */}
+                  <div className="block lg:hidden">
+                    <StaticTerminal t={t} ArrowIcon={ArrowIcon} />
+                  </div>
 
-                      {/* Desktop: Interactive terminal with hint */}
-                      <div className="hidden lg:block">
-                        <div className="mb-2 text-xs text-muted-foreground/60">
-                          💡 {t("terminal.hint")}
-                        </div>
-                        <InteractiveTerminal
-                          commandHandler={handleCommand}
-                          placeholder={t("terminal.commands.placeholder")}
-                          initialCommands={[
-                            { type: "command", content: "$ whoami" },
-                            { type: "output", content: t("terminal.commands.whoami"), className: "text-muted-foreground" },
-                            { type: "output", content: "" },
-                            { type: "command", content: "$ uname -a" },
-                            { type: "output", content: t("terminal.commands.uname"), className: "text-muted-foreground" },
-                            { type: "output", content: "" },
-                            { type: "command", content: "$ sudo join mpc-community" },
-                            { type: "output", content: t("terminal.commands.sudoPassword"), className: "text-muted-foreground" },
-                            { type: "output", content: t("terminal.commands.sudoSuccess"), className: "text-mpc-green-400" },
-                          ]}
-                        />
-                      </div>
-                    </>
-                  )}
+                  {/* Desktop: interactive terminal, mounted client-side only */}
+                  <div className="hidden lg:block">
+                    <div className="mb-2 text-xs text-muted-foreground/60">
+                      💡 {t("terminal.hint")}
+                    </div>
+                    {isMounted && (
+                      <InteractiveTerminal
+                        commandHandler={handleCommand}
+                        placeholder={t("terminal.commands.placeholder")}
+                        initialCommands={[
+                          { type: "command", content: "$ whoami" },
+                          { type: "output", content: t("terminal.commands.whoami"), className: "text-muted-foreground" },
+                          { type: "output", content: "" },
+                          { type: "command", content: "$ uname -a" },
+                          { type: "output", content: t("terminal.commands.uname"), className: "text-muted-foreground" },
+                          { type: "output", content: "" },
+                          { type: "command", content: "$ sudo join mpc-community" },
+                          { type: "output", content: t("terminal.commands.sudoPassword"), className: "text-muted-foreground" },
+                          { type: "output", content: t("terminal.commands.sudoSuccess"), className: "text-mpc-green-400" },
+                        ]}
+                      />
+                    )}
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
