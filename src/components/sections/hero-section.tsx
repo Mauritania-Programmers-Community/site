@@ -383,7 +383,7 @@ export function HeroSection() {
 
               {/* Main card */}
               <motion.div
-                className="relative z-10 rounded-2xl border border-border/50 bg-card/95 p-4 shadow-2xl backdrop-blur-xl sm:p-6"
+                className="relative z-10 rounded-2xl border border-border/50 bg-card/95 p-4 shadow-lg backdrop-blur-xl sm:p-6"
                 whileHover={calm ? {} : { y: -5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
