@@ -29,6 +29,9 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   display: "swap",
   weight: ["400", "500", "600"],
+  // Only used for terminal/code text — don't compete with Cairo/Inter
+  // (the LCP fonts) for bandwidth during the critical first load.
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -108,14 +111,22 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   const isRtl = isRtlLocale(locale);
 
   return (
-    <html lang={locale} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={isRtl ? "rtl" : "ltr"}
+      // Font variables MUST live on <html>: the @theme tokens (--font-sans etc.)
+      // are declared on :root and resolve their var(--font-*) references there —
+      // if the variables are only on <body>, every theme font token computes to
+      // empty and the whole site falls back to system fonts.
+      className={`${inter.variable} ${cairo.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Fonts are self-hosted via next/font — no Google Fonts preconnect needed. */}
         <link rel="dns-prefetch" href="https://api.dicebear.com" />
       </head>
       <body
-        className={`${inter.variable} ${cairo.variable} ${jetbrainsMono.variable} ${isRtl ? "font-arabic" : "font-sans"} antialiased`}
+        className={`${isRtl ? "font-arabic" : "font-sans"} antialiased`}
       >
         <ThemeProvider
           attribute="class"
