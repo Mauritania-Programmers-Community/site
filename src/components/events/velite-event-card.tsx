@@ -21,6 +21,8 @@ interface VeliteEventCardProps {
   event: Event;
   locale: string;
   index?: number;
+  /** Only set for above-the-fold cards — preloads the image and skips lazy loading. */
+  priority?: boolean;
 }
 
 const eventTypeColors: Record<string, string> = {
@@ -30,7 +32,7 @@ const eventTypeColors: Record<string, string> = {
   webinar: "bg-green-500/10 text-green-600 dark:text-green-400",
 };
 
-export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardProps) {
+export function VeliteEventCard({ event, locale, index = 0, priority = false }: VeliteEventCardProps) {
   const t = useTranslations("events");
   const isPast = event.status === "completed";
 
@@ -59,8 +61,8 @@ export function VeliteEventCard({ event, locale, index = 0 }: VeliteEventCardPro
               src={event.image}
               alt={event.title}
               fill
-              priority={index === 0}
-              loading={index === 0 ? undefined : "lazy"}
+              priority={priority}
+              loading={priority ? undefined : "lazy"}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />

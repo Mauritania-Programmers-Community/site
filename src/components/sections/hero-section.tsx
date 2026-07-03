@@ -17,10 +17,18 @@ import {
   Code2,
   ChevronRight,
 } from "lucide-react";
-import { useRef, useCallback, useState, useEffect } from "react";
-import { InteractiveTerminal } from "@/components/magicui/terminal";
+import { useRef, useCallback } from "react";
+import dynamic from "next/dynamic";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Image from "next/image";
+
+// The interactive terminal (and its cmdk dependency) is desktop-only —
+// keep it out of the mobile bundle entirely.
+const InteractiveTerminal = dynamic(
+  () => import("@/components/magicui/terminal").then((m) => m.InteractiveTerminal),
+  { ssr: false }
+);
 
 // Animated background mesh
 function MeshGradient({ prefersReducedMotion }: { prefersReducedMotion: boolean }) {
@@ -164,12 +172,9 @@ export function HeroSection() {
   // Ambient/infinite hero effects run on desktop only (mobile + reduced-motion stay calm).
   const ambient = useAmbientMotion();
   const calm = !ambient;
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Avoid hydration mismatch by only rendering terminal on client
-  useEffect(() => {
-    setIsMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
-  }, []);
+  // false during SSR/first paint (useMediaQuery's server snapshot), so the
+  // terminal only mounts on a confirmed desktop client — hydration-safe.
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   // Terminal command handler
   const handleCommand = useCallback((command: string): string | string[] | React.ReactNode => {
@@ -413,7 +418,7 @@ export function HeroSection() {
                     <div className="mb-2 text-xs text-muted-foreground/60">
                       💡 {t("terminal.hint")}
                     </div>
-                    {isMounted && (
+                    {isDesktop && (
                       <InteractiveTerminal
                         commandHandler={handleCommand}
                         placeholder={t("terminal.commands.placeholder")}

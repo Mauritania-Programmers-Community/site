@@ -16,6 +16,8 @@ interface VeliteBlogCardProps {
   locale: string;
   index?: number;
   variant?: "default" | "featured" | "compact";
+  /** Only set for above-the-fold cards — preloads the image and skips lazy loading. */
+  priority?: boolean;
 }
 
 export function VeliteBlogCard({
@@ -23,6 +25,7 @@ export function VeliteBlogCard({
   locale,
   index = 0,
   variant = "default",
+  priority = false,
 }: VeliteBlogCardProps) {
   const author = getAuthor(post.author);
   const authorName = getAuthorName(post.author, locale);
@@ -73,8 +76,8 @@ export function VeliteBlogCard({
                     src={post.image}
                     alt={post.title}
                     fill
-                    priority={index === 0}
-                    loading={index === 0 ? undefined : "lazy"}
+                    priority={priority}
+                    loading={priority ? undefined : "lazy"}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
@@ -149,8 +152,8 @@ export function VeliteBlogCard({
                 src={post.image}
                 alt={post.title}
                 fill
-                priority={index === 0}
-                loading={index === 0 ? undefined : "lazy"}
+                priority={priority}
+                loading={priority ? undefined : "lazy"}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
